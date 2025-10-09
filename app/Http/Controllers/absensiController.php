@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class absensiController extends Controller
+class AbsensiController extends Controller
 {
-    public function home()
-    {
-        return view('welcome');
+    public function index() {
+        return view('pages.absensi');
     }
 }

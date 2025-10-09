@@ -2,9 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\absensiController;
+use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\PageController;
 
-Route::get('/home', [absensiController::class, 'home'])->name('home');
+Route::get('/home', [PageController::class, 'home'])->name('home');
+Route::get('/absensi-list', [PageController::class, 'absent'])->name('absensi');
+
+Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -12,8 +16,4 @@ Route::get('/login', function () {
 
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
-});
-
-Route::get('/absensi', function () {
-    return view('pages.absensi');
 });
