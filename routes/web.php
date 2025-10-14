@@ -10,9 +10,13 @@ Route::get('/absensi-list', [PageController::class, 'absent'])->name('absensi');
 
 Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
 
+Route::post('/absensi/scan', [AbsensiController::class, 'scan'])->name('absensi.scan');
+
+
 Route::get('/login', function () {
     return view('auth.login');
 });
+
 
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
