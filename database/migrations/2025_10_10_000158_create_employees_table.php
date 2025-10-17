@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('email');
             $table->string('password');
-            $table->string('employees_code');
+            $table->string('employees_code')->unique();
+
             $table->string('full_name');
             $table->foreignId('company_id')->constrained('companies');
             $table->foreignId('position_id')->constrained('positions');

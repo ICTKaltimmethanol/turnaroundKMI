@@ -21,7 +21,7 @@ class PresencesResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Clock;
 
     protected static ?string $navigationLabel = 'Data Presensi';
-    
+
     protected static ?string $recordTitleAttribute = 'id';
 
     public static function form(Schema $schema): Schema
@@ -47,6 +47,8 @@ class PresencesResource extends Resource
             'index' => ListPresences::route('/'),
             'create' => CreatePresences::route('/create'),
             'edit' => EditPresences::route('/{record}/edit'),
+  
+
         ];
     }
 }

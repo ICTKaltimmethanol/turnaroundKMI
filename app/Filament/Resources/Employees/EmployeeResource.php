@@ -22,7 +22,7 @@ class EmployeeResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::User;
 
-    protected static ?string $navigationLabel = 'Data Karyawan TA';
+    protected static ?string $navigationLabel = 'Pekerja TA';
 
     protected static ?string $recordTitleAttribute = 'full_name';
 

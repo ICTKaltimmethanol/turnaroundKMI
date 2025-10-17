@@ -30,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo (fn ( ) => asset('images/engineer2.png'))->brandLogoHeight('50px') 
             ->favicon(asset('images/favicon.ico'))
             ->brandName('Turn Around <br> PT.Kaltim Methanol Industri')
+             ->databaseNotifications()
             ->login()
             ->colors([
                 'primary' => Color::Amber,

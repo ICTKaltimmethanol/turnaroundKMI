@@ -54,6 +54,8 @@ class AbsensiController extends Controller
         }
         
     }*/
+
+
 public function scan(Request $request)
 {
     try {
@@ -77,13 +79,14 @@ public function scan(Request $request)
         $now = now();
         $today = $now->toDateString();
 
-        // Cek pasangan PresenceIn dengan PresenceOut di Presences
+        // Cari PresenceIn terakhir
         $lastIn = PresenceIn::where('employees_id', $employeeId)
             ->latest('presence_time')
             ->first();
 
+        // Cari apakah PresenceIn terakhir sudah punya pasangan di tabel presences
         $alreadyPaired = $lastIn
-            ? Presences::where('presenceIn_id', $lastIn->id)->exists()
+            ? Presences::where('presenceIn_id', $lastIn->id)->whereNotNull('presenceOut_id')->exists()
             : true;
 
         // 🔹 PRESENSI MASUK
@@ -94,6 +97,12 @@ public function scan(Request $request)
                 'longitude_in' => $request->input('longitude') ?? '106.816666',
                 'presence_time' => $now,
                 'presence_date' => $today,
+                'employees_id' => $employeeId,
+            ]);
+
+            // 🔸 Buat entry awal di tabel presences (tanpa presenceOut_id dan total_time)
+            Presences::create([
+                'presenceIn_id' => $presenceIn->id,
                 'employees_id' => $employeeId,
             ]);
 
@@ -121,14 +130,17 @@ public function scan(Request $request)
 
         $inTime = Carbon::parse($lastIn->presence_time);
         $outTime = Carbon::parse($presenceOut->presence_time);
-        $totalTime = $outTime->greaterThan($inTime) ? $outTime->diffInMinutes($inTime) : 0;
+        $totalTime = $outTime->gt($inTime) ? $outTime->diffInMinutes($inTime) : 0;
 
-        Presences::create([
-            'total_time' => $totalTime,
-            'presenceIn_id' => $lastIn->id,
-            'presenceOut_id' => $presenceOut->id,
-            'employees_id' => $employeeId,
-        ]);
+        // Cari presences yang sebelumnya dibuat dan update
+        $presences = Presences::where('presenceIn_id', $lastIn->id)->first();
+
+        if ($presences) {
+            $presences->update([
+                'presenceOut_id' => $presenceOut->id,
+                'total_time' => $totalTime,
+            ]);
+        }
 
         return response()->json([
             'status' => 'keluar',

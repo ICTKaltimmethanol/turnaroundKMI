@@ -35,31 +35,37 @@ class EmployeeForm
 
                 TextInput::make('password')
                     ->password()
-                    ->required()
+                    ->placeholder('Minimal 8 karakter')
                     ->revealable()
-                    ->minLength(8),
+                    ->minLength(8)
+                    ->afterStateHydrated(function (TextInput $component, $state) {
+                            $component->state(null);
+                        })
+                    ->dehydrateStateUsing(fn ($state) => $state ? \Illuminate\Support\Facades\Hash::make($state) : null)
+                    ->dehydrated(fn ($state) => !empty($state)),
 
-                TextInput::make('employees_code')
-                    ->label('Employee Code')
+
+               TextInput::make('employees_code')
+                    ->label('ID Pekerja')
                     ->disabled()
-                    ->default(fn () => 'TA-' . strtoupper(Str::random(4))) 
-                    ->dehydrated(),
-
+                    ->placeholder('Akan diisi otomatis'),
+                    
                 Select::make('company_id')
-                    ->label('Company')
+                    ->label('Perusahaan')
                     ->relationship('company', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
                     ->searchable()
                     ->preload()
                     ->createOptionForm([
                         TextInput::make('name')
-                            ->label('Company Name')
+                            ->label('Nama Perusahaan')
+                            ->placeholder('Contoh: Kaltim Methanol Industri')
                             ->required(),
                     ])
                     ->required(),
 
 
                 Select::make('position_id')
-                    ->label('Position')
+                    ->label('Posisi Kerja')
                     ->relationship('position', 'name')
                     ->searchable()
                     ->preload()
@@ -71,7 +77,7 @@ class EmployeeForm
                     ->required(),
                 
                 Radio::make('status')
-                    ->label('Status')
+                    ->label('Status Pekerja')
                     ->options([
                         'active' => 'Active',
                         'inactive' => 'Inactive',
@@ -86,7 +92,7 @@ class EmployeeForm
                     ->view('forms.components.barcode-image'),
                 
                 FileUpload::make('profile_img_path')
-                    ->label('Profile Image')
+                    ->label('Gambar Profil')
                     ->image()
                     ->disk('public')                   
                     ->directory('employees')           

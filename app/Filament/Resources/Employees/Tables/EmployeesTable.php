@@ -31,9 +31,8 @@ class EmployeesTable
 
                 ImageColumn::make('qrCode.img_path')
                     ->label('Barcode')
-                    ->disk('public') // sesuai disk kamu
-                    ->width(40)      // atur lebar sesuai panjang barcode
-                    ->height(20)      // tinggi tipikal barcode
+                    ->disk('public') 
+                    ->height(40)      
                     ->circular(false),
 
                 TextColumn::make('employees_code')

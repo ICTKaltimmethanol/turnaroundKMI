@@ -9,23 +9,31 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
-
+use Filament\Actions\ViewAction;
 use Illuminate\Database\Eloquent\Builder;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction; // untuk export biasa (header action)
+
 
 class PresencesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+           ->heading('Daftar Karyawan')
         
             ->columns([
                 TextColumn::make('employee.full_name')
                     ->label('Nama Lengkap')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('total_time')
-                    ->numeric()
+               TextColumn::make('total_time')
+                    ->label('Total Waktu')
+                    ->formatStateUsing(fn ($state) => abs($state) . ' menit')
                     ->sortable(),
+
+
                 TextColumn::make('presenceIn.presence_time')
                     ->label('Waktu Masuk')
                     ->numeric()
@@ -42,42 +50,41 @@ class PresencesTable
                     ->label('Tanggal Pulang')
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                
+              
             ])
             ->filters([
                 
                 Filter::make('created_at')
-                    ->schema([
-                        DatePicker::make('created_from'),
-                        DatePicker::make('created_until'),
-                    ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['created_from'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
-                            )
-                            ->when(
-                                $data['created_until'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
-                            );
-                    })
+    ->schema([
+        DatePicker::make('created_from'),
+        DatePicker::make('created_until'),
+    ])
+    ->query(function (Builder $query, array $data): Builder {
+        return $query
+            ->when($data['created_from'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '>=', $date))
+            ->when($data['created_until'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '<=', $date));
+    })
             ])
             ->recordActions([
-                EditAction::make(),
+            
+                  ViewAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                 
+                ExportAction::make()->exports([
+                    ExcelExport::make('table')->fromTable(),
+                   
+                ]),
+                DeleteBulkAction::make(),
+            ])
+            ->bulkActions([
+                ExportBulkAction::make()
             ]);
+            
     }
 }

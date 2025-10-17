@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('presences', function (Blueprint $table) {
             $table->id();
-            $table->integer('total_time');
+            $table->integer('total_time')->nullable();
             $table->foreignId('presenceIn_id')->constrained('presence_in');
-            $table->foreignId('presenceOut_id')->constrained('presence_out');
+            $table->foreignId('presenceOut_id')->nullable()->constrained('presence_out');
             $table->foreignId('employees_id')->constrained('employees');
             $table->timestamp();
         });
