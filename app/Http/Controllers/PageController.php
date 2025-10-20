@@ -79,29 +79,6 @@ class PageController extends Controller
         return view('pages.profile', compact('employee'));
     }       
 
-    public function profileUpdate(Request $request)
-    {
-        $employee = Auth::guard('employee')->user(); // Ambil employee yang login
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:employees,email,' . $employee->id,
-            'profile_img_path' => 'nullable|image|max:2048', // Maks 2MB
-        ]);
-
-        // Update data employee
-        $employee->name = $request->name;
-        $employee->email = $request->email;
-
-        // Jika ada file gambar yang diupload
-        if ($request->hasFile('profile_img_path')) {
-            $path = $request->file('profile_img_path')->store('profile_images', 'public');
-            $employee->profile_img_path = $path;
-        }
-
-        $employee->save();
-
-        return redirect()->route('profile')->with('success', 'Profil berhasil diperbarui.');
-    }
+   
 
 }
