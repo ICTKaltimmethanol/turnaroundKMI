@@ -11,6 +11,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode as QrCodeGenerator;
 use Intervention\Image\Facades\Image;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class Employee extends Model implements AuthenticatableContract
@@ -90,14 +91,31 @@ class Employee extends Model implements AuthenticatableContract
     protected static function booted(): void
     {
         static::creating(function ($employee) {
-            do {
-                $code = 'TA-' . strtoupper(Str::random(4));
-            } while (self::where('employees_code', $code)->exists());
+            DB::transaction(function () use ($employee) {
+                // Ambil kode terakhir dengan lock for update supaya aman
+                $lastCode = DB::table('employees')
+                    ->select('employees_code')
+                    ->where('employees_code', 'like', 'TA-%')
+                    ->orderBy('employees_code', 'desc')
+                    ->lockForUpdate()
+                    ->first();
 
-            $employee->employees_code = $code;
+                if ($lastCode) {
+                    // Ambil nomor terakhir
+                    $lastNumber = (int)substr($lastCode->employees_code, 3);
+                    $newNumber = $lastNumber + 1;
+                } else {
+                    $newNumber = 1;
+                }
+
+                // Format dengan leading zero 3 digit
+                $code = 'TA-' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+                $employee->employees_code = $code;
+            });
         });
 
-        // QR Code generation (kalau masih ingin)
+        // Event created tetap sama (generate QR code dst)
         static::created(function ($employee) {
             $qrData = $employee->employees_code;
 

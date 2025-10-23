@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('time_off_action', ['sakit', 'melahirkan', 'duka']);
             $table->text('description');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->timestamp();
+            $table->timestamps();
         });
 
     }

@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('presence_out', function (Blueprint $table) {
             $table->id();
-            $table->string('latitude_out');
-            $table->string('longitude_out');
-            $table->time('presence_time');
-            $table->date('presence_date');
-            $table->foreignId('employees_id')->constrained('employees');
-            $table->timestamp();
+            $table->string('latitude_out')->nullable();
+            $table->string('longitude_out')->nullable();
+            $table->time('presence_time')->nullable();
+            $table->date('presence_date')->nullable();
+            $table->foreignId('employees_id')->nullable()->constrained('employees');
+            $table->timestamps();
         });
 
     }

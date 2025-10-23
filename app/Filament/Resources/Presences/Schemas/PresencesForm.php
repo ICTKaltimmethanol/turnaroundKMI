@@ -1,10 +1,13 @@
 <?php
-
 namespace App\Filament\Resources\Presences\Schemas;
 
 use Filament\Forms\Components\TextInput;
-use APP\Models\PresenceIn;
-use APP\Models\PresenceOut;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Select;
+use App\Models\Company;
 use Filament\Schemas\Schema;
 
 class PresencesForm
@@ -14,18 +17,53 @@ class PresencesForm
         return $schema
             ->components([
                 TextInput::make('total_time')
-                    ->required()
+                    ->label('Total Time')
+           
                     ->numeric(),
-                TextInput::make('presenceIn_id')
-                    ->relationship('presenceIn', 'presence_time')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('presenceOut_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('employees_id')
-                    ->required()
-                    ->numeric(),
+                
+                Select::make('employees_id')
+                    ->relationship('employee', 'full_name')
+                    ->label('Nama Karyawan')
+                    ->disabled()
+                    ->searchable()
+                    ->preload(),
+
+                Select::make('company_id')
+                    ->label('Perusahaan')
+                    ->relationship('company', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
+                    ->searchable()
+                    ->preload()
+               
+                    ->required(),
+                
+                Select::make('position_id')
+                    ->label('Posisi')
+                    ->relationship('position', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+
+                 Section::make('Presensi Waktu Masuk')
+    ->relationship('presenceIn')
+    ->schema([
+        DatePicker::make('presence_date')
+            ->label('Tanggal Masuk')
+            ->required(),
+        TimePicker::make('presence_time')
+            ->label('Waktu Masuk')
+            ->required(),
+    ]),
+
+Section::make('Presensi Waktu Pulang')
+    ->relationship('presenceOut')
+    ->schema([
+        DatePicker::make('presence_date')
+            ->label('Tanggal Pulang'),
+        TimePicker::make('presence_time')
+            ->label('Waktu Pulang'),
+    ]),
+
+
             ]);
     }
 }

@@ -45,6 +45,16 @@
                 </div>
             </div>
 
+            <!-- elemen loading  -->
+            <div id="loadingIndicator" style="display:none; text-align:center; margin-bottom: 1rem;">
+                <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                </svg>
+                <p>Loading...</p>
+            </div>
+
+
             <!-- Data Karyawan di Samping -->
             <div id="employeeData" class="w-full max-w-md text-xl font-semibold text-gray-700 dark:text-white">
                 <!-- Data akan muncul di sini -->
@@ -81,72 +91,83 @@
 
         // Proses scan
         function handleScan() {
-            const code = input.value.trim();
-            if (code.length < 3) return;
+    const code = input.value.trim();
+    if (code.length < 3) return;
 
-            fetch(`{{ route('absensi.scan') }}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify({ barcode: code }),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Scan gagal');
-                }
-                return response.json();
-            })
-           .then(data => {
-                const employee = data.employee;
+    // Tampilkan loading dan disable input
+    document.getElementById('loadingIndicator').style.display = 'block';
+    input.disabled = true;
 
-                const infoBox = `
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                        <strong>${data.status.toUpperCase()}</strong> - ${data.message}
-                    </div>
-
-                    <div class="max-w-md p-4 bg-center bg-cover bg-no-repeat bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')] bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
-                        <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
-
-                            <div class="rounded-lg text-white text-center py-2 pt-4">
-                                <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span></h2>
-                                <p class="text-sm">PT. Kaltim Methanol Industri</p>
-                            </div>
-
-                            <!-- Info Karyawan -->
-                            <div class="text-gray-800 py-2">
-                                <h3 class="text-xl font-bold text-gray-100">${employee.full_name}</h3>
-                                <p class="text-md text-gray-200 italic">${employee.company_name} - ${employee.position_name}</p>
-                                <p class="text-sm text-gray-400">${employee.employee_code}</p>
-                                ${data.total_minutes !== undefined ? `<p class="mt-1 text-sm">Total Waktu: ${data.total_minutes} menit</p>` : ''}
-                            </div>
-
-                            {{--<!-- Icons -->
-                            <div class="flex justify-center items-center gap-6 py-2 bg-white rounded-lg border border-gray-200">
-                                <img src="/images/sojitz.png" alt="Sojitz" class="h-5" />
-                                <img src="/images/daicel.png" alt="Daicel" class="h-5" />
-                                <img src="/images/humpus.png" alt="Humpus" class="h-5" />
-                                <img src="/images/engineer2.png" alt="Engineer 2" class="h-5" />
-                            </div> --}}
-                        </div>
-                    </div>
-                `;
-
-                document.getElementById('employeeData').innerHTML = infoBox;
-            })
-
-            .catch(() => {
-                document.getElementById('employeeData').innerHTML = `
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                        Karyawan tidak ditemukan atau terjadi kesalahan saat scan.
-                    </div>
-                `;
-            });
-
-            input.value = '';
-            input.focus();
+    fetch(`/absensi/scan`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+        },
+        body: JSON.stringify({ barcode: code }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Scan gagal');
         }
+        return response.json();
+    })
+    .then(data => {
+        const employee = data.employee;
+
+        // Pilih warna sesuai status
+        let bgColor = '';
+        if (data.status === 'masuk') {
+            bgColor = 'bg-green-100 border-green-400 text-green-700';
+        } else if (data.status === 'keluar') {
+            bgColor = 'bg-yellow-100 border-yellow-400 text-yellow-700';
+        } else {
+            bgColor = 'bg-gray-100 border-gray-400 text-gray-700';
+        }
+
+        const infoBox = `
+            <div class="${bgColor} border px-4 py-3 rounded mb-4">
+                <strong>${data.status.toUpperCase()}</strong> - ${data.message}
+            </div>
+
+            <div class="max-w-md p-4 bg-center bg-cover bg-no-repeat bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')] bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
+
+                    <div class="rounded-lg text-white text-center py-2 pt-4">
+                        <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span></h2>
+                        <p class="text-sm">PT. Kaltim Methanol Industri</p>
+                    </div>
+
+                    <!-- Info Karyawan -->
+                    <div class="text-gray-800 py-2">
+                        <h3 class="text-xl font-bold text-gray-100">${employee.full_name}</h3>
+                        <p class="text-md text-gray-200 italic">${employee.company_name} - ${employee.position_name}</p>
+                        <p class="text-sm text-gray-400">${employee.employee_code}</p>
+                        ${data.total_minutes !== undefined ? `<p class="mt-1 text-sm">Total Waktu: ${data.total_minutes} menit</p>` : ''}
+                    </div>
+
+                </div>
+            </div>
+        `;
+
+        document.getElementById('employeeData').innerHTML = infoBox;
+    })
+    .catch(() => {
+        document.getElementById('employeeData').innerHTML = `
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                Karyawan tidak ditemukan atau terjadi kesalahan saat scan.
+            </div>
+        `;
+    })
+    .finally(() => {
+        // Hide loading dan enable input lagi
+        document.getElementById('loadingIndicator').style.display = 'none';
+        input.disabled = false;
+        input.value = '';
+        input.focus();
+    });
+}
+
     </script>
 </body>
 </html>

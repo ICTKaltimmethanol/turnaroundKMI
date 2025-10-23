@@ -54,7 +54,14 @@ class EmployeesTable
                 TextColumn::make('status')
                     ->label('Status')
                     ->searchable()
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'active' => 'success',
+                        'inactive' => 'danger',
+                        default => 'secondary',
+                    })
                     ->sortable(),
+
                 TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime('d M Y H:i')
@@ -64,8 +71,6 @@ class EmployeesTable
                     ->dateTime('d M Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-
-
             ])
             ->filters([
                 TrashedFilter::make(),

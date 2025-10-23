@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('background_path');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->timestamp();
+            $table->timestamps();
         });
 
     }

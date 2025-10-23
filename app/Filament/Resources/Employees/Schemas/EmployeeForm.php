@@ -92,7 +92,7 @@ class EmployeeForm
                     ->view('forms.components.barcode-image'),
                 
                 FileUpload::make('profile_img_path')
-                    ->label('Gambar Profil')
+                    ->label('Gambar Profil (Opsional)')
                     ->image()
                     ->disk('public')                   
                     ->directory('employees')           

@@ -7,6 +7,7 @@ use App\Filament\Resources\Presences\Pages\EditPresences;
 use App\Filament\Resources\Presences\Pages\ListPresences;
 use App\Filament\Resources\Presences\Schemas\PresencesForm;
 use App\Filament\Resources\Presences\Tables\PresencesTable;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Presences;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -21,8 +22,19 @@ class PresencesResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Clock;
 
     protected static ?string $navigationLabel = 'Data Presensi';
+    
 
     protected static ?string $recordTitleAttribute = 'id';
+
+    public static function getLabel (): ?string 
+    {
+        return 'Presensi';
+    }
+    
+    public static function getNavigationBadge(): ?string 
+    {
+        return (string) Presences::count();
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -37,7 +49,7 @@ class PresencesResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            
         ];
     }
 
@@ -51,4 +63,11 @@ class PresencesResource extends Resource
 
         ];
     }
+    
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()->with(['presenceIn', 'presenceOut']);
+}
+
+
 }

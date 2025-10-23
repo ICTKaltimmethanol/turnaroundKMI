@@ -19,7 +19,7 @@ return new class extends Migration
             $table->time('presence_time');
             $table->date('presence_date');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->timestamp();
+            $table->timestamps();
         });
 
     }

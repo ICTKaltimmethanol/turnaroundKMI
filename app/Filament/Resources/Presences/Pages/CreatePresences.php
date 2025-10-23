@@ -8,4 +8,11 @@ use Filament\Resources\Pages\CreateRecord;
 class CreatePresences extends CreateRecord
 {
     protected static string $resource = PresencesResource::class;
+
+
+
+    public static function getLabel (): ?string 
+    {
+        return 'Tambah Presensi';
+    }
 }

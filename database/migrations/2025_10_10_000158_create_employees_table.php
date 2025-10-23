@@ -16,13 +16,12 @@ return new class extends Migration
             $table->string('email');
             $table->string('password');
             $table->string('employees_code')->unique();
-
             $table->string('full_name');
             $table->foreignId('company_id')->constrained('companies');
             $table->foreignId('position_id')->constrained('positions');
             $table->string('profile_img_path')->nullable();
             $table->enum('status', ['active', 'inactive', 'suspended']);
-            $table->timestamp();
+            $table->timestamps();
         });
 
     }
