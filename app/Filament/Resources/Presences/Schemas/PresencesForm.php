@@ -43,27 +43,25 @@ class PresencesForm
                     ->preload()
                     ->required(),
 
-                 Section::make('Presensi Waktu Masuk')
-    ->relationship('presenceIn')
-    ->schema([
-        DatePicker::make('presence_date')
-            ->label('Tanggal Masuk')
-            ->required(),
-        TimePicker::make('presence_time')
-            ->label('Waktu Masuk')
-            ->required(),
-    ]),
+                Section::make('Presensi Waktu Masuk')
+                    ->relationship('presenceIn')
+                    ->schema([
+                        DatePicker::make('presence_date')
+                            ->label('Tanggal Masuk')
+                            ->required(),
+                        TimePicker::make('presence_time')
+                            ->label('Waktu Masuk')
+                            ->required(),
+                    ]),
 
-Section::make('Presensi Waktu Pulang')
-    ->relationship('presenceOut')
-    ->schema([
-        DatePicker::make('presence_date')
-            ->label('Tanggal Pulang'),
-        TimePicker::make('presence_time')
-            ->label('Waktu Pulang'),
-    ]),
-
-
+                Section::make('Presensi Waktu Pulang')
+                    ->relationship('presenceOut')
+                    ->schema([
+                        DatePicker::make('presence_date')
+                            ->label('Tanggal Pulang'),
+                        TimePicker::make('presence_time')
+                            ->label('Waktu Pulang'),
+                    ]),
             ]);
     }
 }

@@ -16,9 +16,7 @@ use Illuminate\Support\Str;
 
 class Employee extends Model implements AuthenticatableContract
 {
-    use HasFactory, Authenticatable;
-    
-    use SoftDeletes;
+    use HasFactory, Authenticatable, SoftDeletes;
 
     protected $fillable = [
         'email',
@@ -31,6 +29,7 @@ class Employee extends Model implements AuthenticatableContract
         'status',
     ];
 
+    
     // Relasi Company
     public function company()
     {

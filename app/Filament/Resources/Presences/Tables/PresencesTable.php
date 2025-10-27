@@ -33,8 +33,8 @@ class PresencesTable
                     ->numeric()
                     ->sortable(),
                TextColumn::make('total_time')
-                    ->label('Total Waktu')
-                    ->formatStateUsing(fn ($state) => abs($state) . ' menit')
+                    ->label('Total Waktu (Jam)')
+                    ->formatStateUsing(fn ($state) => abs($state))
                     ->sortable(),
 
                 TextColumn::make('company.name')

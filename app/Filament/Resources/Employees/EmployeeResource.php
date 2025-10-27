@@ -26,12 +26,6 @@ class EmployeeResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'full_name';
 
- 
-    public static function getNavigationBadge(): ?string 
-    {
-        return (string) Employee::count();
-    }
-
     public static function form(Schema $schema): Schema
     {
         return EmployeeForm::configure($schema);
@@ -41,6 +35,13 @@ class EmployeeResource extends Resource
     {
         return EmployeesTable::configure($table);
     }
+    
+     
+    public static function getNavigationBadge(): ?string 
+    {
+        return (string) Employee::count();
+    }
+
 
     public static function getRelations(): array
     {
