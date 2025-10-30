@@ -31,31 +31,35 @@ class PresencesTable
                 TextColumn::make('employee.full_name')
                     ->label('Nama Lengkap')
                     ->numeric()
+                    ->toogleable()
                     ->sortable(),
                TextColumn::make('total_time')
                     ->label('Total Waktu (Jam)')
                     ->formatStateUsing(fn ($state) => abs($state))
+                    ->toogleable()
                     ->sortable(),
-
                 TextColumn::make('company.name')
                     ->label('Perusahaan')
+                    ->toogleable()
                     ->sortable(),
                 TextColumn::make('position.name')
                     ->label('Posisi')
+                    ->toogleable()
                     ->sortable(),
                 TextColumn::make('presenceIn.created_at')
                     ->label('Waktu Masuk')
-                    ->dateTime('d/m/Y H:i:s')  // Format tanggal yang diinginkan
+                    ->dateTime('d/m/Y H:i:s')                    
+                    ->toogleable()
                     ->sortable(),
-
                 TextColumn::make('presenceOut.created_at')
                     ->label('Waktu Pulang')
                     ->dateTime('d/m/Y H:i:s')
+                    ->toogleable()
                     ->sortable(),
                 
             ])
             ->filters([
-                
+                TrashedFilter::make(),
                 Filter::make('created_at')
                     ->schema([
                         DatePicker::make('created_from')
