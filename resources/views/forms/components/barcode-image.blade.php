@@ -10,7 +10,7 @@
         <!-- Tombol Download -->
         <a 
             href="{{ Storage::disk('public')->url($getRecord()->qrCode->img_path) }}" 
-            download="QR_Code_{{ $getRecord()->full_name }}.png"
+            download="{{ $getRecord()->employees_code}}_{{ $getRecord()->full_name}}.png"
             style="display: inline-block; padding: 8px 16px; background-color: #4CAF50; color: white; border-radius: 4px; text-decoration: none;"
         >
             Download QR Code
