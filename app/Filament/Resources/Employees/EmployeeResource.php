@@ -21,6 +21,11 @@ class EmployeeResource extends Resource
     protected static ?string $model = Employee::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::User;
+    
+    public static function getLabel (): ?string 
+    {
+        return 'Pekerja';
+    }
 
     protected static ?string $navigationLabel = 'Pekerja TA';
 
