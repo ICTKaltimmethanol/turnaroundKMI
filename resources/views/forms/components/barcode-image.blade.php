@@ -1,6 +1,6 @@
 <div>
     @if ($getRecord()?->qrCode?->img_path)
-        <p style="padding: 10px 0;">QR Code</p>
+        <p style="padding: 10px 0; font-weight:600;">QR Code</p>
         <img
             src="{{ Storage::disk('public')->url($getRecord()->qrCode->img_path) }}"
             style="height: 160px;"
