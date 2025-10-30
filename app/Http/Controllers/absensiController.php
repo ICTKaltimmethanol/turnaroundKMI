@@ -58,148 +58,148 @@ class AbsensiController extends Controller
         
     }*/
 
-public function scan(Request $request)
-{
-    $request->validate([
-        'barcode' => 'required|string',
-        'latitude' => 'nullable|numeric',
-        'longitude' => 'nullable|numeric',
-    ]);
+    public function scan(Request $request)
+    {
+        $request->validate([
+            'barcode' => 'required|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+        ]);
 
-    DB::beginTransaction();
+        DB::beginTransaction();
 
-    try {
-        $barcode = $request->input('barcode');
+        try {
+            $barcode = $request->input('barcode');
 
-        // Ambil QR Code + relasi employee, position, company
-        $qrCode = QrCode::with('employee.position', 'employee.company')
-            ->where('code', $barcode)
-            ->first();
+            // Ambil QR Code + relasi employee, position, company
+            $qrCode = QrCode::with('employee.position', 'employee.company')
+                ->where('code', $barcode)
+                ->first();
 
-        if (!$qrCode || !$qrCode->employee) {
-            return response()->json([
-                'message' => 'QR Code tidak valid, tidak ada karyawan terhubung'
-            ], 404);
-        }
+            if (!$qrCode || !$qrCode->employee) {
+                return response()->json([
+                    'message' => 'QR Code tidak valid, tidak ada karyawan terhubung'
+                ], 404);
+            }
 
-        $employee = $qrCode->employee;
-        $employeeId = $employee->id;
-        $now = now();
+            $employee = $qrCode->employee;
+            $employeeId = $employee->id;
+            $now = now();
 
-        $latitude = $request->filled('latitude') ? $request->input('latitude') : '-6.200000';
-        $longitude = $request->filled('longitude') ? $request->input('longitude') : '106.816666';
+            $latitude = $request->filled('latitude') ? $request->input('latitude') : '-6.200000';
+            $longitude = $request->filled('longitude') ? $request->input('longitude') : '106.816666';
 
-        // Ambil presensi terakhir yang belum memiliki out
-        $lastPresence = Presences::where('employees_id', $employeeId)
-            ->whereNull('presenceOut_id')
-            ->latest('id')
-            ->lockForUpdate()
-            ->first();
+            // Ambil presensi terakhir yang belum memiliki out
+            $lastPresence = Presences::where('employees_id', $employeeId)
+                ->whereNull('presenceOut_id')
+                ->latest('id')
+                ->lockForUpdate()
+                ->first();
 
-        /**
-         * =========================
-         * PRESENSI MASUK
-         * =========================
-         */
-        if (!$lastPresence) {
-            // Buat record PresenceIn
-            $presenceIn = PresenceIn::create([
-                'presence_in_status' => 'on_time',
-                'latitude_in' => $latitude,
-                'longitude_in' => $longitude,
+            /**
+             * =========================
+             * PRESENSI MASUK
+             * =========================
+             */
+            if (!$lastPresence) {
+                // Buat record PresenceIn
+                $presenceIn = PresenceIn::create([
+                    'presence_in_status' => 'on_time',
+                    'latitude_in' => $latitude,
+                    'longitude_in' => $longitude,
+                    'presence_time' => $now->toTimeString(),
+                    'presence_date' => $now->toDateString(),
+                    'employees_id' => $employeeId,
+                ]);
+
+                // Buat record Presences
+                Presences::create([
+                    'presenceIn_id' => $presenceIn->id,
+                    'employees_id' => $employeeId,
+                    'employees_company_id' => $employee->company_id,
+                    'employees_position_id' => $employee->position_id,
+                ]);
+
+                DB::commit();
+
+                return response()->json([
+                    'status' => 'masuk',
+                    'message' => 'Presensi masuk berhasil dicatat.',
+                    'employee' => [
+                        'full_name' => $employee->full_name ?? '-',
+                        'employee_code' => $employee->employees_code ?? '-',
+                        'company_name' => $employee->company?->name ?? '-',
+                        'position_name' => $employee->position?->name ?? '-',
+                    ]
+                ]);
+            }
+
+            /**
+             * =========================
+             * PRESENSI KELUAR
+             * =========================
+             */
+            $lastIn = PresenceIn::find($lastPresence->presenceIn_id);
+
+            // Buat record PresenceOut
+            $presenceOut = PresenceOut::create([
+                'latitude_out' => $latitude,
+                'longitude_out' => $longitude,
                 'presence_time' => $now->toTimeString(),
                 'presence_date' => $now->toDateString(),
                 'employees_id' => $employeeId,
             ]);
 
-            // Buat record Presences
-            Presences::create([
-                'presenceIn_id' => $presenceIn->id,
-                'employees_id' => $employeeId,
-                'employees_company_id' => $employee->company_id,
-                'employees_position_id' => $employee->position_id,
+            // Hitung selisih waktu masuk-keluar (dengan dukungan lintas hari)
+            $inDateTime = Carbon::parse($lastIn->presence_date . ' ' . $lastIn->presence_time);
+            $outDateTime = Carbon::parse($presenceOut->presence_date . ' ' . $presenceOut->presence_time);
+
+            // Jika keluar lebih awal dari masuk, berarti lintas hari → tambahkan 1 hari
+            if ($outDateTime->lessThan($inDateTime)) {
+                $outDateTime->addDay();
+            }
+
+            // Total menit
+            $totalMinutes = $outDateTime->diffInMinutes($inDateTime);
+
+            // Total jam penuh (depannya saja)
+            $totalHoursOnly = floor($totalMinutes / 60);
+
+            // Format jam:menit untuk readability
+            $remainingMinutes = $totalMinutes % 60;
+            $totalReadable = sprintf('%02d jam %02d menit', $totalHoursOnly, $remainingMinutes);
+
+            // Update Presences dengan out dan total waktu
+            $lastPresence->update([
+                'presenceOut_id' => $presenceOut->id,
+                'total_time' => $totalHoursOnly, // simpan hanya jam penuh
             ]);
 
             DB::commit();
 
             return response()->json([
-                'status' => 'masuk',
-                'message' => 'Presensi masuk berhasil dicatat.',
+                'status' => 'keluar',
+                'message' => 'Presensi keluar berhasil dicatat.',
+                'total_hours' => $totalHoursOnly, // jam penuh
+                'total_time_readable' => $totalReadable,
                 'employee' => [
-                    'full_name' => $employee->full_name ?? '-',
-                    'employee_code' => $employee->employees_code ?? '-',
+                    'full_name' => $employee->full_name,
+                    'employee_code' => $employee->employees_code,
                     'company_name' => $employee->company?->name ?? '-',
                     'position_name' => $employee->position?->name ?? '-',
                 ]
             ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error in scan method: ' . $e->getMessage());
+
+            return response()->json([
+                'error' => 'Internal Server Error',
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        /**
-         * =========================
-         * PRESENSI KELUAR
-         * =========================
-         */
-        $lastIn = PresenceIn::find($lastPresence->presenceIn_id);
-
-        // Buat record PresenceOut
-        $presenceOut = PresenceOut::create([
-            'latitude_out' => $latitude,
-            'longitude_out' => $longitude,
-            'presence_time' => $now->toTimeString(),
-            'presence_date' => $now->toDateString(),
-            'employees_id' => $employeeId,
-        ]);
-
-        // Hitung selisih waktu masuk-keluar (dengan dukungan lintas hari)
-        $inDateTime = Carbon::parse($lastIn->presence_date . ' ' . $lastIn->presence_time);
-        $outDateTime = Carbon::parse($presenceOut->presence_date . ' ' . $presenceOut->presence_time);
-
-        // Jika keluar lebih awal dari masuk, berarti lintas hari → tambahkan 1 hari
-        if ($outDateTime->lessThan($inDateTime)) {
-            $outDateTime->addDay();
-        }
-
-        // Total menit
-        $totalMinutes = $outDateTime->diffInMinutes($inDateTime);
-
-        // Total jam penuh (depannya saja)
-        $totalHoursOnly = floor($totalMinutes / 60);
-
-        // Format jam:menit untuk readability
-        $remainingMinutes = $totalMinutes % 60;
-        $totalReadable = sprintf('%02d jam %02d menit', $totalHoursOnly, $remainingMinutes);
-
-        // Update Presences dengan out dan total waktu
-        $lastPresence->update([
-            'presenceOut_id' => $presenceOut->id,
-            'total_time' => $totalHoursOnly, // simpan hanya jam penuh
-        ]);
-
-        DB::commit();
-
-        return response()->json([
-            'status' => 'keluar',
-            'message' => 'Presensi keluar berhasil dicatat.',
-            'total_hours' => $totalHoursOnly, // jam penuh
-            'total_time_readable' => $totalReadable,
-            'employee' => [
-                'full_name' => $employee->full_name,
-                'employee_code' => $employee->employees_code,
-                'company_name' => $employee->company?->name ?? '-',
-                'position_name' => $employee->position?->name ?? '-',
-            ]
-        ]);
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        Log::error('Error in scan method: ' . $e->getMessage());
-
-        return response()->json([
-            'error' => 'Internal Server Error',
-            'message' => $e->getMessage(),
-        ], 500);
     }
-}
 
 
 }
