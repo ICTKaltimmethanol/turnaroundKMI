@@ -35,9 +35,9 @@ class EmployeeForm
 
                 TextInput::make('password')
                     ->password()
-                    ->placeholder('Minimal 8 karakter')
+                    ->placeholder('Minimal 14 karakter')
                     ->revealable()
-                    ->minLength(8)
+                    ->minLength(14)
                     ->afterStateHydrated(function (TextInput $component, $state) {
                             $component->state(null);
                         })
