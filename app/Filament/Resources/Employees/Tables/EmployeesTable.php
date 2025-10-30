@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Employees\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
@@ -15,15 +14,15 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
-
+use Filament\Forms\Components\Select;
 use App\Models\Employee;
 use App\Models\QrCode;
-use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Actions\Action; 
+use Filament\Tables\Actions\BulkAction;
 
 
 class EmployeesTable

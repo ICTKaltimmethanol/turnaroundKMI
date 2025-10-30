@@ -9,6 +9,8 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Filters\TrashedFilter;
+
 use Filament\Tables\Filters\Filter;
 use Filament\Actions\ViewAction;
 use Illuminate\Database\Eloquent\Builder;
