@@ -15,6 +15,8 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Forms\Components\TextInput;
+
 use App\Models\Employee;
 use App\Models\QrCode;
 use Filament\Forms\Components\DatePicker;
