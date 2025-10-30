@@ -20,7 +20,7 @@ class PresencesStatsOverview extends BaseWidget
     {
         return [
             Stat::make('Total Employee', Employee::count())
-                ->description('Jumlah semua karyawan')
+                ->description('Jumlah pekerja TA')
                 ->descriptionIcon('heroicon-o-user-group')
                 ->color('success'),
 
