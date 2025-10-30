@@ -80,53 +80,49 @@ class EmployeesTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            
             ->filters([
                 TrashedFilter::make(),
                 Filter::make('created_at')
-                    ->schema([
-                        DatePicker::make('created_from')
-                        ->label('Dari Tanggal'),
-                        DatePicker::make('created_until')
-                        ->label('Sampai Tanggal'),
+                    ->form([
+                        DatePicker::make('created_from')->label('Dari Tanggal'),
+                        DatePicker::make('created_until')->label('Sampai Tanggal'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
-                            ->when($data['created_from'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '>=', $date))
-                            ->when($data['created_until'] ?? null, fn ($query, $date) => $query->whereDate('created_at', '<=', $date));
-                        }),
-                
+                            ->when($data['created_from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    }),
+
+                // 🔹 Filter gabungan (nama, perusahaan, posisi)
                 Filter::make('filters')
                     ->form([
                         TextInput::make('employee_name')
                             ->label('Nama Karyawan')
                             ->placeholder('Cari nama karyawan...'),
 
-                        Select::make('employees_company_id')
+                        Select::make('company_id')
                             ->label('Perusahaan')
-                            ->options(function () {
-                                return \App\Models\Company::pluck('name', 'id')->toArray();
-                            })
+                            ->options(fn () => Company::pluck('name', 'id'))
                             ->searchable()
                             ->placeholder('Pilih perusahaan'),
 
-                        Select::make('employees_position_id')
+                        Select::make('position_id')
                             ->label('Posisi')
-                            ->options(function () {
-                                return \App\Models\Position::pluck('name', 'id')->toArray();
-                            })
+                            ->options(fn () => Position::pluck('name', 'id'))
                             ->searchable()
                             ->placeholder('Pilih posisi'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
-                            ->when($data['employee_name'] ?? null, fn ($query, $name) => 
-                                $query->whereHas('employee', fn ($q) => $q->where('full_name', 'like', "%{$name}%"))
+                            ->when($data['employee_name'], fn ($q, $name) =>
+                                $q->where('full_name', 'like', "%{$name}%")
                             )
-                            ->when($data['employees_company_id'] ?? null, fn ($query, $companyId) => 
-                                $query->where('employees_company_id', $companyId)
+                            ->when($data['company_id'], fn ($q, $companyId) =>
+                                $q->where('company_id', $companyId)
                             )
-                            ->when($data['employees_position_id'] ?? null, fn ($query, $positionId) => 
-                                $query->where('employees_position_id', $positionId)
+                            ->when($data['position_id'], fn ($q, $positionId) =>
+                                $q->where('position_id', $positionId)
                             );
                     }),
             ])
