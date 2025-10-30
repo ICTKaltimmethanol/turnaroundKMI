@@ -17,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use App\Models\Employee;
 use App\Models\QrCode;
+use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -34,28 +35,28 @@ class EmployeesTable
                     ->label('Barcode')
                     ->disk('public') 
                     ->height(40)
-                    ->toogleable()
+                    ->toggleable()
                     ->circular(false)
-                    ->toogleable(),
+                    ->toggleable(),
                 TextColumn::make('employees_code')
                     ->label('Employee Code')
                     ->searchable()                    
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('full_name')
                     ->label('Full Name')
                     ->searchable()
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('company.name')
                     ->label('Company')
                     ->searchable()
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('position.name')
                     ->label('Position')
                     ->searchable()
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('status')
                     ->label('Status')
@@ -70,7 +71,7 @@ class EmployeesTable
                 TextColumn::make('created_at')
                     ->label('Created At')
                     ->dateTime('d M Y H:i')
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('deleted_at')
                     ->label('Deleted At')

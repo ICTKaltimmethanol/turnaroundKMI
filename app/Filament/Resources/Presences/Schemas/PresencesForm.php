@@ -18,7 +18,7 @@ class PresencesForm
             ->components([
                 TextInput::make('total_time')
                     ->label('Total Time')
-           
+                    ->formatStateUsing(fn ($state) => abs($state))
                     ->numeric(),
                 
                 Select::make('employees_id')
