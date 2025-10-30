@@ -53,6 +53,12 @@ class EmployeesTable
                     ->sortable(),
                 TextColumn::make('status')
                     ->label('Status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'inactive' => 'warning',
+                        'active' => 'success',
+                        'suspended' => 'danger',
+                    })
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
