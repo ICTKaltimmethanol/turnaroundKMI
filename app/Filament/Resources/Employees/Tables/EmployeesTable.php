@@ -44,22 +44,22 @@ class EmployeesTable
                     ->circular(false)
                     ->toggleable(),
                 TextColumn::make('employees_code')
-                    ->label('Employee Code')
+                    ->label('ID Pekerja')
                     ->searchable()                    
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('full_name')
-                    ->label('Full Name')
+                    ->label('Nama Lengkap')
                     ->searchable()
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('company.name')
-                    ->label('Company')
+                    ->label('Perusahaan')
                     ->searchable()
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('position.name')
-                    ->label('Position')
+                    ->label('Posisi')
                     ->searchable()
                     ->toggleable()
                     ->sortable(),
