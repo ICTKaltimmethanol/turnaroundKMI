@@ -28,7 +28,7 @@ class PresencesTable
     public static function configure(Table $table): Table
     {
         return $table
-           ->heading('Daftar Karyawan')
+           ->heading('Daftar Absensi ')
         
             ->columns([
                 TextColumn::make('employee.full_name')
