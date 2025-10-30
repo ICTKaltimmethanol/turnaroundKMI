@@ -6,21 +6,22 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Filament\Forms\Components\DatePicker;
-use Filament\Tables\Filters\TrashedFilter;
-
-use Filament\Tables\Filters\Filter;
 use Filament\Actions\ViewAction;
-use Illuminate\Database\Eloquent\Builder;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
-use pxlrbt\FilamentExcel\Exports\ExcelExport;
+
+use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
-use Illuminate\Support\Collection;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportAction; // untuk export biasa (header action)
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction; 
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class PresencesTable
 {
@@ -61,7 +62,6 @@ class PresencesTable
                 
             ])
             ->filters([
-                TrashedFilter::make(),
                 Filter::make('created_at')
                     ->schema([
                         DatePicker::make('created_from')
