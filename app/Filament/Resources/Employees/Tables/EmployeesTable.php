@@ -23,7 +23,9 @@ use App\Models\Position;
 use App\Models\QrCode;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Tables\Actions\Action; 
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
+use Filament\Actions\Action; 
 use Filament\Tables\Actions\BulkAction;
 
 
@@ -133,6 +135,37 @@ class EmployeesTable
                 EditAction::make(),
             ])
             ->toolbarActions([
+                Action::make('downloadAllQRCodes')
+                    ->label('Download Semua QR Code')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->color('success')
+                    ->action(function () {
+                        $zip = new ZipArchive;
+                        $fileName = 'qr_codes_' . now()->format('Ymd_His') . '.zip';
+                        $zipPath = storage_path('app/public/' . $fileName);
+
+                        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+                            $employees = \App\Models\Employee::with('qrCode')->get();
+
+                            foreach ($employees as $employee) {
+                                if ($employee->qrCode && Storage::disk('public')->exists($employee->qrCode->img_path)) {
+                                    $path = Storage::disk('public')->path($employee->qrCode->img_path);
+                                    $fileNameInsideZip = $employee->employees_code . '_' . $employee->full_name . '.png';
+                                    $zip->addFile($path, $fileNameInsideZip);
+                                }
+                            }
+
+                            $zip->close();
+                        }
+
+                        // Return URL download file zip
+                        return response()->download($zipPath)->deleteFileAfterSend(true);
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading('Download Semua QR Code')
+                    ->modalSubheading('File ZIP akan berisi seluruh QR Code karyawan.')
+                    ->modalButton('Download Sekarang'),
+
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ForceDeleteBulkAction::make(),
