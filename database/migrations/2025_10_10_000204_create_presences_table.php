@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('presenceIn_id')->constrained('presence_in');
             $table->foreignId('presenceOut_id')->nullable()->constrained('presence_out');
             $table->foreignId('employees_id')->constrained('employees');
-            $table->foreignId('employees_company');        
-            $table->foreignId('employees_position');
+            $table->foreignId('employees_company_id');        
+            $table->foreignId('employees_position_id');
             $table->timestamps();
         });
 
