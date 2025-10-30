@@ -37,7 +37,7 @@ class EmployeesTable
             ->columns([
 
                 ImageColumn::make('qrCode.img_path')
-                    ->label('Barcode')
+                    ->label('Qr Code')
                     ->disk('public') 
                     ->height(40)
                     ->toggleable()
