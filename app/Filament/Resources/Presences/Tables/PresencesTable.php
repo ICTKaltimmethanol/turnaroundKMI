@@ -33,30 +33,30 @@ class PresencesTable
                 TextColumn::make('employee.full_name')
                     ->label('Nama Lengkap')
                     ->numeric()
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                TextColumn::make('total_time')
                     ->label('Total Waktu (Jam)')
                     ->formatStateUsing(fn ($state) => abs($state))
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('company.name')
                     ->label('Perusahaan')
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('position.name')
                     ->label('Posisi')
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('presenceIn.created_at')
                     ->label('Waktu Masuk')
                     ->dateTime('d/m/Y H:i:s')                    
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 TextColumn::make('presenceOut.created_at')
                     ->label('Waktu Pulang')
                     ->dateTime('d/m/Y H:i:s')
-                    ->toogleable()
+                    ->toggleable()
                     ->sortable(),
                 
             ])
