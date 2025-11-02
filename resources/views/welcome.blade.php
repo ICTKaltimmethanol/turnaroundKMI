@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <title>TA KMI</title>
+        <!-- SEO Meta -->
+        <title>Absensi TA 2025 - PT. Kaltim Methanol Industri</title>
+        <meta name="description" content="Sistem Absensi Online Turn Around 2025 PT. Kaltim Methanol Industri. Digunakan untuk pencatatan kehadiran pekerja perbantuan kegiatan TA 2025 di Bontang.">
+        <meta name="keywords" content="Sistem Absensi, Absensi Online, TA 2025, PT Kaltim Methanol Industri, KMI Bontang, Absensi Karyawan, Absensi Kontraktor, Turn Around KMI, KMI, TA, 2025">
+
+        <!-- Open Graph (untuk preview di media sosial) -->
+        <meta property="og:title" content="Sistem Absensi TA 2025 - PT. Kaltim Methanol Industri" />
+        <meta property="og:description" content="Aplikasi absensi online untuk kegiatan Turn Around 2025 PT. KMI Bontang. Sistem pencatatan kehadiran personel selama kegiatan turn around berlangsung." />
+        <meta property="og:image" content="https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg" />
+        <meta property="og:url" content="https://turnaround-kmi.com/" />
+        <meta property="og:type" content="website" />
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{asset('images/engineer2.png')}}" />
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link rel="preconnect" href="https://fonts.bunny.net" />
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        @vite('resources/css/app.css')
 
-          @vite('resources/css/app.css')
     </head>
     <body class="font-roboto antialiased dark:bg-black dark:text-white/50">
         <div class="relative overflow-hidden min-h-screen">

@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\PageController;
 
-    Route::get('/', [AuthController::class, 'showLogin'])->name('login');
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 
@@ -21,6 +21,6 @@ Route::middleware(['auth:employee'])->group(function () {
     Route::post('/profile', [PageController::class, 'profileUpdate'])->name('profile.update');
 });
 
-Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+Route::get('/', [AbsensiController::class, 'index'])->name('absensi.index');
 
 Route::post('/absensi/scan', [AbsensiController::class, 'scan'])->name('absensi.scan');
