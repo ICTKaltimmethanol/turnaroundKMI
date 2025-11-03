@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
+  <meta name="description" content="Turn around 2025 PT. Kaltim Methanol Industri">
+
+  <title>TA - PT. KMI</title>
+
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.bunny.net" />
@@ -70,9 +73,6 @@
 
         <button type="submit" class="w-full rounded-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white mb-2">Log In</button>
 
-        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-          Belum memiliki akun? <a href="#" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Daftar</a>
-        </p>
       </form>
     </div>
   </div>
