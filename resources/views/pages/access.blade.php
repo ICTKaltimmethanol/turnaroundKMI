@@ -153,7 +153,7 @@ async function cekAkses() {
 
             setTimeout(() => {
                 window.location.href = "{{ route('absensi.index') }}";
-            }, 1200);
+            }, 2000);
 
         } catch (e) {
             showModal('error', 'SERVER ERROR', 'Tidak dapat terhubung ke server');
