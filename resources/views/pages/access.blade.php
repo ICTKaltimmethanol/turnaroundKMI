@@ -23,7 +23,6 @@
     <link rel="preconnect" href="https://fonts.bunny.net" />
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
-    <title>Akses Absensi</title>
     @vite('resources/css/app.css')
 
 </head>
@@ -125,32 +124,42 @@ function toggleVisibility() {
    CEK AKSES
 ================================ */
 async function cekAkses() {
+   
     const kode = document.getElementById('kode').value.trim();
+         
+        if (!kode) {
+            showModal('error', 'INPUT REQUIRED', 'Kode akses tidak boleh kosong');
+            return false;
+        }
+        try {
+            const res = await fetch("{{ route('akses.cek') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({ kode })
+            });
 
-    const res = await fetch("{{ route('akses.cek') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify({ kode })
-    });
+            const data = await res.json();
 
-    const data = await res.json();
+            if (!res.ok) {
+                showModal('error', 'ACCESS DENIED', data.message);
+                return false;
+            }
 
-    if (!res.ok) {
-        showModal('error', 'ACCESS DENIED', data.message);
+            showModal('success', 'ACCESS GRANTED', `Masuk ${data.gate}`);
+
+            setTimeout(() => {
+                window.location.href = "{{ route('absensi.index') }}";
+            }, 1200);
+
+        } catch (e) {
+            showModal('error', 'SERVER ERROR', 'Tidak dapat terhubung ke server');
+        }
+
         return false;
-    }
-
-    showModal('success', 'ACCESS GRANTED', `Masuk ${data.gate}`);
-
-    setTimeout(() => {
-        window.location.href = "{{ route('absensi.index') }}";
-    }, 1200);
-
-    return false;
 }
 
 /* ===============================
