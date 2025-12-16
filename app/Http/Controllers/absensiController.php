@@ -17,10 +17,38 @@ use Illuminate\Support\Carbon;
 
 class AbsensiController extends Controller
 {
-    public function index() {
-        return view('pages.absensi');
+    
+    public function index()
+    {
+        if (!session()->has('gate')) {
+            return redirect()->route('akses.index');
+        }
+
+        return view('pages.absensi', [
+            'gate' => session('gate')
+        ]);
     }
 
+
+    public function counterMasukDanBelumKeluar() {
+        $today = Carbon::today();
+
+        // Sudah absensi masuk hari ini
+        $alreadyIn = Presences::whereDate('created_at', $today)
+            ->whereNotNull('presenceIn_id')
+            ->count();
+
+        // Sudah masuk tapi belum absensi keluar
+        $notOutYet = Presences::whereDate('created_at', $today)
+            ->whereNotNull('presenceIn_id')
+            ->whereNull('presenceOut_id')
+            ->count();
+
+        return response()->json([
+            'already_in' => $alreadyIn,
+            'not_out_yet' => $notOutYet,
+        ]);
+    }
     /*public function scan(Request $request)
     {
         try {

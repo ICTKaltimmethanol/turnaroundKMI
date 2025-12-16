@@ -114,7 +114,6 @@
                         if ($minutes === 0 || $minutes === null) {
                             $totalTime = '--:--';
                         } else {
-                            // Paksa jadi positif
                             $minutes = abs($minutes);
 
                             $hours = floor($minutes / 60);

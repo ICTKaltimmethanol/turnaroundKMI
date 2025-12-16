@@ -11,66 +11,158 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
-<body class="font-roboto antialiased dark:bg-black dark:text-white/50">
-    <div class="h-screen flex justify-center items-center text-black">
-    <div class="text-center">
-        <h1 class="text-6xl font-bold text-red-800 mb-6">
-            <span class="text-blue-900">ABSENSI</span> TURN AROUND
-        </h1>
+<body class="min-h-screen font-[Figtree] bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
 
-        <div class="text-8xl py-2 font-bold">
-            <div id="liveTime"></div>
+
+    <!-- Header -->
+    <header class="w-full border-b border-white/5 bg-black/30 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+
+            <!-- BRAND -->
+            <div class="flex flex-col leading-tight">
+                <span class="text-lg font-semibold tracking-wide text-white">
+                    ABSENSI
+                    <span class="text-blue-400 font-bold">TA</span>
+                </span>
+                <span class="text-[10px] tracking-widest text-red-300 uppercase">
+                    Turn Around System
+                </span>
+            </div>
+
+            <!-- STATUS BAR -->
+            <div class="flex items-center gap-5">
+
+                <!-- POS -->
+                <div class="flex flex-col items-end leading-tight">
+                    <span class="text-[10px] tracking-widest text-white/40 uppercase">
+                        Active Post
+                    </span>
+                    <span class="text-sm font-medium text-emerald-400">
+                        {{ $gate }}
+                    </span>
+                </div>
+
+                <!-- Divider -->
+                <div class="h-8 w-px bg-white/10"></div>
+
+                <!-- Time -->
+                <div id="liveTime"
+                    class="text-sm font-mono tracking-wide text-white/70 min-w-[70px] text-right">
+                </div>
+
+                <!-- Divider -->
+                <div class="h-8 w-px bg-white/10"></div>
+
+                <!-- End Button -->
+                <form action="{{ route('akses.logout') }}" method="POST">
+                    @csrf
+                    <button
+                        type="submit"
+                        class="px-3 py-1.5 text-[10px] tracking-widest uppercase
+                            text-white/60 border border-white/20 rounded-md
+                            hover:text-red-400 hover:border-red-400/40
+                            hover:bg-red-500/5 transition">
+                        End Session
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        <div class="grid grid-cols-2 gap-6 mb-6">
+
+            <div class="rounded-xl bg-emerald-500/20 border border-emerald-400/40 p-5 text-center">
+                <p class="text-sm text-emerald-200">Sudah Absensi Masuk</p>
+                <p id="alreadyInCount" class="text-3xl font-bold text-emerald-300">0</p>
+            </div>
+
+            <div class="rounded-xl bg-amber-500/20 border border-amber-400/40 p-5 text-center">
+                <p class="text-sm text-amber-200">Belum Absensi Keluar</p>
+                <p id="notOutCount" class="text-3xl font-bold text-amber-300">0</p>
+            </div>
+
         </div>
 
-        <!-- Kontainer Flex: Gambar & Data Karyawan -->
-        <div class="flex items-start justify-center gap-10 mt-8">
-            <!-- Gambar + Scanner -->
-            <div class="w-full max-w-md border-2 border-gray-500 rounded-xl p-4 relative">
-                <!-- Input Barcode (hidden tapi tetap aktif) -->
-                <input
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+            <!-- Scanner Section -->
+            <div class="lg:col-span-1">
+                <div class="relative rounded-2xl border border-white/20 bg-white/5 p-6 shadow-lg">
+                    <!-- Hidden Input -->
+                    <input
                     type="text"
                     id="barcodeInput"
-                    class="absolute opacity-0 top-0 left-0 w-full h-full"
+                    class="absolute inset-0 opacity-0"
                     autocomplete="off"
                     spellcheck="false"
                     onkeydown="if(event.key === 'Enter') handleScan()"
-                />
+                    />
 
-                <img src="{{ asset('images/engineer.png') }}" alt="Engineer" class="h-70 mx-auto" />
 
-                <div class="mt-4">
-                    <p class="text-lg font-semibold text-gray-500">
-                        Arahkan barcode anda ke scanner
-                    </p>
+                    <img src="{{ asset('images/engineer.png') }}" alt="Scanner" class="mx-auto h-56 opacity-90" />
+
+
+                    <div class="mt-6 text-center">
+                        <p class="text-lg font-semibold text-white">Scan Barcode Anda</p>
+                        <p class="text-sm text-white/60">Pastikan scanner aktif dan mengarah ke QR Code</p>
+                    </div>
+
+
+                    <!-- Loading -->
+                    <div id="loadingIndicator" class="hidden absolute inset-0 bg-black/60 rounded-2xl flex flex-col items-center justify-center">
+                        <svg class="animate-spin h-10 w-10 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                        </svg>
+                        <p class="mt-3 text-sm text-white/80">Memproses data absensi...</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- elemen loading  -->
-            <div id="loadingIndicator" style="display:none; text-align:center; margin-bottom: 1rem;">
-                <svg class="animate-spin h-8 w-8 text-blue-500 mx-auto" xmlns="https://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                </svg>
-                <p>Loading...</p>
-            </div>
 
-
-            <!-- Data Karyawan di Samping -->
-            <div id="employeeData" class="w-full max-w-md text-xl font-semibold text-gray-700 dark:text-white">
-                <!-- Data akan muncul di sini -->
+            <!-- Result Section -->
+            <div class="lg:col-span-2">
+                <div id="employeeData" class="space-y-4">
+                    <div class="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white/50">
+                        <p class="text-lg">Data karyawan akan tampil di sini</p>
+                    </div>
+                </div>
             </div>
         </div>
+    </main>
 
-        {{--<!-- Logo perusahaan -->
+    <!-- SESSION EXPIRED MODAL -->
+    <div id="sessionModal"
+        class="fixed inset-0 z-50 hidden items-center justify-center
+                bg-black/70 backdrop-blur-sm">
+
+        <div class="w-full max-w-sm bg-slate-900 border border-white/10
+                    rounded-2xl p-6 text-center shadow-2xl">
+
+            <div class="text-4xl mb-3 text-red-400">⚠</div>
+
+            <h2 class="text-lg font-semibold tracking-wide mb-1">
+                SESSION BERAKHIR
+            </h2>
+
+            <p class="text-sm text-white/60">
+                Sesi absensi telah berakhir.<br>
+                Silakan masuk kembali untuk melanjutkan.
+            </p>
+        </div>
+    </div>
+
+    {{--<!-- Logo perusahaan -->
         <div class="flex justify-center items-center gap-8 mt-10">
             <img src="{{ asset('images/sojitz.png') }}" alt="Sojitz" class="h-12" />
             <img src="{{ asset('images/daicel.png') }}" alt="Daicel" class="h-12" />
             <img src="{{ asset('images/humpus.png') }}" alt="Humpus" class="h-12" />
             <img src="{{ asset('images/engineer2.png') }}" alt="Engineer 2" class="h-12" />
         </div>--}}
-    </div>
-</div>
-
 
     <script>
         // Update jam realtime
@@ -91,82 +183,113 @@
 
         // Proses scan
         function handleScan() {
-    const code = input.value.trim();
-    if (code.length < 3) return;
+            const code = input.value.trim();
+            if (code.length < 3) return;
 
-    // Tampilkan loading dan disable input
-    document.getElementById('loadingIndicator').style.display = 'block';
-    input.disabled = true;
+            // Tampilkan loading dan disable input
+            document.getElementById('loadingIndicator').style.display = 'block';
+            input.disabled = true;
 
-    fetch(`/absensi/scan`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
-        },
-        body: JSON.stringify({ barcode: code }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Scan gagal');
-        }
-        return response.json();
-    })
-    .then(data => {
-        const employee = data.employee;
+            fetch(`/absensi/scan`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify({ barcode: code }),
+            })
+            
+            .then(response => {
+                if (!response.status === 401 || response.status === 419) {
+                    showSessionExpired();
+                    throw new Error('Session expired');
+                }
+                if (!response.ok) {
+                    throw new Error('Scan gagal');
+                }
+                return response.json();
+            })
+            .then(data => {
+            
+                const employee = data.employee;
 
-        // Pilih warna sesuai status
-        let bgColor = '';
-        if (data.status === 'masuk') {
-            bgColor = 'bg-green-100 border-green-400 text-green-700';
-        } else if (data.status === 'keluar') {
-            bgColor = 'bg-yellow-100 border-yellow-400 text-yellow-700';
-        } else {
-            bgColor = 'bg-gray-100 border-gray-400 text-gray-700';
-        }
+                // Pilih warna sesuai status
+                let bgColor = '';
+                if (data.status === 'masuk') {
+                    bgColor = 'bg-green-100 border-green-400 text-green-700';
+                } else if (data.status === 'keluar') {
+                    bgColor = 'bg-yellow-100 border-yellow-400 text-yellow-700';
+                } else {
+                    bgColor = 'bg-gray-100 border-gray-400 text-gray-700';
+                }
 
-        const infoBox = `
-            <div class="${bgColor} border px-4 py-3 rounded mb-4">
-                <strong>${data.status.toUpperCase()}</strong> - ${data.message}
-            </div>
-
-            <div class="max-w-md p-4 bg-center bg-cover bg-no-repeat bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')] bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
-                <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
-
-                    <div class="rounded-lg text-white text-center py-2 pt-4">
-                        <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span></h2>
-                        <p class="text-sm">PT. Kaltim Methanol Industri</p>
+                const infoBox = `
+                    <div class="${bgColor} border px-4 py-3 rounded mb-4">
+                        <strong>${data.status.toUpperCase()}</strong> - ${data.message}
                     </div>
 
-                    <!-- Info Karyawan -->
-                    <div class="text-gray-800 py-2">
-                        <h3 class="text-xl font-bold text-gray-100">${employee.full_name}</h3>
-                        <p class="text-md text-gray-200 italic">${employee.company_name} - ${employee.position_name}</p>
-                        <p class="text-sm text-gray-400">${employee.employee_code}</p>
-                        ${data.total_minutes !== undefined ? `<p class="mt-1 text-sm">Total Waktu: ${data.total_minutes} menit</p>` : ''}
+                    <div class="max-w-md p-4 bg-center bg-cover bg-no-repeat bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')] bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                        <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
+
+                            <div class="rounded-lg text-white text-center py-2 pt-4">
+                                <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span></h2>
+                                <p class="text-sm">PT. Kaltim Methanol Industri</p>
+                            </div>
+
+                            <!-- Info Karyawan -->
+                            <div class="text-gray-800 py-2">
+                                <h3 class="text-xl font-bold text-gray-100">${employee.full_name}</h3>
+                                <p class="text-md text-gray-200 italic">${employee.company_name} - ${employee.position_name}</p>
+                                <p class="text-sm text-gray-400">${employee.employee_code}</p>
+                                ${data.total_minutes !== undefined ? `<p class="mt-1 text-sm">Total Waktu: ${data.total_minutes} menit</p>` : ''}
+                            </div>
+
+                        </div>
                     </div>
+                `;
 
-                </div>
-            </div>
-        `;
+                document.getElementById('employeeData').innerHTML = infoBox;
+                loadDailyCounter();
+            })
+            .catch(() => {
+                document.getElementById('employeeData').innerHTML = `
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        Karyawan tidak ditemukan atau terjadi kesalahan saat scan.
+                    </div>
+                `;
+            })
+            .finally(() => {
+                // Hide loading dan enable input lagi
+                document.getElementById('loadingIndicator').style.display = 'none';
+                input.disabled = false;
+                input.value = '';
+                input.focus();
+            });
+        }
+        function loadDailyCounter() {
+            fetch('/absensi/counter-harian')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('alreadyInCount').innerText = data.already_in;
+                    document.getElementById('notOutCount').innerText = data.not_out_yet;
+                });
+        }
 
-        document.getElementById('employeeData').innerHTML = infoBox;
-    })
-    .catch(() => {
-        document.getElementById('employeeData').innerHTML = `
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                Karyawan tidak ditemukan atau terjadi kesalahan saat scan.
-            </div>
-        `;
-    })
-    .finally(() => {
-        // Hide loading dan enable input lagi
-        document.getElementById('loadingIndicator').style.display = 'none';
-        input.disabled = false;
-        input.value = '';
-        input.focus();
-    });
-}
+        /* ===============================
+        SESSION EXPIRED HANDLER
+        ================================ */
+        function showSessionExpired() {
+            const modal = document.getElementById('sessionModal');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            // redirect otomatis
+            setTimeout(() => {
+                window.location.href = "{{ route('akses.index') }}";
+            }, 2000);
+        }
+
 
     </script>
 </body>
