@@ -31,7 +31,7 @@ use App\Http\Controllers\PageController;
             ->name('profile.update');
     });
 
-    Route::get('/akses', [AccessController::class, 'index'])
+    Route::get('/', [AccessController::class, 'index'])
         ->name('akses.index');
 
     Route::post('/akses/cek', [AccessController::class, 'cek'])
