@@ -148,7 +148,7 @@ async function cekAkses() {
 
     setTimeout(() => {
         window.location.href = "{{ route('absensi.index') }}";
-    }, 300);
+    }, 1200);
 
     return false;
 }
