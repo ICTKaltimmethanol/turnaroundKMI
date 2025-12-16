@@ -151,9 +151,9 @@ async function cekAkses() {
 
             showModal('success', 'ACCESS GRANTED', `Masuk ${data.gate}`);
 
-            setTimeout(() => {
+            requestAnimationFrame(() => {
                 window.location.href = "{{ route('absensi.index') }}";
-            }, 2000);
+            });
 
         } catch (e) {
             showModal('error', 'SERVER ERROR', 'Tidak dapat terhubung ke server');
