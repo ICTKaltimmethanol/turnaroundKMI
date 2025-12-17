@@ -21,11 +21,10 @@
             <!-- BRAND -->
             <div class="flex flex-col leading-tight">
                 <span class="text-lg font-semibold tracking-wide text-white">
-                    ABSENSI
-                    <span class="text-blue-400 font-bold">TA</span>
+                    ABSENSI TA
                 </span>
-                <span class="text-[10px] tracking-widest text-red-300 uppercase">
-                    Turn Around System
+                <span class="text-[10px] tracking-widest uppercase">
+                    Turn <span class=" text-red-300 uppercase">Around <span class="text-blue-400 font-bold">System</span></span>
                 </span>
             </div>
 
@@ -111,15 +110,30 @@
                         <p class="text-sm text-white/60">Pastikan scanner aktif dan mengarah ke QR Code</p>
                     </div>
 
-
                     <!-- Loading -->
-                    <div id="loadingIndicator" class="hidden absolute inset-0 bg-black/60 rounded-2xl flex flex-col items-center justify-center">
-                        <svg class="animate-spin h-10 w-10 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                        </svg>
-                        <p class="mt-3 text-sm text-white/80">Memproses data absensi...</p>
+                    <div id="loadingIndicator"
+                        class="hidden absolute inset-0 z-10
+                                bg-black/70 backdrop-blur-sm
+                                rounded-2xl
+                                flex flex-col items-center justify-center
+                                transition-opacity duration-300">
+
+                        <!-- Loader -->
+                        <div class="relative w-14 h-14 mb-4">
+                            <div class="absolute inset-0 rounded-full border-2 border-white/10"></div>
+                            <div class="absolute inset-0 rounded-full border-2 border-blue-400
+                                        border-t-transparent animate-spin"></div>
+                        </div>
+
+                        <!-- Text -->
+                        <p class="text-sm tracking-widest uppercase text-white/80">
+                            Processing
+                        </p>
+                        <p class="text-xs text-white/40 mt-1">
+                            Verifying attendance data
+                        </p>
                     </div>
+
                 </div>
             </div>
 
@@ -186,8 +200,14 @@
             const code = input.value.trim();
             if (code.length < 3) return;
 
-            // Tampilkan loading dan disable input
-            document.getElementById('loadingIndicator').style.display = 'block';
+            const loader = document.getElementById('loadingIndicator');
+                loader.classList.remove('hidden');
+                loader.style.opacity = '0';
+
+                requestAnimationFrame(() => {
+                    loader.style.opacity = '1';
+                });
+
             input.disabled = true;
 
             fetch(`/absensi/scan`, {
@@ -223,12 +243,13 @@
                     bgColor = 'bg-gray-100 border-gray-400 text-gray-700';
                 }
 
+                
                 const infoBox = `
                     <div class="${bgColor} border px-4 py-3 rounded mb-4">
                         <strong>${data.status.toUpperCase()}</strong> - ${data.message}
                     </div>
 
-                    <div class="max-w-md p-4 bg-center bg-cover bg-no-repeat bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')] bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                    <div class=" p-4 bg-center bg-cover bg-no-repeat bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')] bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
                         <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
 
                             <div class="rounded-lg text-white text-center py-2 pt-4">
@@ -248,6 +269,8 @@
                     </div>
                 `;
 
+
+
                 document.getElementById('employeeData').innerHTML = infoBox;
                 loadDailyCounter();
             })
@@ -259,10 +282,10 @@
                 `;
             })
             .finally(() => {
-                // Hide loading dan enable input lagi
-                document.getElementById('loadingIndicator').style.display = 'none';
-                input.disabled = false;
+                loader.style.opacity = '0';
+                setTimeout(() => loader.classList.add('hidden'), 200);
                 input.value = '';
+                input.disabled = false;
                 input.focus();
             });
         }
