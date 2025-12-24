@@ -112,21 +112,24 @@ class PresencesTable
             ])
 
             ->recordActions([
-                DeleteAction::make()
-                    ->action(function ($record) {
+DeleteAction::make()
+    ->action(function ($record) {
 
-                        // simpan parent dulu
-                        $presenceIn  = $record->presenceIn;
-                        $presenceOut = $record->presenceOut;
+        $presenceIn  = $record->presenceIn;
+        $presenceOut = $record->presenceOut;
 
-                        // 1️⃣ hapus CHILD
-                        $record->delete();
+        // 1️⃣ hapus child
+        $record->delete();
 
-                        // 2️⃣ baru hapus parent
-                        $presenceIn?->delete();
-                        $presenceOut?->delete();
-                    }),
+        // 2️⃣ pastikan TIDAK dipakai presences lain
+        if ($presenceIn && !Presences::where('presenceIn_id', $presenceIn->id)->exists()) {
+            $presenceIn->delete();
+        }
 
+        if ($presenceOut && !Presences::where('presenceOut_id', $presenceOut->id)->exists()) {
+            $presenceOut->delete();
+        }
+    }),
                 EditAction::make(),
             ])
            ->toolbarActions([
