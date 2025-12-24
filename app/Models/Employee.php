@@ -19,8 +19,6 @@ class Employee extends Model implements AuthenticatableContract
     use HasFactory, Authenticatable, SoftDeletes;
 
     protected $fillable = [
-        'email',
-        'password',
         'employees_code',
         'full_name',
         'company_id',

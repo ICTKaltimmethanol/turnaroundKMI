@@ -49,6 +49,7 @@ class AbsensiController extends Controller
             'not_out_yet' => $notOutYet,
         ]);
     }
+    
     /*public function scan(Request $request)
     {
         try {
@@ -86,8 +87,7 @@ class AbsensiController extends Controller
         
     }*/
 
-    public function scan(Request $request)
-    {
+    public function scan(Request $request) {
         $request->validate([
             'barcode' => 'required|string',
             'latitude' => 'nullable|numeric',
