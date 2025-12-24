@@ -114,7 +114,11 @@ class PresencesTable
             ->recordActions([
                 DeleteAction::make()
                     ->action(function ($record) {
-                        
+
+                        // 1️⃣ Hapus PRESENCES dulu (child)
+                        $record->delete();
+
+                        // 2️⃣ Baru hapus parent
                         if ($record->presenceIn) {
                             $record->presenceIn->delete();
                         }
@@ -122,9 +126,8 @@ class PresencesTable
                         if ($record->presenceOut) {
                             $record->presenceOut->delete();
                         }
-
-                        $record->delete();
                     }),
+
 
                 EditAction::make(),
             ])
