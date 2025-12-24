@@ -13,35 +13,40 @@ class AccessController extends Controller
     }
 
     public function cek(Request $request)
-    {
-        $kode = $request->input('kode');
+{
+    $request->validate([
+        'kode' => 'required|string'
+    ]);
 
-        $gates = [
-            'Gate 1' => ['GATE1TA2025'],
-            'Gate 2' => ['GATE2TA2025'],
-            'Gate 3' => ['GATE3TA2025'],
-        ];
+    $kode = $request->kode;
 
-        foreach ($gates as $gate => $codes) {
-            if (in_array($kode, $codes)) {
+    $gates = [
+        'Gate 1' => ['GATE1TA2025'],
+        'Gate 2' => ['GATE2TA2025'],
+        'Gate 3' => ['GATE3TA2025'],
+    ];
 
-                session([
-                    'gate' => $gate,
-                    'gate_login_at' => now(),
-                ]);
+    foreach ($gates as $gate => $codes) {
+        if (in_array($kode, $codes)) {
 
-                return response()->json([
-                    'status' => 'success',
-                    'gate' => $gate,
-                ]);
-            }
+            session([
+                'gate' => $gate,
+                'gate_login_at' => now(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'gate' => $gate,
+            ], 200);
         }
-
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Kode tidak valid'
-        ], 401);
     }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Kode tidak valid'
+    ], 401);
+}
+
 
 
     public function logout()
