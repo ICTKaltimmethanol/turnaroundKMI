@@ -133,7 +133,18 @@ class PresencesTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()
+    ->action(function (Collection $records) {
+        $records->each(function ($record) {
+
+            // hapus child dulu
+            $record->delete();
+
+            // JANGAN hapus presenceIn / presenceOut
+            // karena itu data historis
+        });
+    }),
+
                 ]),
             ])
             ->headerActions([
