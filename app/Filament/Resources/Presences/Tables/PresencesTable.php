@@ -112,7 +112,20 @@ class PresencesTable
             ])
 
             ->recordActions([
-                DeleteAction::make(),
+                DeleteAction::make()
+                    ->action(function ($record) {
+                        
+                        if ($record->presenceIn) {
+                            $record->presenceIn->delete();
+                        }
+
+                        if ($record->presenceOut) {
+                            $record->presenceOut->delete();
+                        }
+
+                        $record->delete();
+                    }),
+
                 EditAction::make(),
             ])
             ->toolbarActions([
