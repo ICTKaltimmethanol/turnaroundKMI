@@ -8,6 +8,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 
+use app\Models\Presences;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -112,24 +113,24 @@ class PresencesTable
             ])
 
             ->recordActions([
-DeleteAction::make()
-    ->action(function ($record) {
+                DeleteAction::make()
+                    ->action(function ($record) {
 
-        $presenceIn  = $record->presenceIn;
-        $presenceOut = $record->presenceOut;
+                        $presenceIn  = $record->presenceIn;
+                        $presenceOut = $record->presenceOut;
 
-        // 1️⃣ hapus child
-        $record->delete();
+                        // 1️⃣ hapus child
+                        $record->delete();
 
-        // 2️⃣ pastikan TIDAK dipakai presences lain
-        if ($presenceIn && !Presences::where('presenceIn_id', $presenceIn->id)->exists()) {
-            $presenceIn->delete();
-        }
+                        // 2️⃣ pastikan TIDAK dipakai presences lain
+                        if ($presenceIn && !Presences::where('presenceIn_id', $presenceIn->id)->exists()) {
+                            $presenceIn->delete();
+                        }
 
-        if ($presenceOut && !Presences::where('presenceOut_id', $presenceOut->id)->exists()) {
-            $presenceOut->delete();
-        }
-    }),
+                        if ($presenceOut && !Presences::where('presenceOut_id', $presenceOut->id)->exists()) {
+                            $presenceOut->delete();
+                        }
+                    }),
                 EditAction::make(),
             ])
            ->toolbarActions([
