@@ -41,7 +41,6 @@ use App\Http\Controllers\PageController;
         ->name('akses.logout');
 
     Route::get('/absensi', [AbsensiController::class, 'index'])
-        ->middleware('cek.gate')
         ->name('absensi.index');
 
     Route::get('/absensi/counter-harian', [AbsensiController::class, 'counterMasukDanBelumKeluar']);
