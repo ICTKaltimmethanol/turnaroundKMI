@@ -4,28 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- SEO Meta -->
     <title>Absensi TA 2025 - PT. Kaltim Methanol Industri</title>
-    <meta name="description" content="Sistem Absensi Online Turn Around 2025 PT. Kaltim Methanol Industri. Digunakan untuk pencatatan kehadiran pekerja perbantuan kegiatan TA 2025 di Bontang.">
-    <meta name="keywords" content="Sistem Absensi, Absensi Online, TA 2025, PT Kaltim Methanol Industri, KMI Bontang, Absensi Karyawan, Absensi Kontraktor, Turn Around KMI, KMI, TA, 2025">
 
-    <!-- Open Graph (untuk preview di media sosial) -->
-    <meta property="og:title" content="Sistem Absensi TA 2025 - PT. Kaltim Methanol Industri" />
-    <meta property="og:description" content="Aplikasi absensi online untuk kegiatan Turn Around 2025 PT. KMI Bontang. Sistem pencatatan kehadiran personel selama kegiatan turn around berlangsung." />
-    <meta property="og:image" content="https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg" />
-    <meta property="og:url" content="https://turnaround-kmi.com/" />
-    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/png" href="{{ asset('images/engineer2.png') }}" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{asset('images/engineer2.png')}}" />
-
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net" />
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
     @vite('resources/css/app.css')
-
 </head>
+
 <body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black
              text-white flex items-center justify-center">
 
@@ -45,8 +33,6 @@
 
     <!-- FORM -->
     <form onsubmit="return cekAkses()">
-
-        <!-- PASSWORD -->
         <div class="relative mb-6">
             <input
                 id="kode"
@@ -57,26 +43,21 @@
                        px-4 py-3 pr-12 text-center tracking-widest
                        focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-            <!-- EYE -->
             <button type="button"
                     onclick="toggleVisibility()"
-                    tabindex="-1"
                     class="absolute inset-y-0 right-3 flex items-center
-                           text-white/40 hover:text-white/70 transition">
+                           text-white/40 hover:text-white/70">
                 <span id="eyeOpen">👁</span>
                 <span id="eyeClosed" class="hidden">🙈</span>
             </button>
         </div>
 
-        <!-- BUTTON -->
         <button
             type="submit"
             class="w-full rounded-xl bg-gradient-to-r
                    from-blue-500 to-indigo-600
                    hover:from-blue-400 hover:to-indigo-500
-                   transition-all duration-200
-                   py-3 text-sm font-semibold tracking-widest
-                   shadow-lg shadow-blue-500/30">
+                   py-3 text-sm font-semibold tracking-widest">
             BUKA AKSES
         </button>
     </form>
@@ -87,23 +68,14 @@
 </div>
 
 <!-- MODAL -->
-<div id="modal"
-     class="fixed inset-0 z-50 hidden items-center justify-center
-            bg-black/60 backdrop-blur-sm">
-
-    <div class="w-full max-w-sm bg-slate-900 border border-white/10
-                rounded-2xl p-6 text-center">
-
+<div id="modal" class="fixed inset-0 hidden items-center justify-center bg-black/60">
+    <div class="bg-slate-900 rounded-xl p-6 text-center max-w-sm w-full">
         <div id="modalIcon" class="text-4xl mb-3"></div>
-        <h2 id="modalTitle" class="font-semibold mb-1"></h2>
-        <p id="modalMessage" class="text-sm text-white/60"></p>
+        <h2 id="modalTitle" class="font-semibold"></h2>
+        <p id="modalMessage" class="text-sm text-white/60 mt-1"></p>
 
-        <!-- BUTTON (HANYA ERROR) -->
-        <button id="modalButton"
-                onclick="closeModal()"
-                class="mt-5 w-full rounded-xl bg-white/10
-                       hover:bg-white/15 border border-white/20
-                       py-2 text-xs tracking-widest transition hidden">
+        <button onclick="closeModal()"
+                class="mt-5 w-full rounded-xl bg-white/10 py-2 text-xs">
             OK
         </button>
     </div>
@@ -121,49 +93,47 @@ function toggleVisibility() {
 }
 
 /* ===============================
-   CEK AKSES
+   CEK AKSES (FINAL FIX)
 ================================ */
 async function cekAkses() {
-   
     const kode = document.getElementById('kode').value.trim();
-         
-        if (!kode) {
-            showModal('error', 'INPUT REQUIRED', 'Kode akses tidak boleh kosong');
+
+    if (!kode) {
+        showModal('error', 'INPUT REQUIRED', 'Kode akses tidak boleh kosong');
+        return false;
+    }
+
+    try {
+        const res = await fetch("{{ route('akses.cek') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ kode })
+        });
+
+        const data = await res.json();
+
+        // 🔑 SINKRON DENGAN BACKEND
+        if (!data.success) {
+            showModal('error', 'ACCESS DENIED', data.message);
             return false;
         }
-        try {
-            const res = await fetch("{{ route('akses.cek') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({ kode })
-            });
 
-            const data = await res.json();
+        // ✅ REDIRECT AMAN
+        window.location.replace("{{ route('absensi.index') }}");
 
-            if (!res.ok) {
-                showModal('error', 'ACCESS DENIED', data.message);
-                return false;
-            }
+    } catch (e) {
+        showModal('error', 'SERVER ERROR', 'Tidak dapat terhubung ke server');
+    }
 
-            showModal('success', 'ACCESS GRANTED', `Masuk ${data.gate}`);
-
-            requestAnimationFrame(() => {
-                window.location.href = "{{ route('absensi.index') }}";
-            });
-
-        } catch (e) {
-            showModal('error', 'SERVER ERROR', 'Tidak dapat terhubung ke server');
-        }
-
-        return false;
+    return false;
 }
 
 /* ===============================
-   MODAL HANDLER
+   MODAL
 ================================ */
 function showModal(type, title, message) {
     modal.classList.remove('hidden');
@@ -172,15 +142,7 @@ function showModal(type, title, message) {
     modalTitle.innerText = title;
     modalMessage.innerText = message;
 
-    if (type === 'success') {
-        modalIcon.innerText = '✓';
-        modalIcon.className = 'text-4xl mb-3 text-emerald-400';
-        modalButton.classList.add('hidden');
-    } else {
-        modalIcon.innerText = '✕';
-        modalIcon.className = 'text-4xl mb-3 text-red-400';
-        modalButton.classList.remove('hidden');
-    }
+    modalIcon.innerText = type === 'error' ? '✕' : '✓';
 }
 
 function closeModal() {
