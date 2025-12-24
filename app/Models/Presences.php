@@ -37,13 +37,6 @@ class Presences extends Model
         return $this->belongsTo(PresenceOut::class, 'presenceOut_id');
     }
 
-       protected static function booted()
-    {
-        static::deleting(function ($presence) {
-            // Hapus relasi ketika presences dihapus
-            $presence->presenceIn?->delete();
-            $presence->presenceOut?->delete();
-        });
-    }
+   
 
 }
