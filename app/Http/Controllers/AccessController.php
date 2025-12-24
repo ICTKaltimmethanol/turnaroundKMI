@@ -29,12 +29,11 @@ class AccessController extends Controller
     foreach ($gates as $gate => $codes) {
         if (in_array($kode, $codes)) {
 
+            $request->session()->regenerate();
             session([
                 'gate' => $gate,
                 'gate_login_at' => now(),
             ]);
-
-            $request->session()->regenerate();
 
             return response()->json([
                 'success' => true,
