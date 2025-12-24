@@ -113,9 +113,20 @@ class PresencesTable
 
             ->recordActions([
                 DeleteAction::make()
-        ->action(function ($record) {
-            $record->delete(); // ✅ CUKUP INI
-        }),
+                    ->action(function ($record) {
+
+                        // simpan parent dulu
+                        $presenceIn  = $record->presenceIn;
+                        $presenceOut = $record->presenceOut;
+
+                        // 1️⃣ hapus CHILD
+                        $record->delete();
+
+                        // 2️⃣ baru hapus parent
+                        $presenceIn?->delete();
+                        $presenceOut?->delete();
+                    }),
+
                 EditAction::make(),
             ])
            ->toolbarActions([
