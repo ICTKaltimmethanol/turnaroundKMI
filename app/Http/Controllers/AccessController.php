@@ -34,6 +34,8 @@ class AccessController extends Controller
                 'gate_login_at' => now(),
             ]);
 
+            $request->session()->regenerate();
+
             return response()->json([
                 'success' => true,
                 'gate' => $gate,
@@ -49,9 +51,12 @@ class AccessController extends Controller
 
 
 
-    public function logout()
+    public function logout(Request $request)
     {
-        session()->forget(['gate', 'gate_login_at']);
+        $request->session()->invalidate();      
+        $request->session()->regenerateToken(); 
+
         return redirect()->route('akses.index');
     }
+
 }
