@@ -113,40 +113,20 @@ class PresencesTable
 
             ->recordActions([
                 DeleteAction::make()
-                    ->action(function ($record) {
-
-                        // 1️⃣ Hapus PRESENCES dulu (child)
-                        $record->delete();
-
-                        // 2️⃣ Baru hapus parent
-                        if ($record->presenceIn) {
-                            $record->presenceIn->delete();
-                        }
-
-                        if ($record->presenceOut) {
-                            $record->presenceOut->delete();
-                        }
-                    }),
-
-
+        ->action(function ($record) {
+            $record->delete(); // ✅ CUKUP INI
+        }),
                 EditAction::make(),
             ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make()
-    ->action(function (Collection $records) {
-        $records->each(function ($record) {
+           ->toolbarActions([
+    BulkActionGroup::make([
+        DeleteBulkAction::make()
+            ->action(function (Collection $records) {
+                $records->each(fn ($record) => $record->delete());
+            }),
+    ]),
+])
 
-            // hapus child dulu
-            $record->delete();
-
-            // JANGAN hapus presenceIn / presenceOut
-            // karena itu data historis
-        });
-    }),
-
-                ]),
-            ])
             ->headerActions([
                  
                 ExportAction::make()->exports([
