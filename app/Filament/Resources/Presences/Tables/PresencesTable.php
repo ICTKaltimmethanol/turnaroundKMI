@@ -133,23 +133,71 @@ class PresencesTable
                     }),
                 EditAction::make(),
             ])
-           ->toolbarActions([
-    BulkActionGroup::make([
-        DeleteBulkAction::make()
-            ->action(function (Collection $records) {
-                $records->each(fn ($record) => $record->delete());
-            }),
-    ]),
-])
+
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()
+                        ->action(function (Collection $records) {
+
+                            DB::transaction(function () use ($records) {
+
+                                $records->each(function ($record) {
+
+                                    $presenceIn  = $record->presenceIn;
+                                    $presenceOut = $record->presenceOut;
+
+                                    // 1️⃣ hapus presences
+                                    $record->delete();
+
+                                    // 2️⃣ hapus presence_in jika tidak dipakai lagi
+                                    if ($presenceIn && !Presences::where('presenceIn_id', $presenceIn->id)->exists()) {
+                                        $presenceIn->delete();
+                                    }
+
+                                    // 3️⃣ hapus presence_out jika tidak dipakai lagi
+                                    if ($presenceOut && !Presences::where('presenceOut_id', $presenceOut->id)->exists()) {
+                                        $presenceOut->delete();
+                                    }
+                                });
+
+                            });
+                        }),
+                ]),
+            ])
 
             ->headerActions([
-                 
                 ExportAction::make()->exports([
                     ExcelExport::make('table')->fromTable(),
                    
                 ]),
-                DeleteBulkAction::make(),
+                DeleteBulkAction::make()
+                    ->action(function (Collection $records) {
+
+                        DB::transaction(function () use ($records) {
+
+                            $records->each(function ($record) {
+
+                                $presenceIn  = $record->presenceIn;
+                                $presenceOut = $record->presenceOut;
+
+                                // 1️⃣ hapus presences
+                                $record->delete();
+
+                                // 2️⃣ hapus presence_in jika tidak dipakai lagi
+                                if ($presenceIn && !Presences::where('presenceIn_id', $presenceIn->id)->exists()) {
+                                    $presenceIn->delete();
+                                }
+
+                                // 3️⃣ hapus presence_out jika tidak dipakai lagi
+                                if ($presenceOut && !Presences::where('presenceOut_id', $presenceOut->id)->exists()) {
+                                    $presenceOut->delete();
+                                }
+                            });
+
+                        });
+                    }),
             ])
+            
             ->bulkActions([
                 ExportBulkAction::make()
             ]);
