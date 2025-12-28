@@ -115,7 +115,7 @@ class EmployeesTable
                         Select::make('employee_code_from')
                             ->label('Employee Code Dari')
                             ->options(
-                                Employee::orderBy('employee_code')
+                                Employee::orderBy('employees_code')
                                     ->pluck('employees_code', 'employees_code')
                             )
                             ->searchable()
@@ -124,7 +124,7 @@ class EmployeesTable
                         Select::make('employee_code_until')
                             ->label('Employee Code Sampai')
                             ->options(
-                                Employee::orderBy('employee_code')
+                                Employee::orderBy('employees_code')
                                     ->pluck('employees_code', 'employees_code')
                             )
                             ->searchable()
