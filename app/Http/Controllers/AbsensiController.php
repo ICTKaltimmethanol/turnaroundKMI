@@ -209,8 +209,9 @@ class AbsensiController extends Controller
             return response()->json([
                 'status' => 'keluar',
                 'message' => 'Presensi keluar berhasil dicatat.',
-                'total_hours' => $totalHoursOnly, // jam penuh
-                'total_time_readable' => $totalReadable,
+                'total_minutes' => $totalMinutes,
+                //'total_hours' => $totalHoursOnly, // jam penuh
+                //'total_time_readable' => $totalReadable,
                 'employee' => [
                     'full_name' => $employee->full_name,
                     'employee_code' => $employee->employees_code,
