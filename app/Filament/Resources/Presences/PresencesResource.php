@@ -24,7 +24,7 @@ class PresencesResource extends Resource
     protected static ?string $navigationLabel = 'Data Presensi';
     
 
-    protected static ?string $recordTitleAttribute = 'id';
+    protected static ?string $recordTitleAttribute = 'created_at';
 
     public static function getLabel (): ?string 
     {
