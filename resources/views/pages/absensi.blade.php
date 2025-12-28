@@ -228,7 +228,7 @@
                 return response.json();
             })
             .then(data => {
-                 if (!data || !data.employee) {
+                 if (!data || !data.status) {
                     throw new Error('Data tidak valid');
                 }
              const employee = data.employee ?? {};
