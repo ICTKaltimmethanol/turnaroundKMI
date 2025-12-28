@@ -228,9 +228,7 @@
                 return response.json();
             })
             .then(data => {
-                 if (!data || !data.status) {
-                    throw new Error('Data tidak valid');
-                }
+              
                const employee = data.employee ?? null;
 
                 // Pilih warna sesuai status
