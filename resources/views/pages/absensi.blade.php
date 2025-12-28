@@ -220,17 +220,17 @@
             })
             
             .then(response => {
-                if (!response.status === 401 || response.status === 419) {
+                if ([401, 419].includes(response.status)) {
                     showSessionExpired();
                     throw new Error('Session expired');
                 }
-                if (!response.ok) {
-                    throw new Error('Scan gagal');
-                }
+
                 return response.json();
             })
             .then(data => {
-            
+                 if (!data || !data.employee) {
+                    throw new Error('Data tidak valid');
+                }
                 const employee = data.employee;
 
                 // Pilih warna sesuai status

@@ -38,7 +38,7 @@ class PresencesTable
                     ->toggleable()
                     ->sortable(),
                TextColumn::make('total_time')
-                    ->label('Total Waktu (Jam)')
+                    ->label('Total Waktu (Menit)')
                     ->formatStateUsing(fn ($state) => abs($state))
                     ->toggleable()
                     ->sortable(),
