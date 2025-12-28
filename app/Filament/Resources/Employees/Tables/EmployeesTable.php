@@ -116,7 +116,7 @@ class EmployeesTable
                             ->label('Employee Code Dari')
                             ->options(
                                 Employee::orderBy('employee_code')
-                                    ->pluck('employee_code', 'employee_code')
+                                    ->pluck('employees_code', 'employee_code')
                             )
                             ->searchable()
                             ->placeholder('Pilih kode awal'),
@@ -125,7 +125,7 @@ class EmployeesTable
                             ->label('Employee Code Sampai')
                             ->options(
                                 Employee::orderBy('employee_code')
-                                    ->pluck('employee_code', 'employee_code')
+                                    ->pluck('employees_code', 'employee_code')
                             )
                             ->searchable()
                             ->placeholder('Pilih kode akhir'),
