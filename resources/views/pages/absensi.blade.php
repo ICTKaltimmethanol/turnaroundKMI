@@ -76,12 +76,12 @@
         <div class="grid grid-cols-2 gap-6 mb-6">
 
             <div class="rounded-xl bg-emerald-500/20 border border-emerald-400/40 p-5 text-center">
-                <p class="text-sm text-emerald-200">Sudah Absensi Masuk</p>
+                <p class="text-sm text-emerald-200">Absensi Masuk Hari Ini</p>
                 <p id="alreadyInCount" class="text-3xl font-bold text-emerald-300">0</p>
             </div>
 
             <div class="rounded-xl bg-amber-500/20 border border-amber-400/40 p-5 text-center">
-                <p class="text-sm text-amber-200">Belum Absensi Keluar</p>
+                <p class="text-sm text-amber-200">Absensi Keluar Hari Ini</p>
                 <p id="notOutCount" class="text-3xl font-bold text-amber-300">0</p>
             </div>
 
@@ -231,7 +231,7 @@
                  if (!data || !data.employee) {
                     throw new Error('Data tidak valid');
                 }
-                const employee = data.employee;
+             const employee = data.employee ?? {};
 
                 // Pilih warna sesuai status
                 let bgColor = '';

@@ -98,6 +98,7 @@ class EmployeesTable
                             ->when($data['created_until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
                     }),
 
+
                 // 🔹 Filter gabungan (nama, perusahaan, posisi)
                 Filter::make('filters')
                     ->form([
@@ -111,6 +112,24 @@ class EmployeesTable
                             ->searchable()
                             ->placeholder('Pilih perusahaan'),
 
+                        Select::make('employee_code_from')
+                            ->label('Employee Code Dari')
+                            ->options(
+                                Employee::orderBy('employee_code')
+                                    ->pluck('employee_code', 'employee_code')
+                            )
+                            ->searchable()
+                            ->placeholder('Pilih kode awal'),
+
+                        Select::make('employee_code_until')
+                            ->label('Employee Code Sampai')
+                            ->options(
+                                Employee::orderBy('employee_code')
+                                    ->pluck('employee_code', 'employee_code')
+                            )
+                            ->searchable()
+                            ->placeholder('Pilih kode akhir'),
+
                         Select::make('position_id')
                             ->label('Posisi')
                             ->options(fn () => Position::pluck('name', 'id'))
@@ -118,7 +137,22 @@ class EmployeesTable
                             ->placeholder('Pilih posisi'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
+                           
+                        if (
+                            filled($data['employee_code_from']) &&
+                            filled($data['employee_code_until']) &&
+                            $data['employee_code_from'] > $data['employee_code_until']
+                        ) {
+                            [$data['employee_code_from'], $data['employee_code_until']] =
+                                [$data['employee_code_until'], $data['employee_code_from']];
+                        }
                         return $query
+                            ->when($data['employee_code_from'], fn ($q, $from) =>
+                                $q->where('employee_code', '>=', $from)
+                            )
+                            ->when($data['employee_code_until'], fn ($q, $until) =>
+                                $q->where('employee_code', '<=', $until)
+                            )
                             ->when($data['employee_name'], fn ($q, $name) =>
                                 $q->where('full_name', 'like', "%{$name}%")
                             )
