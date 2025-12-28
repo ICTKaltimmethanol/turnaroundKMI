@@ -220,11 +220,9 @@
             })
             
             .then(response => {
-                if ([401, 419].includes(response.status)) {
-                    showSessionExpired();
-                    throw new Error('Session expired');
+                if (!response.ok) {
+                    throw new Error('Scan gagal');
                 }
-
                 return response.json();
             })
             .then(data => {
