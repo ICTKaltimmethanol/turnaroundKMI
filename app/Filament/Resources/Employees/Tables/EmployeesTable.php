@@ -148,10 +148,10 @@ class EmployeesTable
                         }
                         return $query
                             ->when($data['employee_code_from'], fn ($q, $from) =>
-                                $q->where('employee_code', '>=', $from)
+                                $q->where('employees_code', '>=', $from)
                             )
                             ->when($data['employee_code_until'], fn ($q, $until) =>
-                                $q->where('employee_code', '<=', $until)
+                                $q->where('employees_code', '<=', $until)
                             )
                             ->when($data['employee_name'], fn ($q, $name) =>
                                 $q->where('full_name', 'like', "%{$name}%")
