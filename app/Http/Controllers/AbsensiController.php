@@ -191,16 +191,17 @@ class AbsensiController extends Controller
             $totalMinutes = $outDateTime->diffInMinutes($inDateTime);
 
             // Total jam penuh (depannya saja)
-            $totalHoursOnly = floor($totalMinutes / 60);
+            // $totalHoursOnly = floor($totalMinutes / 60);
 
             // Format jam:menit untuk readability
-            $remainingMinutes = $totalMinutes % 60;
-            $totalReadable = sprintf('%02d jam %02d menit', $totalHoursOnly, $remainingMinutes);
+            // $remainingMinutes = $totalMinutes % 60;
+            // $totalReadable = sprintf('%02d jam %02d menit', $totalHoursOnly, $remainingMinutes);
 
             // Update Presences dengan out dan total waktu
             $lastPresence->update([
                 'presenceOut_id' => $presenceOut->id,
-                'total_time' => $totalHoursOnly, // simpan hanya jam penuh
+                'total_time' => $totalMinutes,
+                //'total_time' => $totalHoursOnly, // simpan hanya jam penuh
             ]);
 
             DB::commit();

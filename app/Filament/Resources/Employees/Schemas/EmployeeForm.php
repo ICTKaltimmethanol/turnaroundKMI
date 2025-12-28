@@ -27,24 +27,6 @@ class EmployeeForm
                     ->required()
                     ->maxLength(255),
 
-                TextInput::make('email')
-                    ->placeholder('Contoh: ict.admin@kaltimmethanol.com')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('password')
-                    ->password()
-                    ->placeholder('Minimal 14 karakter')
-                    ->revealable()
-                    ->minLength(14)
-                    ->afterStateHydrated(function (TextInput $component, $state) {
-                            $component->state(null);
-                        })
-                    ->dehydrateStateUsing(fn ($state) => $state ? \Illuminate\Support\Facades\Hash::make($state) : null)
-                    ->dehydrated(fn ($state) => !empty($state)),
-
-
                TextInput::make('employees_code')
                     ->label('ID Pekerja')
                     ->disabled()
