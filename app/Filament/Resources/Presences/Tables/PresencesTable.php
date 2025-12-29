@@ -2,25 +2,51 @@
 
 namespace App\Filament\Resources\Presences\Tables;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+
+/*
+|--------------------------------------------------------------------------
+| Filament – Actions
+|--------------------------------------------------------------------------
+*/
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 
+/*
+|--------------------------------------------------------------------------
+| Filament – Models
+|--------------------------------------------------------------------------
+*/
 use app\Models\Presences;
 use app\Models\Employee;
+
+/*
+|--------------------------------------------------------------------------
+| Filament – Tables
+|--------------------------------------------------------------------------
+*/
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 
+/*
+|--------------------------------------------------------------------------
+| Filament – Forms
+|--------------------------------------------------------------------------
+*/
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Collection;
-
+/*
+|--------------------------------------------------------------------------
+| Filament – pxlrbt
+|--------------------------------------------------------------------------
+*/
 use pxlrbt\FilamentExcel\Actions\Tables\ExportAction; 
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;

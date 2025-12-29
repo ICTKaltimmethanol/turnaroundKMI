@@ -2,38 +2,73 @@
 
 namespace App\Filament\Resources\Employees\Tables;
 
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Collection;
+use ZipArchive;
+
+/*
+|--------------------------------------------------------------------------
+| Filament – Tables
+|--------------------------------------------------------------------------
+*/
+use Filament\Tables\Table;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\TrashedFilter;
+
+/*
+|--------------------------------------------------------------------------
+| Filament – Actions
+|--------------------------------------------------------------------------
+*/
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
-use Filament\Tables\Filters\TrashedFilter;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Table;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Forms\Components\DatePicker;
+use Filament\Tables\Actions\BulkAction;
+
+/*
+|--------------------------------------------------------------------------
+| Filament – Forms
+|--------------------------------------------------------------------------
+*/
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DatePicker;
+
+/*
+|--------------------------------------------------------------------------
+| Export (Excel)
+|--------------------------------------------------------------------------
+*/
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
+
+/*
+|--------------------------------------------------------------------------
+| Models
+|--------------------------------------------------------------------------
+*/
 use App\Models\Employee;
 use App\Models\Company;
 use App\Models\Position;
 use App\Models\QrCode;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Storage;
-use ZipArchive;
-use Filament\Actions\Action; 
-use Filament\Tables\Actions\BulkAction;
-
 
 class EmployeesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->heading('Daftar Pekerja TA')
             ->paginated([
                 5,
                 10,
@@ -212,6 +247,16 @@ class EmployeesTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
+            ])
+             ->headerActions([
+                ExportAction::make()->exports([
+                    ExcelExport::make('table')->fromTable(),
+                   
+                ]),
+            ])
+            
+            ->bulkActions([
+                ExportBulkAction::make()
             ]);
     }
 }
