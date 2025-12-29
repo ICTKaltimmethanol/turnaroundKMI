@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Presences\Tables;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+
 
 /*
 |--------------------------------------------------------------------------
