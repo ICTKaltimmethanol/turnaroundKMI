@@ -73,6 +73,10 @@ class PresencesTable
                     ->numeric()
                     ->toggleable()
                     ->sortable(),
+                TextColumn::make('employee.employees_code')
+                    ->label('ID Pekerja')
+                    ->toggleable()
+                    ->sortable(),
                TextColumn::make('total_time')
                     ->label('Total Waktu (Menit)')
                     ->formatStateUsing(fn ($state) => abs($state))
@@ -80,10 +84,6 @@ class PresencesTable
                     ->sortable(),
                 TextColumn::make('company.name')
                     ->label('Perusahaan')
-                    ->toggleable()
-                    ->sortable(),
-                TextColumn::make('employee.employees_code')
-                    ->label('ID Pekerja')
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('position.name')
