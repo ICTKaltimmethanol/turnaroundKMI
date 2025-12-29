@@ -113,22 +113,22 @@ class EmployeesTable
                             ->placeholder('Pilih perusahaan'),
 
                         Select::make('employee_code_from')
-                            ->label('Employee Code Dari')
+                            ->label('ID Pekerja From')
                             ->options(
                                 Employee::orderBy('employees_code')
                                     ->pluck('employees_code', 'employees_code')
                             )
                             ->searchable()
-                            ->placeholder('Pilih kode awal'),
+                            ->placeholder('Pilih ID pekerja'),
 
                         Select::make('employee_code_until')
-                            ->label('Employee Code Sampai')
+                            ->label('ID Pekerja To')
                             ->options(
                                 Employee::orderBy('employees_code')
                                     ->pluck('employees_code', 'employees_code')
                             )
                             ->searchable()
-                            ->placeholder('Pilih kode akhir'),
+                            ->placeholder('Pilih ID pekerja'),
 
                         Select::make('position_id')
                             ->label('Posisi')

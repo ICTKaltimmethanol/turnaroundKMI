@@ -9,6 +9,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 
 use app\Models\Presences;
+use app\Models\Employee;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -82,6 +83,24 @@ class PresencesTable
                             ->label('Nama Karyawan')
                             ->placeholder('Cari nama karyawan...'),
 
+                        Select::make('employee_code_from')
+                            ->label('ID Pekerja Form')
+                            ->options(
+                                Employee::orderBy('employees_code')
+                                    ->pluck('employees_code','employees_code')
+                            )
+                            ->searchable()
+                            ->placeholder('Pilih ID Karyawan'),
+                        
+                        Select::make('employee_code_untill')
+                            ->label('ID Pekerja')
+                            ->options(
+                                Employee::orderBy('employees_code')
+                                 ->pluck('employees_code', 'employees_code')
+                            )
+                            ->searchable()
+                            ->placeholder('Pilih ID Karyawan'),
+
                         Select::make('employees_company_id')
                             ->label('Perusahaan')
                             ->options(function () {
@@ -99,7 +118,21 @@ class PresencesTable
                             ->placeholder('Pilih posisi'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
+                        if (
+                            filled($data['employee_code_from']) &&
+                            filled($data['employee_code_until']) &&
+                            $data['employee_code_from'] > $data['employee_code_until']
+                        ) {
+                            [$data['employee_code_from'], $data['employee_code_until']] =
+                                [$data['employee_code_until'], $data['employee_code_from']];
+                        }
                         return $query
+                            ->when($data['employee_code_from'], fn ($q, $from) =>
+                                $q->where('employees_code', '>=', $from)
+                            )
+                            ->when($data['employe_code_untill'], fn ($q, $untill) =>
+                                $q->where('employees_code', '>=', $untill)
+                            )
                             ->when($data['employee_name'] ?? null, fn ($query, $name) => 
                                 $query->whereHas('employee', fn ($q) => $q->where('full_name', 'like', "%{$name}%"))
                             )
