@@ -27,7 +27,9 @@ use Illuminate\Support\Facades\Storage;
 use ZipArchive;
 use Filament\Actions\Action; 
 use Filament\Tables\Actions\BulkAction;
-
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction; 
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class EmployeesTable
 {
