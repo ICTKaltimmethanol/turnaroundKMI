@@ -130,7 +130,7 @@ class PresencesTable
                             ->when($data['employee_code_from'], fn ($q, $from) =>
                                 $q->where('employees_code', '>=', $from)
                             )
-                            ->when($data['employe_code_untill'], fn ($q, $untill) =>
+                            ->when($data['employee_code_untill'], fn ($q, $untill) =>
                                 $q->where('employees_code', '>=', $untill)
                             )
                             ->when($data['employee_name'] ?? null, fn ($query, $name) => 
