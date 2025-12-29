@@ -34,6 +34,13 @@ class EmployeesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->paginated([
+                5,
+                10,
+                25,
+                50,
+                'all',
+            ])
             ->columns([
 
                 ImageColumn::make('qrCode.img_path')
