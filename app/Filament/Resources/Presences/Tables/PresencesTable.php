@@ -82,6 +82,10 @@ class PresencesTable
                     ->label('Perusahaan')
                     ->toggleable()
                     ->sortable(),
+                TextColumn::make('employee.employees_code')
+                    ->label('ID Pekerja')
+                    ->toggleable()
+                    ->sortable(),
                 TextColumn::make('position.name')
                     ->label('Posisi')
                     ->toggleable()
@@ -125,7 +129,7 @@ class PresencesTable
                                     ->pluck('employees_code','employees_code')
                             )
                             ->searchable()
-                            ->placeholder('Pilih ID Karyawan'),
+                            ->placeholder('Pilih ID Pekerja'),
                         
                         Select::make('employee_code_untill')
                             ->label('ID Pekerja To')
@@ -134,7 +138,7 @@ class PresencesTable
                                  ->pluck('employees_code', 'employees_code')
                             )
                             ->searchable()
-                            ->placeholder('Pilih ID Karyawan'),
+                            ->placeholder('Pilih ID Pekerja'),
 
                         Select::make('employees_company_id')
                             ->label('Perusahaan')
