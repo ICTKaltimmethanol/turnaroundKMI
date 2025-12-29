@@ -37,13 +37,7 @@ class EmployeesTable
     {
         return $table
             ->heading('Daftar Pekerja TA')
-            ->paginated([
-                5,
-                10,
-                25,
-                50,
-                'all',
-            ])
+            ->paginated([ 5, 10, 25, 50, 'all',])
             ->columns([
 
                 ImageColumn::make('qrCode.img_path')
@@ -215,6 +209,16 @@ class EmployeesTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                ExportAction::make()
+                    ->label('Export Excel')
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exports([
+                        ExcelExport::make()
+                            ->fromTable()
+                            ->withFilename('employees_' . now()->format('Ymd_His')),
+                    ]),
             ]);
     }
 }
