@@ -30,8 +30,14 @@ class PresencesTable
     public static function configure(Table $table): Table
     {
         return $table
-           ->heading('Daftar Absensi ')
-        
+            ->heading('Daftar Absensi')
+            ->paginated([
+                5,
+                10,
+                25,
+                50,
+                'all',
+            ])
             ->columns([
                 TextColumn::make('employee.full_name')
                     ->label('Nama Lengkap')
