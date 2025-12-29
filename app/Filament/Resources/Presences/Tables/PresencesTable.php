@@ -84,7 +84,7 @@ class PresencesTable
                             ->placeholder('Cari nama karyawan...'),
 
                         Select::make('employee_code_from')
-                            ->label('ID Pekerja Form')
+                            ->label('ID Pekerja From')
                             ->options(
                                 Employee::orderBy('employees_code')
                                     ->pluck('employees_code','employees_code')
@@ -93,7 +93,7 @@ class PresencesTable
                             ->placeholder('Pilih ID Karyawan'),
                         
                         Select::make('employee_code_untill')
-                            ->label('ID Pekerja')
+                            ->label('ID Pekerja To')
                             ->options(
                                 Employee::orderBy('employees_code')
                                  ->pluck('employees_code', 'employees_code')
