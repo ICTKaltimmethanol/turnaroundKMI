@@ -213,6 +213,17 @@ class EmployeesTable
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
                 ]),
+            ])
+             ->headerActions([
+                ExportAction::make()->exports([
+                    ExcelExport::make('table')->fromTable(),
+                   
+                ]),
+
+            ])
+            
+            ->bulkActions([
+                ExportBulkAction::make()
             ]);
     }
 }
