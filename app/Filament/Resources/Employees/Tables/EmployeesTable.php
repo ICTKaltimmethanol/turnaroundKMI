@@ -103,8 +103,8 @@ class EmployeesTable
                 Filter::make('filters')
                     ->form([
                         TextInput::make('employee_name')
-                            ->label('Nama Karyawan')
-                            ->placeholder('Cari nama karyawan...'),
+                            ->label('Nama Pekerja')
+                            ->placeholder('Cari nama pekerja...'),
 
                         Select::make('company_id')
                             ->label('Perusahaan')

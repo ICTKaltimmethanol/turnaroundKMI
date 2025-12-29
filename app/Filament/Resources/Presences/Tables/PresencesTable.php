@@ -80,8 +80,8 @@ class PresencesTable
                 Filter::make('filters')
                     ->form([
                         TextInput::make('employee_name')
-                            ->label('Nama Karyawan')
-                            ->placeholder('Cari nama karyawan...'),
+                            ->label('Nama Pekerja')
+                            ->placeholder('Cari nama pekerja...'),
 
                         Select::make('employee_code_from')
                             ->label('ID Pekerja From')
