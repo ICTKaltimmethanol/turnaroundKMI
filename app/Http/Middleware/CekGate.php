@@ -13,12 +13,11 @@ class CekGate
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+     public function handle(Request $request, Closure $next): Response
     {
-        if (!session()->has('gate')) {
+        if (!$request->hasCookie('gate')) {
             return redirect()->route('akses.index');
         }
-        
 
         return $next($request);
     }
