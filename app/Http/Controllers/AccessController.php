@@ -11,7 +11,7 @@ class AccessController extends Controller
     {
         return view('pages.access');
     }
-
+    
     public function cek(Request $request): JsonResponse
     {
         $kode = trim($request->input('kode'));
@@ -32,20 +32,30 @@ class AccessController extends Controller
         foreach ($gates as $gate => $code) {
             if (hash_equals($code, $kode)) {
 
-                return response()->json([
+                $response = response()->json([
                     'success' => true,
                     'gate' => $gate,
-                ])->withCookie(
+                ]);
+
+                // 🔥 HAPUS COOKIE LAMA (PAKSA)
+                $response->withCookie(
+                    cookie()->forget('gate', '/', null)
+                );
+
+                // 🔥 SET COOKIE BARU (KONSISTEN)
+                $response->withCookie(
                     cookie(
                         'gate',
                         $gate,
-                        120,    // menit
-                        null,
-                        null,
-                        true,   // secure (HTTPS)
-                        true    // httpOnly
+                        120,
+                        '/',                    // PATH WAJIB
+                        null,                   // DOMAIN
+                        request()->isSecure(),  // secure sesuai HTTPS
+                        true                    // httpOnly
                     )
                 );
+
+                return $response;
             }
         }
 
@@ -55,10 +65,14 @@ class AccessController extends Controller
         ], 401);
     }
 
+
     public function logout()
     {
         return redirect()
             ->route('akses.index')
-            ->withCookie(cookie()->forget('gate'));
+            ->withCookie(
+                cookie()->forget('gate', '/', null)
+            );
     }
+
 }
