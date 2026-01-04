@@ -18,14 +18,14 @@ use Illuminate\Support\Carbon;
 class AbsensiController extends Controller
 {
     
-    public function index()
+    public function index($gate)
     {
-        if (!session()->has('gate')) {
+        if (!in_array($gate, [1, 2, 3])) {
             return redirect()->route('akses.index');
         }
 
         return view('pages.absensi', [
-            'gate' => session('gate')
+            'gate' => $gate
         ]);
     }
 
