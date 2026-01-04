@@ -46,39 +46,43 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
 
         <a href="{{ url('/absensi/1') }}"
-        class="group h-32 rounded-xl border border-white/10
+        class="w-full h-28 sm:h-32 rounded-xl
+                border border-white/10
                 bg-white/5 hover:bg-blue-500/10
                 flex items-center justify-center
-                transition transform hover:scale-105">
+                transition hover:-translate-y-0.5">
 
-            <p class="text-xl font-bold tracking-widest text-blue-400">
+            <p class="text-lg sm:text-xl font-bold tracking-widest text-blue-400">
                 GATE 1
             </p>
         </a>
 
         <a href="{{ url('/absensi/2') }}"
-        class="group h-32 rounded-xl border border-white/10
+        class="w-full h-28 sm:h-32 rounded-xl
+                border border-white/10
                 bg-white/5 hover:bg-indigo-500/10
                 flex items-center justify-center
-                transition transform hover:scale-105">
+                transition hover:-translate-y-0.5">
 
-            <p class="text-xl font-bold tracking-widest text-indigo-400">
+            <p class="text-lg sm:text-xl font-bold tracking-widest text-indigo-400">
                 GATE 2
             </p>
         </a>
 
         <a href="{{ url('/absensi/3') }}"
-        class="group h-32 rounded-xl border border-white/10
+        class="w-full h-28 sm:h-32 rounded-xl
+                border border-white/10
                 bg-white/5 hover:bg-purple-500/10
                 flex items-center justify-center
-                transition transform hover:scale-105">
+                transition hover:-translate-y-0.5">
 
-            <p class="text-xl font-bold tracking-widest text-purple-400">
+            <p class="text-lg sm:text-xl font-bold tracking-widest text-purple-400">
                 GATE 3
             </p>
         </a>
 
     </div>
+
 
 
     <!-- FOOTER -->
