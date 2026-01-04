@@ -33,9 +33,7 @@
 
     <!-- INTRO -->
     <div class="text-center mb-8">
-        <p class="text-lg font-semibold">
-            Selamat Datang
-        </p>
+      
         <p class="text-sm text-white/60 leading-relaxed mt-2">
             Silakan pilih lokasi gate untuk melanjutkan
             proses absensi masuk dan keluar.
@@ -43,45 +41,67 @@
     </div>
 
     <!-- GATE OPTIONS -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
 
-        <a href="{{ url('/absensi/1') }}"
-        class="w-full h-28 sm:h-32 rounded-xl
-                border border-white/10
-                bg-white/5 hover:bg-blue-500/10
-                flex items-center justify-center
-                transition hover:-translate-y-0.5">
+    <!-- GATE 1 -->
+    <a href="{{ url('/absensi/1') }}"
+       class="group relative overflow-hidden rounded-xl
+              border border-blue-400/30
+              bg-gradient-to-br from-blue-500/10 to-blue-900/10
+              hover:from-blue-500/20 hover:to-blue-900/20
+              h-28 sm:h-32
+              flex flex-col items-center justify-center
+              transition-all duration-300
+              hover:scale-[1.03]
+              hover:shadow-[0_0_30px_-8px_rgba(59,130,246,0.6)]
+              focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-            <p class="text-lg sm:text-xl font-bold tracking-widest text-blue-400">
-                GATE 1
-            </p>
-        </a>
+        <span class="text-3xl mb-1 group-hover:scale-110 transition">🚪</span>
+        <span class="text-lg sm:text-xl font-bold tracking-widest text-blue-400">
+            GATE 1
+        </span>
+    </a>
 
-        <a href="{{ url('/absensi/2') }}"
-        class="w-full h-28 sm:h-32 rounded-xl
-                border border-white/10
-                bg-white/5 hover:bg-indigo-500/10
-                flex items-center justify-center
-                transition hover:-translate-y-0.5">
+    <!-- GATE 2 -->
+    <a href="{{ url('/absensi/2') }}"
+       class="group relative overflow-hidden rounded-xl
+              border border-indigo-400/30
+              bg-gradient-to-br from-indigo-500/10 to-indigo-900/10
+              hover:from-indigo-500/20 hover:to-indigo-900/20
+              h-28 sm:h-32
+              flex flex-col items-center justify-center
+              transition-all duration-300
+              hover:scale-[1.03]
+              hover:shadow-[0_0_30px_-8px_rgba(99,102,241,0.6)]
+              focus:outline-none focus:ring-2 focus:ring-indigo-400">
 
-            <p class="text-lg sm:text-xl font-bold tracking-widest text-indigo-400">
-                GATE 2
-            </p>
-        </a>
+        <span class="text-3xl mb-1 group-hover:scale-110 transition">🚪</span>
+        <span class="text-lg sm:text-xl font-bold tracking-widest text-indigo-400">
+            GATE 2
+        </span>
+    </a>
 
-        <a href="{{ url('/absensi/3') }}"
-        class="w-full h-28 sm:h-32 rounded-xl
-                border border-white/10
-                bg-white/5 hover:bg-purple-500/10
-                flex items-center justify-center
-                transition hover:-translate-y-0.5">
+    <!-- GATE 3 -->
+    <a href="{{ url('/absensi/3') }}"
+       class="group relative overflow-hidden rounded-xl
+              border border-purple-400/30
+              bg-gradient-to-br from-purple-500/10 to-purple-900/10
+              hover:from-purple-500/20 hover:to-purple-900/20
+              h-28 sm:h-32
+              flex flex-col items-center justify-center
+              transition-all duration-300
+              hover:scale-[1.03]
+              hover:shadow-[0_0_30px_-8px_rgba(168,85,247,0.6)]
+              focus:outline-none focus:ring-2 focus:ring-purple-400">
 
-            <p class="text-lg sm:text-xl font-bold tracking-widest text-purple-400">
-                GATE 3
-            </p>
-        </a>
+        <span class="text-3xl mb-1 group-hover:scale-110 transition">🚪</span>
+        <span class="text-lg sm:text-xl font-bold tracking-widest text-purple-400">
+            GATE 3
+        </span>
+    </a>
 
-    </div>
+</div>
+
 
 
 
