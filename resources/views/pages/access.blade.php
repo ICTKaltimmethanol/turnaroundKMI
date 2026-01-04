@@ -17,7 +17,7 @@
 <body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black
              text-white flex items-center justify-center">
 
-<div class="w-full max-w-lg bg-white/5 backdrop-blur
+<div class=" max-w-lg bg-white/5 backdrop-blur
             border border-white/10 rounded-2xl p-8 shadow-2xl">
 
     <!-- HEADER -->
@@ -46,36 +46,40 @@
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
 
         <a href="{{ url('/absensi/1') }}"
-           class="group rounded-xl border border-white/10
-                  bg-white/5 hover:bg-blue-500/10
-                  p-5 text-center transition">
-            <p class="text-sm font-semibold tracking-widest text-blue-400">
+        class="group h-32 rounded-xl border border-white/10
+                bg-white/5 hover:bg-blue-500/10
+                flex items-center justify-center
+                transition transform hover:scale-105">
+
+            <p class="text-xl font-bold tracking-widest text-blue-400">
                 GATE 1
             </p>
-            
         </a>
 
         <a href="{{ url('/absensi/2') }}"
-           class="group rounded-xl border border-white/10
-                  bg-white/5 hover:bg-indigo-500/10
-                  p-5 text-center transition">
-            <p class="text-sm font-semibold tracking-widest text-indigo-400">
+        class="group h-32 rounded-xl border border-white/10
+                bg-white/5 hover:bg-indigo-500/10
+                flex items-center justify-center
+                transition transform hover:scale-105">
+
+            <p class="text-xl font-bold tracking-widest text-indigo-400">
                 GATE 2
             </p>
-          
         </a>
 
         <a href="{{ url('/absensi/3') }}"
-           class="group rounded-xl border border-white/10
-                  bg-white/5 hover:bg-purple-500/10
-                  p-5 text-center transition">
-            <p class="text-sm font-semibold tracking-widest text-purple-400">
+        class="group h-32 rounded-xl border border-white/10
+                bg-white/5 hover:bg-purple-500/10
+                flex items-center justify-center
+                transition transform hover:scale-105">
+
+            <p class="text-xl font-bold tracking-widest text-purple-400">
                 GATE 3
             </p>
-          
         </a>
 
     </div>
+
 
     <!-- FOOTER -->
     <p class="text-center text-[10px] text-white/40 tracking-widest">
