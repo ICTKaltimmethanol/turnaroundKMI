@@ -31,14 +31,7 @@
         </p>
     </div>
 
-    <!-- INTRO -->
-    <div class="text-center mb-8">
-      
-        <p class="text-sm text-white/60 leading-relaxed mt-2">
-            Silakan pilih lokasi gate untuk melanjutkan
-            proses absensi masuk dan keluar.
-        </p>
-    </div>
+  
 
     <!-- GATE OPTIONS -->
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
