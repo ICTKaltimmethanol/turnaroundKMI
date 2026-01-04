@@ -45,7 +45,7 @@
 
     <!-- GATE 1 -->
     <a href="{{ url('/absensi/1') }}"
-       class="group h-50 sm:h-32
+       class="group h-50 py-8 sm:h-32
               rounded-xl
               border border-blue-400/20
               bg-white/5
@@ -62,7 +62,7 @@
 
     <!-- GATE 2 -->
     <a href="{{ url('/absensi/2') }}"
-       class="group h-50 sm:h-32
+       class="group h-50 py-8 sm:h-32
               rounded-xl
               border border-indigo-400/20
               bg-white/5
@@ -79,7 +79,7 @@
 
     <!-- GATE 3 -->
     <a href="{{ url('/absensi/3') }}"
-       class="group h-50 sm:h-32
+       class="group h-50 py-8 sm:h-32
               rounded-xl
               border border-purple-400/20
               bg-white/5
