@@ -17,11 +17,11 @@
 <body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black
              text-white flex items-center justify-center">
 
-<div class="w-full max-w-md bg-white/5 backdrop-blur
-            border border-white/10 rounded-xl p-8 shadow-xl">
+<div class="w-full max-w-lg bg-white/5 backdrop-blur
+            border border-white/10 rounded-2xl p-8 shadow-2xl">
 
     <!-- HEADER -->
-    <div class="text-center mb-8">
+    <div class="text-center mb-10">
         <h1 class="text-3xl font-bold tracking-wide">
             <span class="text-blue-400">ABSENSI</span>
             <span class="text-red-400">TURN AROUND</span>
@@ -31,32 +31,56 @@
         </p>
     </div>
 
-    <!-- WELCOME TEXT -->
-    <div class="text-center space-y-4 mb-8">
+    <!-- INTRO -->
+    <div class="text-center mb-8">
         <p class="text-lg font-semibold">
-            Selamat Datang 👋
+            Selamat Datang
         </p>
-        <p class="text-sm text-white/60 leading-relaxed">
-            Sistem Absensi Turn Around digunakan untuk pencatatan
-            kehadiran masuk dan keluar selama kegiatan TA berlangsung.
+        <p class="text-sm text-white/60 leading-relaxed mt-2">
+            Silakan pilih lokasi gate untuk melanjutkan
+            proses absensi masuk dan keluar.
         </p>
     </div>
 
-    <!-- ACTION -->
-    <div class="space-y-4">
-        <!-- Contoh langsung ke Gate 1 -->
+    <!-- GATE OPTIONS -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+
         <a href="{{ url('/absensi/1') }}"
-           class="block text-center rounded-xl bg-gradient-to-r
-                  from-blue-500 to-indigo-600
-                  hover:from-blue-400 hover:to-indigo-500
-                  py-3 text-sm font-semibold tracking-widest transition">
-            MASUK ABSENSI
+           class="group rounded-xl border border-white/10
+                  bg-white/5 hover:bg-blue-500/10
+                  p-5 text-center transition">
+            <p class="text-sm font-semibold tracking-widest text-blue-400">
+                GATE 1
+            </p>
+            
         </a>
 
-        <p class="text-center text-xs text-white/40 tracking-widest">
-            AUTHORIZED PERSONNEL ONLY
-        </p>
+        <a href="{{ url('/absensi/2') }}"
+           class="group rounded-xl border border-white/10
+                  bg-white/5 hover:bg-indigo-500/10
+                  p-5 text-center transition">
+            <p class="text-sm font-semibold tracking-widest text-indigo-400">
+                GATE 2
+            </p>
+          
+        </a>
+
+        <a href="{{ url('/absensi/3') }}"
+           class="group rounded-xl border border-white/10
+                  bg-white/5 hover:bg-purple-500/10
+                  p-5 text-center transition">
+            <p class="text-sm font-semibold tracking-widest text-purple-400">
+                GATE 3
+            </p>
+          
+        </a>
+
     </div>
+
+    <!-- FOOTER -->
+    <p class="text-center text-[10px] text-white/40 tracking-widest">
+        AUTHORIZED PERSONNEL ONLY
+    </p>
 
 </div>
 

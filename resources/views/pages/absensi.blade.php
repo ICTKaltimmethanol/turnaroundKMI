@@ -34,10 +34,10 @@
                 <!-- POS -->
                 <div class="flex flex-col items-end leading-tight">
                     <span class="text-[10px] tracking-widest text-white/40 uppercase">
-                        Active Post
+                        Gate in use
                     </span>
                     <span class="text-sm font-medium text-emerald-400">
-                        {{ $gate }}
+                        Gate {{ $gate }}
                     </span>
                 </div>
 

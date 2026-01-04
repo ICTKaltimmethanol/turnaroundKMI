@@ -36,6 +36,7 @@ class EmployeesTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->poll('10s')
             ->heading('Daftar Pekerja TA')
             ->paginated([ 5, 10, 25, 50, 'all',])
             ->columns([
