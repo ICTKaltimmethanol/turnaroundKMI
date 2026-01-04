@@ -26,7 +26,7 @@
             <span class="text-blue-400">ABSENSI</span>
             <span class="text-red-400">TURN AROUND</span>
         </h1>
-        <p class="text-xs text-white/50 tracking-widest mt-2">
+        <p class="text-xs text-white/50 tracking-widest mt-2 mb-8">
             TA 2025 · PT. Kaltim Methanol Industri
         </p>
     </div>
