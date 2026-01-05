@@ -27,14 +27,16 @@ class Presences extends Model
         return $this->belongsTo(Position::class, 'employees_position_id');
     }
 
-    public function presenceIn()
+  
+
+        public function presenceIn()
     {
-        return $this->belongsTo(PresenceIn::class, 'presenceIn_id');
+        return $this->hasOne(PresenceIn::class, 'presences_id');
     }
 
     public function presenceOut()
     {
-        return $this->belongsTo(PresenceOut::class, 'presenceOut_id');
+        return $this->hasOne(PresenceOut::class, 'presences_id');
     }
     
 
