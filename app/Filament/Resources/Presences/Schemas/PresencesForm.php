@@ -2,14 +2,16 @@
 
 namespace App\Filament\Resources\Presences\Schemas;
 
-use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Actions\Action;
+
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TimePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Actions\Action;
+
 use Filament\Notifications\Notification;
-use Filament\Schemas\Schema;
 
 class PresencesForm
 {
@@ -17,14 +19,20 @@ class PresencesForm
     {
         return $schema->components([
 
+            /* ======================
+               TOTAL TIME
+            ====================== */
             TextInput::make('total_time')
                 ->label('Total Time')
                 ->numeric()
                 ->disabled(),
 
+            /* ======================
+               EMPLOYEE
+            ====================== */
             Select::make('employees_id')
-                ->relationship('employee', 'full_name')
                 ->label('Nama Karyawan')
+                ->relationship('employee', 'full_name')
                 ->disabled()
                 ->searchable()
                 ->preload(),
@@ -58,7 +66,7 @@ class PresencesForm
                         ->label('Remove')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->visible(fn ($record) => $record?->presenceIn)
+                        ->visible(fn ($record) => filled($record?->presenceIn))
                         ->action(function ($record, $set) {
                             $record->presenceIn?->delete();
                             $set('presenceIn_id', null);
@@ -85,7 +93,7 @@ class PresencesForm
                         ->label('Remove')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->visible(fn ($record) => $record?->presenceOut)
+                        ->visible(fn ($record) => filled($record?->presenceOut))
                         ->action(function ($record, $set) {
                             $record->presenceOut?->delete();
                             $set('presenceOut_id', null);
