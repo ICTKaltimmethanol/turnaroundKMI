@@ -39,6 +39,8 @@ use App\Http\Controllers\PageController;
 
     Route::post('/akses/logout', [AccessController::class, 'logout'])
         ->name('akses.logout');
+    
+    Route::get('/absensi/counter-harian', [AbsensiController::class, 'counterMasukDanBelumKeluar']);
 
     Route::get('/absensi/{gate}', [AbsensiController::class, 'index'])
         ->name('absensi.index');
