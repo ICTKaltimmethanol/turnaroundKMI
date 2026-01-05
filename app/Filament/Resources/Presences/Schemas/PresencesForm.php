@@ -1,13 +1,12 @@
 <?php
+
 namespace App\Filament\Resources\Presences\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Select;
-use App\Models\Company;
 use Filament\Schemas\Schema;
 
 class PresencesForm
@@ -18,9 +17,9 @@ class PresencesForm
             ->components([
                 TextInput::make('total_time')
                     ->label('Total Time')
-                    ->formatStateUsing(fn ($state) => abs($state))
-                    ->numeric(),
-                
+                    ->numeric()
+                    ->disabled(),
+
                 Select::make('employees_id')
                     ->relationship('employee', 'full_name')
                     ->label('Nama Karyawan')
@@ -30,35 +29,44 @@ class PresencesForm
 
                 Select::make('company_id')
                     ->label('Perusahaan')
-                    ->relationship('company', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
-                    ->searchable()
-                    ->preload()
-               
-                    ->required(),
-                
-                Select::make('position_id')
-                    ->label('Posisi')
-                    ->relationship('position', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
+                    ->relationship('company', 'name', modifyQueryUsing: fn ($q) => $q->orderBy('name'))
                     ->searchable()
                     ->preload()
                     ->required(),
 
+                Select::make('position_id')
+                    ->label('Posisi')
+                    ->relationship('position', 'name', modifyQueryUsing: fn ($q) => $q->orderBy('name'))
+                    ->searchable()
+                    ->preload()
+                    ->required(),
+
+                /* =======================
+                   PRESENCE IN
+                ======================= */
                 Section::make('Presensi Waktu Masuk')
                     ->relationship('presenceIn')
+                    ->deletable() // ✅ tombol Remove
                     ->schema([
                         DatePicker::make('presence_date')
                             ->label('Tanggal Masuk')
                             ->required(),
+
                         TimePicker::make('presence_time')
                             ->label('Waktu Masuk')
                             ->required(),
                     ]),
 
+                /* =======================
+                   PRESENCE OUT
+                ======================= */
                 Section::make('Presensi Waktu Pulang')
                     ->relationship('presenceOut')
+                    ->deletable() // ✅ tombol Remove
                     ->schema([
                         DatePicker::make('presence_date')
                             ->label('Tanggal Pulang'),
+
                         TimePicker::make('presence_time')
                             ->label('Waktu Pulang'),
                     ]),
