@@ -4,12 +4,12 @@ namespace App\Filament\Resources\Presences\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Actions\Action;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Button;
 
 use Filament\Notifications\Notification;
 
@@ -62,10 +62,9 @@ class PresencesForm
                     TimePicker::make('presenceIn.presence_time')
                         ->label('Waktu Masuk'),
 
-                    Action::make('removePresenceIn')
+                    Button::make('removePresenceIn')
                         ->label('Remove')
                         ->color('danger')
-                        ->requiresConfirmation()
                         ->visible(fn ($record) => filled($record?->presenceIn))
                         ->action(function ($record, $set) {
                             $record->presenceIn?->delete();
@@ -89,10 +88,9 @@ class PresencesForm
                     TimePicker::make('presenceOut.presence_time')
                         ->label('Waktu Pulang'),
 
-                    Action::make('removePresenceOut')
+                    Button::make('removePresenceOut')
                         ->label('Remove')
                         ->color('danger')
-                        ->requiresConfirmation()
                         ->visible(fn ($record) => filled($record?->presenceOut))
                         ->action(function ($record, $set) {
                             $record->presenceOut?->delete();
