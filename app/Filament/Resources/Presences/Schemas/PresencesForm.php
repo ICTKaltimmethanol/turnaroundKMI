@@ -9,7 +9,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TimePicker;
-use Filament\Forms\Components\Button;
+use Filament\Forms\Components\Checkbox;
 
 use Filament\Notifications\Notification;
 
@@ -62,18 +62,21 @@ class PresencesForm
                     TimePicker::make('presenceIn.presence_time')
                         ->label('Waktu Masuk'),
 
-                    Button::make('removePresenceIn')
-                        ->label('Remove')
-                        ->color('danger')
-                        ->visible(fn ($record) => filled($record?->presenceIn))
-                        ->action(function ($record, $set) {
-                            $record->presenceIn?->delete();
-                            $set('presenceIn_id', null);
+                    Checkbox::make('removePresenceIn')
+                        ->label('Hapus Presensi Masuk')
+                        ->afterStateUpdated(function ($state, $set, $record) {
+                            if ($state) {
+                                $record->presenceIn?->delete();
+                                $set('presenceIn_id', null);
 
-                            Notification::make()
-                                ->success()
-                                ->title('Presensi Masuk dihapus')
-                                ->send();
+                                Notification::make()
+                                    ->success()
+                                    ->title('Presensi Masuk dihapus')
+                                    ->send();
+
+                                // Reset checkbox
+                                $set('removePresenceIn', false);
+                            }
                         }),
                 ]),
 
@@ -88,18 +91,21 @@ class PresencesForm
                     TimePicker::make('presenceOut.presence_time')
                         ->label('Waktu Pulang'),
 
-                    Button::make('removePresenceOut')
-                        ->label('Remove')
-                        ->color('danger')
-                        ->visible(fn ($record) => filled($record?->presenceOut))
-                        ->action(function ($record, $set) {
-                            $record->presenceOut?->delete();
-                            $set('presenceOut_id', null);
+                    Checkbox::make('removePresenceOut')
+                        ->label('Hapus Presensi Pulang')
+                        ->afterStateUpdated(function ($state, $set, $record) {
+                            if ($state) {
+                                $record->presenceOut?->delete();
+                                $set('presenceOut_id', null);
 
-                            Notification::make()
-                                ->success()
-                                ->title('Presensi Pulang dihapus')
-                                ->send();
+                                Notification::make()
+                                    ->success()
+                                    ->title('Presensi Pulang dihapus')
+                                    ->send();
+
+                                // Reset checkbox
+                                $set('removePresenceOut', false);
+                            }
                         }),
                 ]),
         ]);
