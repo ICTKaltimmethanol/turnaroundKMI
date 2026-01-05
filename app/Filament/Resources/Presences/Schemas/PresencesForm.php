@@ -1,67 +1,101 @@
 <?php
+
 namespace App\Filament\Resources\Presences\Schemas;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Select;
-use App\Models\Company;
+use Filament\Forms\Components\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
 
 class PresencesForm
 {
     public static function configure(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                TextInput::make('total_time')
-                    ->label('Total Time')
-                    ->formatStateUsing(fn ($state) => abs($state))
-                    ->numeric(),
-                
-                Select::make('employees_id')
-                    ->relationship('employee', 'full_name')
-                    ->label('Nama Karyawan')
-                    ->disabled()
-                    ->searchable()
-                    ->preload(),
+        return $schema->components([
 
-                Select::make('company_id')
-                    ->label('Perusahaan')
-                    ->relationship('company', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
-                    ->searchable()
-                    ->preload()
-               
-                    ->required(),
-                
-                Select::make('position_id')
-                    ->label('Posisi')
-                    ->relationship('position', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
-                    ->searchable()
-                    ->preload()
-                    ->required(),
+            TextInput::make('total_time')
+                ->label('Total Time')
+                ->numeric()
+                ->disabled(),
 
-                Section::make('Presensi Waktu Masuk')
-                    ->relationship('presenceIn')
-                    ->schema([
-                        DatePicker::make('presence_date')
-                            ->label('Tanggal Masuk')
-                            ->required(),
-                        TimePicker::make('presence_time')
-                            ->label('Waktu Masuk')
-                            ->required(),
-                    ]),
+            Select::make('employees_id')
+                ->relationship('employee', 'full_name')
+                ->label('Nama Karyawan')
+                ->disabled()
+                ->searchable()
+                ->preload(),
 
-                Section::make('Presensi Waktu Pulang')
-                    ->relationship('presenceOut')
-                    ->schema([
-                        DatePicker::make('presence_date')
-                            ->label('Tanggal Pulang'),
-                        TimePicker::make('presence_time')
-                            ->label('Waktu Pulang'),
-                    ]),
-            ]);
+            Select::make('company_id')
+                ->label('Perusahaan')
+                ->relationship('company', 'name', modifyQueryUsing: fn ($q) => $q->orderBy('name'))
+                ->searchable()
+                ->preload()
+                ->required(),
+
+            Select::make('position_id')
+                ->label('Posisi')
+                ->relationship('position', 'name', modifyQueryUsing: fn ($q) => $q->orderBy('name'))
+                ->searchable()
+                ->preload()
+                ->required(),
+
+            /* ======================
+               PRESENCE IN
+            ====================== */
+            Section::make('Presensi Waktu Masuk')
+                ->schema([
+                    DatePicker::make('presenceIn.presence_date')
+                        ->label('Tanggal Masuk'),
+
+                    TimePicker::make('presenceIn.presence_time')
+                        ->label('Waktu Masuk'),
+
+                    Action::make('removePresenceIn')
+                        ->label('Remove')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->visible(fn ($record) => $record?->presenceIn)
+                        ->action(function ($record, $set) {
+                            $record->presenceIn?->delete();
+                            $set('presenceIn_id', null);
+
+                            Notification::make()
+                                ->success()
+                                ->title('Presensi Masuk dihapus')
+                                ->send();
+                        }),
+                ]),
+
+            /* ======================
+               PRESENCE OUT
+            ====================== */
+            Section::make('Presensi Waktu Pulang')
+                ->schema([
+                    DatePicker::make('presenceOut.presence_date')
+                        ->label('Tanggal Pulang'),
+
+                    TimePicker::make('presenceOut.presence_time')
+                        ->label('Waktu Pulang'),
+
+                    Action::make('removePresenceOut')
+                        ->label('Remove')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->visible(fn ($record) => $record?->presenceOut)
+                        ->action(function ($record, $set) {
+                            $record->presenceOut?->delete();
+                            $set('presenceOut_id', null);
+
+                            Notification::make()
+                                ->success()
+                                ->title('Presensi Pulang dihapus')
+                                ->send();
+                        }),
+                ]),
+        ]);
     }
 }
