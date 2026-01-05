@@ -29,17 +29,18 @@ class AbsensiController extends Controller
         ]);
     }
 
+    public function counterMasukDanBelumKeluar()
+    {
+        $start = Carbon::today()->startOfDay();
+        $end   = Carbon::today()->endOfDay();
 
-    public function counterMasukDanBelumKeluar() {
-        $today = Carbon::today();
-
-        // Sudah absensi masuk hari ini
-        $alreadyIn = Presences::whereDate('created_at', $today)
+        // Total MASUK (semua gate)
+        $alreadyIn = Presences::whereBetween('created_at', [$start, $end])
             ->whereNotNull('presenceIn_id')
             ->count();
 
-        // Sudah masuk tapi belum absensi keluar
-        $notOutYet = Presences::whereDate('created_at', $today)
+        // Total BELUM KELUAR (semua gate)
+        $notOutYet = Presences::whereBetween('created_at', [$start, $end])
             ->whereNotNull('presenceIn_id')
             ->whereNull('presenceOut_id')
             ->count();
@@ -49,7 +50,7 @@ class AbsensiController extends Controller
             'not_out_yet' => $notOutYet,
         ]);
     }
-    
+
     /*public function scan(Request $request)
     {
         try {

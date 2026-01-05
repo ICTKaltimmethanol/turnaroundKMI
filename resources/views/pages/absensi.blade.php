@@ -290,13 +290,34 @@
             });
         }
         function loadDailyCounter() {
-            fetch('/absensi/counter-harian')
-                .then(res => res.json())
-                .then(data => {
-                    document.getElementById('alreadyInCount').innerText = data.already_in;
-                    document.getElementById('notOutCount').innerText = data.not_out_yet;
-                });
+            fetch('/absensi/counter-harian', {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(res => {
+                if (res.status === 401 || res.status === 419) {
+                    showSessionExpired();
+                    throw new Error('Session expired');
+                }
+
+                if (!res.ok) {
+                    throw new Error('Failed to fetch counter');
+                }
+
+                return res.json();
+            })
+            .then(data => {
+                document.getElementById('alreadyInCount').innerText = data.already_in ?? 0;
+                document.getElementById('notOutCount').innerText = data.not_out_yet ?? 0;
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('alreadyInCount').innerText = '-';
+                document.getElementById('notOutCount').innerText = '-';
+            });
         }
+
 
         /* ===============================
         SESSION EXPIRED HANDLER
