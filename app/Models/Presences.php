@@ -36,5 +36,6 @@ class Presences extends Model
     {
         return $this->belongsTo(PresenceOut::class, 'presenceOut_id');
     }
+    
 
 }
