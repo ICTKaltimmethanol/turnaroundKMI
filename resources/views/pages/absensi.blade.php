@@ -81,7 +81,7 @@
             </div>
 
             <div class="rounded-xl bg-amber-500/20 border border-amber-400/40 p-5 text-center">
-                <p class="text-sm text-amber-200">Absensi Keluar Hari Ini</p>
+                <p class="text-sm text-amber-200">Belum Absensi Keluar Hari Ini</p>
                 <p id="notOutCount" class="text-3xl font-bold text-amber-300">0</p>
             </div>
 
