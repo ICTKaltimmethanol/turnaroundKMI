@@ -23,10 +23,14 @@ class PresencesForm
                 
                 Select::make('employees_id')
                     ->relationship('employee', 'full_name')
-                    ->label('Nama Karyawan')
+                    ->getOptionLabelFromRecordUsing(
+                        fn ($record) => $record->full_name ?? '-'
+                    )
+                    ->label('Nama Pekerja')
                     ->disabled()
                     ->searchable()
                     ->preload(),
+
 
                 Select::make('company_id')
                     ->label('Perusahaan')
