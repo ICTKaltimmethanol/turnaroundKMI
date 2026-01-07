@@ -140,11 +140,7 @@ class AbsensiController extends Controller
                     'presence_date' => $now->toDateString(),
                     'employees_id' => $employeeId,
 
-                    // Snapshot data
-                    'employee_name'  => $employee->full_name,
-                    'employee_code'  => $employee->employees_code,
-                    'company_name'   => $employee->company?->name,
-                    'position_name'  => $employee->position?->name,
+                 
                 ]);
 
                 // Buat record Presences
@@ -153,6 +149,11 @@ class AbsensiController extends Controller
                     'employees_id' => $employeeId,
                     'employees_company_id' => $employee->company_id,
                     'employees_position_id' => $employee->position_id,
+                       // Snapshot data
+                    'employee_name'  => $employee->full_name,
+                    'employee_code'  => $employee->employees_code,
+                    'company_name'   => $employee->company?->name,
+                    'position_name'  => $employee->position?->name,
                 ]);
 
                 DB::commit();
@@ -176,7 +177,7 @@ class AbsensiController extends Controller
              */
             $lastIn = PresenceIn::find($lastPresence->presenceIn_id);
 
-            // Buat record PresenceOut
+            // Record PresenceOut
             $presenceOut = PresenceOut::create([
                 'latitude_out' => $latitude,
                 'longitude_out' => $longitude,
@@ -185,11 +186,10 @@ class AbsensiController extends Controller
                 'employees_id' => $employeeId,
             ]);
 
-            // Hitung selisih waktu masuk-keluar (dengan dukungan lintas hari)
+            // Selisih waktu masuk-keluar (support lintas hari)
             $inDateTime = Carbon::parse($lastIn->presence_date . ' ' . $lastIn->presence_time);
             $outDateTime = Carbon::parse($presenceOut->presence_date . ' ' . $presenceOut->presence_time);
 
-            // Jika keluar lebih awal dari masuk, berarti lintas hari → tambahkan 1 hari
             if ($outDateTime->lessThan($inDateTime)) {
                 $outDateTime->addDay();
             }
