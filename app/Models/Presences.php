@@ -9,7 +9,21 @@ class Presences extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['total_time', 'presenceIn_id', 'presenceOut_id', 'employees_id', 'employees_company_id', 'employees_position_id'];
+    protected $fillable = [
+        'total_time', 
+        'presenceIn_id', 
+        'presenceOut_id', 
+        'employees_id', 
+
+        
+        // SNAPSHOT
+        'employee_name',
+        'employee_code',
+        'company_name',
+        'position_name',
+        
+        'employees_company_id', 
+        'employees_position_id'];
 
     
     public function employee()

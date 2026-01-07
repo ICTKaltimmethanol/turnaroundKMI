@@ -131,7 +131,7 @@ class AbsensiController extends Controller
              * =========================
              */
             if (!$lastPresence) {
-                // Buat record PresenceIn
+                // Record PresenceIn
                 $presenceIn = PresenceIn::create([
                     'presence_in_status' => 'on_time',
                     'latitude_in' => $latitude,
@@ -139,6 +139,12 @@ class AbsensiController extends Controller
                     'presence_time' => $now->toTimeString(),
                     'presence_date' => $now->toDateString(),
                     'employees_id' => $employeeId,
+
+                    // Snapshot data
+                    'employee_name'  => $employee->full_name,
+                    'employee_code'  => $employee->employees_code,
+                    'company_name'   => $employee->company?->name,
+                    'position_name'  => $employee->position?->name,
                 ]);
 
                 // Buat record Presences
