@@ -68,7 +68,7 @@ class PresencesTable
                 'all',
             ])
             ->columns([
-                TextColumn::make('employee.full_name')
+                /* TextColumn::make('employee.full_name')
                     ->label('Nama Lengkap')
                     ->numeric()
                     ->toggleable()
@@ -77,19 +77,24 @@ class PresencesTable
                     ->label('ID Pekerja')
                     ->toggleable()
                     ->sortable(),
-               TextColumn::make('total_time')
-                    ->label('Total Waktu (Menit)')
-                    ->formatStateUsing(fn ($state) => abs($state))
+                TextColumn::make('position.name')
+                    ->label('Posisi')
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('company.name')
                     ->label('Perusahaan')
                     ->toggleable()
-                    ->sortable(),
-                TextColumn::make('position.name')
-                    ->label('Posisi')
+                    ->sortable(), */
+                TextColumn::make('employee_name')->label('Nama Lengkap'),
+                TextColumn::make('employee_code')->label('ID Pekerja'),
+                TextColumn::make('company_name')->label('Perusahaan'),
+                TextColumn::make('position_name')->label('Posisi'),
+                TextColumn::make('total_time')
+                    ->label('Total Waktu (Menit)')
+                    ->formatStateUsing(fn ($state) => abs($state))
                     ->toggleable()
                     ->sortable(),
+                
                 TextColumn::make('presenceIn.created_at')
                     ->label('Waktu Masuk')
                     ->dateTime('d/m/Y H:i:s')                    
