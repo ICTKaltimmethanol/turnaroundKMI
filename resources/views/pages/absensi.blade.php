@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Absent Page</title>
+    <title>Absensi TA</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net" />
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -12,37 +12,38 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
-<body class="min-h-screen font-[Figtree] bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
+<body class="min-h-screen font-[Figtree] bg-gray-100 text-gray-800">
 
 <!-- ================= HEADER ================= -->
-<header class="w-full border-b border-white/5 bg-black/30 backdrop-blur-md">
+<header class="w-full border-b border-gray-200 bg-white">
     <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
-        <div class="flex flex-col leading-tight">
-            <span class="text-lg font-semibold tracking-wide">ABSENSI TA</span>
-            <span class="text-[10px] tracking-widest uppercase">
-                Turn <span class="text-red-300">Around <span class="text-blue-400 font-bold">System</span></span>
-            </span>
+        <div>
+            <div class="text-lg font-semibold tracking-wide">ABSENSI TA</div>
+            <div class="text-[10px] tracking-widest uppercase text-gray-500">
+                Turn <span class="text-red-500">Around</span>
+                <span class="text-blue-600 font-bold">System</span>
+            </div>
         </div>
 
         <div class="flex items-center gap-5">
-            <div class="flex flex-col items-end leading-tight">
-                <span class="text-[10px] tracking-widest text-white/40 uppercase">Gate in use</span>
-                <span class="text-sm font-medium text-emerald-400">Gate {{ $gate }}</span>
+            <div class="text-right">
+                <div class="text-[10px] uppercase tracking-widest text-gray-400">Gate in use</div>
+                <div class="text-sm font-medium text-emerald-600">Gate {{ $gate }}</div>
             </div>
 
-            <div class="h-8 w-px bg-white/10"></div>
+            <div class="h-6 w-px bg-gray-300"></div>
 
-            <div id="liveTime" class="text-sm font-mono tracking-wide text-white/70 min-w-[70px] text-right"></div>
+            <div id="liveTime" class="text-sm font-mono text-gray-600 min-w-[70px] text-right"></div>
 
-            <div class="h-8 w-px bg-white/10"></div>
+            <div class="h-6 w-px bg-gray-300"></div>
 
             <form action="{{ route('akses.logout') }}" method="POST">
                 @csrf
                 <button type="submit"
-                    class="px-3 py-1.5 text-[10px] tracking-widest uppercase
-                    text-white/60 border border-white/20 rounded-md
-                    hover:text-red-400 hover:border-red-400/40 hover:bg-red-500/5 transition">
+                    class="px-3 py-1.5 text-[10px] uppercase tracking-widest
+                    text-gray-600 border border-gray-300 rounded
+                    hover:text-red-600 hover:border-red-400 hover:bg-red-50 transition">
                     End Session
                 </button>
             </form>
@@ -53,15 +54,16 @@
 <!-- ================= MAIN ================= -->
 <main class="max-w-7xl mx-auto px-6 py-10">
 
+    <!-- COUNTER -->
     <div class="grid grid-cols-2 gap-6 mb-6">
-        <div class="rounded-xl bg-emerald-500/20 border border-emerald-400/40 p-5 text-center">
-            <p class="text-sm text-emerald-200">Absensi Masuk Hari Ini</p>
-            <p id="alreadyInCount" class="text-3xl font-bold text-emerald-300">0</p>
+        <div class="rounded-xl bg-green-50 border border-green-300 p-5 text-center">
+            <p class="text-sm text-green-700">Absensi Masuk Hari Ini</p>
+            <p id="alreadyInCount" class="text-3xl font-bold text-green-700">0</p>
         </div>
 
-        <div class="rounded-xl bg-amber-500/20 border border-amber-400/40 p-5 text-center">
-            <p class="text-sm text-amber-200">Belum Absensi Keluar Hari Ini</p>
-            <p id="notOutCount" class="text-3xl font-bold text-amber-300">0</p>
+        <div class="rounded-xl bg-yellow-50 border border-yellow-300 p-5 text-center">
+            <p class="text-sm text-yellow-700">Belum Absensi Keluar Hari Ini</p>
+            <p id="notOutCount" class="text-3xl font-bold text-yellow-700">0</p>
         </div>
     </div>
 
@@ -69,7 +71,7 @@
 
         <!-- SCANNER -->
         <div>
-            <div class="relative rounded-2xl border border-white/20 bg-white/5 p-6">
+            <div class="relative rounded-2xl border border-gray-300 bg-white p-6 shadow">
 
                 <input type="text" id="barcodeInput"
                     class="absolute inset-0 opacity-0"
@@ -80,20 +82,20 @@
 
                 <div class="mt-6 text-center">
                     <p class="text-lg font-semibold">Scan Barcode Anda</p>
-                    <p class="text-sm text-white/60">Pastikan scanner aktif</p>
+                    <p class="text-sm text-gray-500">Pastikan scanner aktif</p>
                 </div>
 
                 <!-- LOADER -->
                 <div id="loadingIndicator"
-                    class="hidden absolute inset-0 bg-black/70 backdrop-blur-sm
+                    class="hidden absolute inset-0 bg-white/80 backdrop-blur-sm
                     flex flex-col items-center justify-center rounded-2xl">
 
                     <div class="w-14 h-14 mb-4 relative">
-                        <div class="absolute inset-0 rounded-full border border-white/10"></div>
-                        <div class="absolute inset-0 rounded-full border-2 border-blue-400 border-t-transparent animate-spin"></div>
+                        <div class="absolute inset-0 rounded-full border border-gray-300"></div>
+                        <div class="absolute inset-0 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
                     </div>
 
-                    <p class="text-xs tracking-widest uppercase text-white/70">Processing</p>
+                    <p class="text-xs uppercase tracking-widest text-gray-500">Processing</p>
                 </div>
             </div>
         </div>
@@ -101,7 +103,7 @@
         <!-- RESULT -->
         <div class="lg:col-span-2">
             <div id="employeeData"
-                class="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white/50">
+                class="rounded-2xl border border-gray-300 bg-white p-10 text-center text-gray-400 shadow">
                 Data karyawan akan tampil di sini
             </div>
         </div>
@@ -109,44 +111,33 @@
     </div>
 </main>
 
-<!-- ================= SESSION MODAL ================= -->
-<div id="sessionModal"
-    class="fixed inset-0 hidden z-50 bg-black/70 backdrop-blur-sm items-center justify-center">
-    <div class="bg-slate-900 border border-white/10 rounded-xl p-6 text-center">
-        <div class="text-4xl text-red-400 mb-2">⚠</div>
-        <p class="text-sm text-white/70">Session berakhir</p>
-    </div>
-</div>
-
 <!-- ================= SCRIPT ================= -->
 <script>
-/* ================= TIME ================= */
+/* ===== TIME ===== */
 function updateLiveTime() {
-    document.getElementById('liveTime').innerText = new Date().toLocaleTimeString();
+    liveTime.innerText = new Date().toLocaleTimeString();
 }
 setInterval(updateLiveTime, 1000); updateLiveTime();
 
-/* ================= COOLDOWN CONFIG ================= */
-const SCAN_COOLDOWN_MS = 60 * 1000;
+/* ===== COOLDOWN ===== */
+const SCAN_COOLDOWN_MS = 60000;
 const STORAGE_KEY = 'employee_scan_cooldown';
 
 function getCooldownData() {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
 }
-
 function setCooldown(code) {
     const data = getCooldownData();
     data[code] = Date.now();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
-
 function remainingCooldown(code) {
     const data = getCooldownData();
     if (!data[code]) return 0;
     return Math.max(0, SCAN_COOLDOWN_MS - (Date.now() - data[code]));
 }
 
-/* ================= SCAN ================= */
+/* ===== SCAN ===== */
 const input = document.getElementById('barcodeInput');
 const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
@@ -159,8 +150,8 @@ function handleScan() {
 
     const remaining = remainingCooldown(code);
     if (remaining > 0) {
-        document.getElementById('employeeData').innerHTML = `
-            <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded">
+        employeeData.innerHTML = `
+            <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded">
                 Barcode sudah discan.<br>
                 Tunggu <strong>${Math.ceil(remaining / 1000)} detik</strong>.
             </div>`;
@@ -168,7 +159,7 @@ function handleScan() {
         return;
     }
 
-    document.getElementById('loadingIndicator').classList.remove('hidden');
+    loadingIndicator.classList.remove('hidden');
     input.disabled = true;
 
     fetch('/absensi/scan', {
@@ -183,81 +174,57 @@ function handleScan() {
     .then(data => {
         if (!data || !data.employee) throw 'error';
 
-       setCooldown(data.employee.employee_code);
+        setCooldown(data.employee.employee_code);
 
-         // Pilih warna sesuai status
-                let bgColor = '';
-                if (data.status === 'masuk') {
-                    bgColor = 'bg-green-100 border-green-400 text-green-700';
-                } else if (data.status === 'keluar') {
-                    bgColor = 'bg-yellow-100 border-yellow-400 text-yellow-700';
-                } else {
-                    bgColor = 'bg-gray-100 border-gray-400 text-gray-700';
-                }
-        document.getElementById('employeeData').innerHTML = `
-            <div class="${bgColor} border px-4 py-3 rounded mb-4">
-                <strong>${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
+        let color = 'bg-red-100 border-red-400 text-red-700';
+        let label = 'ERROR';
+
+        if (data.status === 'success') {
+            if (data.type === 'in') {
+                color = 'bg-green-100 border-green-400 text-green-700';
+                label = 'ABSENSI MASUK';
+            } else if (data.type === 'out') {
+                color = 'bg-yellow-100 border-yellow-400 text-yellow-800';
+                label = 'ABSENSI KELUAR';
+            }
+        }
+
+        employeeData.innerHTML = `
+            <div class="${color} border px-4 py-3 rounded mb-4">
+                <strong>${label}</strong><br>${data.message ?? ''}
             </div>
 
-            <div class="p-4 bg-center bg-cover bg-no-repeat 
-                bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')]
-                bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
+            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow">
+                <h2 class="text-xl font-bold text-blue-600 mb-1">
+                    Turn <span class="text-red-500">Around</span> 2025
+                </h2>
+                <p class="text-sm text-gray-500 mb-4">PT. Kaltim Methanol Industri</p>
 
-                <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
-
-                    <!-- Header -->
-                    <div class="rounded-lg text-white text-center py-2 pt-4">
-                        <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">
-                            Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span>
-                        </h2>
-                        <p class="text-sm">PT. Kaltim Methanol Industri</p>
-                    </div>
-
-                    <!-- Info Karyawan -->
-                    <div class="py-2">
-                        <h3 class="text-xl font-bold text-gray-100">
-                            ${data.employee.full_name}
-                        </h3>
-
-                        <p class="text-md text-gray-200 italic">
-                            ${data.employee.company_name} - ${data.employee.position_name}
-                        </p>
-
-                        <p class="text-sm text-gray-400">
-                            ${data.employee.employee_code}
-                        </p>
-
-                        ${
-                            data.total_minutes !== undefined
-                                ? `<p class="mt-1 text-sm text-gray-300">
-                                    Total Waktu: ${data.total_minutes} menit
-                                </p>`
-                                : ''
-                        }
-                    </div>
-
-                </div>
+                <h3 class="text-xl font-bold">${data.employee.full_name}</h3>
+                <p class="italic text-gray-600">
+                    ${data.employee.company_name} - ${data.employee.position_name}
+                </p>
+                <p class="text-sm text-gray-500">${data.employee.employee_code}</p>
             </div>
         `;
 
         loadDailyCounter();
-
     })
     .catch(() => {
-        document.getElementById('employeeData').innerHTML =
-            `<div class="bg-red-100 border border-red-400 text-red-700 p-4 rounded">
+        employeeData.innerHTML = `
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                 Scan gagal atau data tidak ditemukan
             </div>`;
     })
     .finally(() => {
         input.value = '';
         input.disabled = false;
-        document.getElementById('loadingIndicator').classList.add('hidden');
+        loadingIndicator.classList.add('hidden');
         input.focus();
     });
 }
 
-/* ================= COUNTER ================= */
+/* ===== COUNTER ===== */
 function loadDailyCounter() {
     fetch('/absensi/counter-harian')
         .then(res => res.json())
