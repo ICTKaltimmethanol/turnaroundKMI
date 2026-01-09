@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
-<body class="min-h-screen font-[Figtree] bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
+<body class="min-h-screen font-[Figtree] bg-zinc-100 text-black">
 
 <!-- ================= HEADER ================= -->
 <header class="w-full border-b border-white/5 bg-black/30 backdrop-blur-md">
