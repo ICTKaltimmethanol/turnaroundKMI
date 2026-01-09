@@ -185,23 +185,15 @@ function handleScan() {
 
        setCooldown(data.employee.employee_code);
 
-       /* ================= WARNA STATUS ================= */
-        let statusBoxClass = 'bg-red-100 border-red-400 text-red-700';
-        let badgeClass = 'bg-red-500/20 text-red-300';
-        let badgeText = 'ERROR';
-
-        if (data.status === 'success') {
-            if (data.type === 'in') {
-                statusBoxClass = 'bg-green-100 border-green-400 text-green-700';
-                badgeClass = 'bg-green-500/20 text-green-300';
-                badgeText = 'ABSENSI MASUK';
-            } else if (data.type === 'out') {
-                statusBoxClass = 'bg-yellow-100 border-yellow-400 text-yellow-800';
-                badgeClass = 'bg-yellow-500/20 text-yellow-300';
-                badgeText = 'ABSENSI KELUAR';
-            }
-        }
-        
+         // Pilih warna sesuai status
+                let bgColor = '';
+                if (data.status === 'masuk') {
+                    bgColor = 'bg-green-100 border-green-400 text-green-700';
+                } else if (data.status === 'keluar') {
+                    bgColor = 'bg-yellow-100 border-yellow-400 text-yellow-700';
+                } else {
+                    bgColor = 'bg-gray-100 border-gray-400 text-gray-700';
+                }
         document.getElementById('employeeData').innerHTML = `
             <div class="${bgColor} border px-4 py-3 rounded mb-4">
                 <strong>${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
