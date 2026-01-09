@@ -12,49 +12,37 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 
-<body class="min-h-screen font-[Figtree] bg-gradient-to-br from-slate-100 via-white to-slate-200 text-slate-800">
+<body class="min-h-screen font-[Figtree] bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
 
 <!-- ================= HEADER ================= -->
-<header class="w-full border-b border-slate-300 bg-white/90 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
+<header class="w-full border-b border-white/5 bg-black/30 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
 
-        <!-- LOGO -->
         <div class="flex flex-col leading-tight">
-            <span class="text-xl font-semibold tracking-wide text-slate-800">
-                ABSENSI TA
-            </span>
-            <span class="text-xs tracking-widest uppercase text-slate-500">
-                Turn <span class="text-red-500">Around</span>
-                <span class="text-blue-600 font-semibold">System</span>
+            <span class="text-lg font-semibold tracking-wide">ABSENSI TA</span>
+            <span class="text-[10px] tracking-widest uppercase">
+                Turn <span class="text-red-300">Around <span class="text-blue-400 font-bold">System</span></span>
             </span>
         </div>
 
-        <!-- RIGHT INFO -->
-        <div class="flex items-center gap-6">
-
+        <div class="flex items-center gap-5">
             <div class="flex flex-col items-end leading-tight">
-                <span class="text-xs tracking-widest uppercase text-slate-400">
-                    Gate in use
-                </span>
-                <span class="text-base font-semibold text-emerald-600">
-                    Gate {{ $gate }}
-                </span>
+                <span class="text-[10px] tracking-widest text-white/40 uppercase">Gate in use</span>
+                <span class="text-sm font-medium text-emerald-400">Gate {{ $gate }}</span>
             </div>
 
-            <div class="h-10 w-px bg-slate-300"></div>
+            <div class="h-8 w-px bg-white/10"></div>
 
-            <div id="liveTime"
-                class="text-base font-mono tracking-wide text-slate-700 min-w-[90px] text-right">
-            </div>
+            <div id="liveTime" class="text-sm font-mono tracking-wide text-white/70 min-w-[70px] text-right"></div>
 
-            <div class="h-10 w-px bg-slate-300"></div>
+            <div class="h-8 w-px bg-white/10"></div>
 
             <form action="{{ route('akses.logout') }}" method="POST">
                 @csrf
                 <button type="submit"
-                    class="px-4 py-2 text-xs tracking-widest uppercase
-                    text-slate-600 border border-slate-300 rounded-lg
-                    hover:text-red-600 hover:border-red-400 hover:bg-red-50 transition">
+                    class="px-3 py-1.5 text-[10px] tracking-widest uppercase
+                    text-white/60 border border-white/20 rounded-md
+                    hover:text-red-400 hover:border-red-400/40 hover:bg-red-500/5 transition">
                     End Session
                 </button>
             </form>
@@ -63,80 +51,57 @@
 </header>
 
 <!-- ================= MAIN ================= -->
-<main class="max-w-7xl mx-auto px-8 py-12">
+<main class="max-w-7xl mx-auto px-6 py-10">
 
-    <!-- SUMMARY -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-
-        <div class="rounded-2xl bg-white border border-slate-200 p-6 text-center shadow-sm">
-            <p class="text-base text-slate-600 mb-2">
-                Absensi Masuk Hari Ini
-            </p>
-            <p id="alreadyInCount"
-                class="text-4xl font-bold text-emerald-600">
-                0
-            </p>
+    <div class="grid grid-cols-2 gap-6 mb-6">
+        <div class="rounded-xl bg-emerald-500/20 border border-emerald-400/40 p-5 text-center">
+            <p class="text-sm text-emerald-200">Absensi Masuk Hari Ini</p>
+            <p id="alreadyInCount" class="text-3xl font-bold text-emerald-300">0</p>
         </div>
 
-        <div class="rounded-2xl bg-white border border-slate-200 p-6 text-center shadow-sm">
-            <p class="text-base text-slate-600 mb-2">
-                Belum Absensi Keluar Hari Ini
-            </p>
-            <p id="notOutCount"
-                class="text-4xl font-bold text-amber-600">
-                0
-            </p>
+        <div class="rounded-xl bg-amber-500/20 border border-amber-400/40 p-5 text-center">
+            <p class="text-sm text-amber-200">Belum Absensi Keluar Hari Ini</p>
+            <p id="notOutCount" class="text-3xl font-bold text-amber-300">0</p>
         </div>
-
     </div>
 
-    <!-- CONTENT -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
         <!-- SCANNER -->
         <div>
-            <div class="relative rounded-3xl border border-slate-200 bg-white p-8 shadow-md">
+            <div class="relative rounded-2xl border border-white/20 bg-white/5 p-6">
 
                 <input type="text" id="barcodeInput"
                     class="absolute inset-0 opacity-0"
                     autocomplete="off"
                     onkeydown="if(event.key==='Enter')handleScan()" />
 
-                <img src="{{ asset('images/engineer.png') }}"
-                    class="mx-auto h-60 opacity-90" />
+                <img src="{{ asset('images/engineer.png') }}" class="mx-auto h-56" />
 
                 <div class="mt-6 text-center">
-                    <p class="text-xl font-semibold text-slate-800">
-                        Scan Barcode Anda
-                    </p>
-                    <p class="text-base text-slate-500 mt-1">
-                        Pastikan scanner aktif & siap digunakan
-                    </p>
+                    <p class="text-lg font-semibold">Scan Barcode Anda</p>
+                    <p class="text-sm text-white/60">Pastikan scanner aktif</p>
                 </div>
 
-                <!-- LOADING -->
+                <!-- LOADER -->
                 <div id="loadingIndicator"
-                    class="hidden absolute inset-0 bg-white/90 backdrop-blur-sm
-                    flex flex-col items-center justify-center rounded-3xl">
+                    class="hidden absolute inset-0 bg-black/70 backdrop-blur-sm
+                    flex flex-col items-center justify-center rounded-2xl">
 
-                    <div class="w-16 h-16 mb-4 relative">
-                        <div class="absolute inset-0 rounded-full border border-slate-300"></div>
-                        <div class="absolute inset-0 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+                    <div class="w-14 h-14 mb-4 relative">
+                        <div class="absolute inset-0 rounded-full border border-white/10"></div>
+                        <div class="absolute inset-0 rounded-full border-2 border-blue-400 border-t-transparent animate-spin"></div>
                     </div>
 
-                    <p class="text-sm tracking-widest uppercase text-slate-500">
-                        Processing
-                    </p>
+                    <p class="text-xs tracking-widest uppercase text-white/70">Processing</p>
                 </div>
-
             </div>
         </div>
 
         <!-- RESULT -->
         <div class="lg:col-span-2">
             <div id="employeeData"
-                class="rounded-3xl border border-dashed border-slate-300 bg-white p-12
-                text-center text-lg text-slate-500 shadow-sm">
+                class="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white/50">
                 Data karyawan akan tampil di sini
             </div>
         </div>
@@ -146,15 +111,11 @@
 
 <!-- ================= SESSION MODAL ================= -->
 <div id="sessionModal"
-    class="fixed inset-0 hidden z-50 bg-black/40 backdrop-blur-sm items-center justify-center">
-
-    <div class="bg-white border border-slate-200 rounded-2xl p-8 text-center shadow-xl">
-        <div class="text-5xl text-red-500 mb-4">⚠</div>
-        <p class="text-lg font-medium text-slate-700">
-            Session berakhir
-        </p>
+    class="fixed inset-0 hidden z-50 bg-black/70 backdrop-blur-sm items-center justify-center">
+    <div class="bg-slate-900 border border-white/10 rounded-xl p-6 text-center">
+        <div class="text-4xl text-red-400 mb-2">⚠</div>
+        <p class="text-sm text-white/70">Session berakhir</p>
     </div>
-
 </div>
 
 <!-- ================= SCRIPT ================= -->
