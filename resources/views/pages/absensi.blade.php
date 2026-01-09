@@ -185,11 +185,23 @@ function handleScan() {
 
        setCooldown(data.employee.employee_code);
 
-        const bgColor =
-            data.status === 'success'
-                ? 'bg-green-100 border-green-400 text-green-700'
-                : 'bg-red-100 border-red-400 text-red-700';
+       /* ================= WARNA STATUS ================= */
+        let statusBoxClass = 'bg-red-100 border-red-400 text-red-700';
+        let badgeClass = 'bg-red-500/20 text-red-300';
+        let badgeText = 'ERROR';
 
+        if (data.status === 'success') {
+            if (data.type === 'in') {
+                statusBoxClass = 'bg-green-100 border-green-400 text-green-700';
+                badgeClass = 'bg-green-500/20 text-green-300';
+                badgeText = 'ABSENSI MASUK';
+            } else if (data.type === 'out') {
+                statusBoxClass = 'bg-yellow-100 border-yellow-400 text-yellow-800';
+                badgeClass = 'bg-yellow-500/20 text-yellow-300';
+                badgeText = 'ABSENSI KELUAR';
+            }
+        }
+        
         document.getElementById('employeeData').innerHTML = `
             <div class="${bgColor} border px-4 py-3 rounded mb-4">
                 <strong>${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
