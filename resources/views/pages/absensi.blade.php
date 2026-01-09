@@ -118,15 +118,15 @@
     </div>
 </div>
 
-<!-- ================= SCRIPT ================= -->
 <script>
 /* ================= TIME ================= */
 function updateLiveTime() {
-    document.getElementById('liveTime').innerText = new Date().toLocaleTimeString();
+    document.getElementById('liveTime').innerText =
+        new Date().toLocaleTimeString();
 }
 setInterval(updateLiveTime, 1000); updateLiveTime();
 
-/* ================= COOLDOWN CONFIG ================= */
+/* ================= COOLDOWN ================= */
 const SCAN_COOLDOWN_MS = 60 * 1000;
 const STORAGE_KEY = 'employee_scan_cooldown';
 
@@ -159,8 +159,8 @@ function handleScan() {
 
     const remaining = remainingCooldown(code);
     if (remaining > 0) {
-        document.getElementById('employeeData').innerHTML = `
-            <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded">
+        employeeData.innerHTML = `
+            <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded">
                 Barcode sudah discan.<br>
                 Tunggu <strong>${Math.ceil(remaining / 1000)} detik</strong>.
             </div>`;
@@ -168,7 +168,7 @@ function handleScan() {
         return;
     }
 
-    document.getElementById('loadingIndicator').classList.remove('hidden');
+    loadingIndicator.classList.remove('hidden');
     input.disabled = true;
 
     fetch('/absensi/scan', {
@@ -181,74 +181,83 @@ function handleScan() {
     })
     .then(res => res.json())
     .then(data => {
-        if (!data || !data.employee) throw 'error';
+        if (!data || !data.employee) throw 'invalid';
 
-       setCooldown(data.employee.employee_code);
+        setCooldown(data.employee.employee_code);
 
-            const bgColor =
-                data.status === 'success'
-                    ? 'bg-green-100 border-green-400 text-green-700'
-                    : 'bg-red-100 border-red-400 text-yellow-700';
+        /* ========= WARNA STATUS ========= */
+        let statusBox = 'bg-red-100 border-red-400 text-red-700';
+        let badge = 'bg-red-200 text-red-800';
+        let label = 'ERROR';
 
-            document.getElementById('employeeData').innerHTML = `
-                <div class="${bgColor} border px-4 py-3 rounded mb-4">
-                    <strong>${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
-                </div>
+        if (data.status === 'success') {
+            if (data.type === 'in') {
+                statusBox = 'bg-green-100 border-green-400 text-green-700';
+                badge = 'bg-green-200 text-green-800';
+                label = 'ABSENSI MASUK';
+            }
+            if (data.type === 'out') {
+                statusBox = 'bg-yellow-100 border-yellow-400 text-yellow-800';
+                badge = 'bg-yellow-200 text-yellow-800';
+                label = 'ABSENSI KELUAR';
+            }
+        }
 
-                <div class="p-4 bg-center bg-cover bg-no-repeat 
-                    bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')]
-                    bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
+        employeeData.innerHTML = `
+            <!-- STATUS -->
+            <div class="${statusBox} border px-4 py-3 rounded mb-4">
+                <strong>${label}</strong><br>
+                ${data.message ?? ''}
+            </div>
 
-                    <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
+            <!-- CARD -->
+            <div class="bg-white rounded-xl shadow border border-gray-200 p-6">
 
-                        <!-- Header -->
-                        <div class="rounded-lg text-white text-center py-2 pt-4">
-                            <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">
-                                Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span>
-                            </h2>
-                            <p class="text-sm">PT. Kaltim Methanol Industri</p>
-                        </div>
+                <h2 class="text-xl font-bold uppercase text-blue-600 mb-1">
+                    Turn <span class="text-red-500">Around</span> 2025
+                </h2>
+                <p class="text-sm text-gray-500 mb-4">
+                    PT. Kaltim Methanol Industri
+                </p>
 
-                        <!-- Info Karyawan -->
-                        <div class="py-2">
-                            <h3 class="text-xl font-bold text-gray-100">
-                                ${data.employee.full_name}
-                            </h3>
+                <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold ${badge} mb-4">
+                    ${label}
+                </span>
 
-                            <p class="text-md text-gray-200 italic">
-                                ${data.employee.company_name} - ${data.employee.position_name}
-                            </p>
+                <h3 class="text-xl font-bold text-gray-800">
+                    ${data.employee.full_name}
+                </h3>
 
-                            <p class="text-sm text-gray-400">
-                                ${data.employee.employee_code}
-                            </p>
+                <p class="italic text-gray-600">
+                    ${data.employee.company_name} - ${data.employee.position_name}
+                </p>
 
-                            ${
-                                data.total_minutes !== undefined
-                                    ? `<p class="mt-1 text-sm text-gray-300">
-                                        Total Waktu: ${data.total_minutes} menit
-                                    </p>`
-                                    : ''
-                            }
-                        </div>
+                <p class="text-sm text-gray-500 mt-1">
+                    ${data.employee.employee_code}
+                </p>
 
-                    </div>
-                </div>
-            `;
+                ${
+                    data.total_minutes !== undefined
+                        ? `<p class="mt-2 text-sm text-gray-600">
+                            Total Waktu: <strong>${data.total_minutes} menit</strong>
+                           </p>`
+                        : ''
+                }
+            </div>
+        `;
 
-            loadDailyCounter();
-
+        loadDailyCounter();
     })
     .catch(() => {
-        document.getElementById('employeeData').innerHTML =
-            `<div class="bg-red-100 border border-red-400 text-red-700 p-4 rounded">
+        employeeData.innerHTML = `
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                 Scan gagal atau data tidak ditemukan
             </div>`;
     })
     .finally(() => {
         input.value = '';
         input.disabled = false;
-        document.getElementById('loadingIndicator').classList.add('hidden');
+        loadingIndicator.classList.add('hidden');
         input.focus();
     });
 }
@@ -263,6 +272,7 @@ function loadDailyCounter() {
         });
 }
 </script>
+
 
 </body>
 </html>
