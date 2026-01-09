@@ -137,8 +137,7 @@ function getCooldownData() {
 function setCooldown(code) {
     const data = getCooldownData();
     data[code] = Date.now();
-    localStorage.setItem(STORAGE_KEY, JSONTA-097
-    .stringify(data));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 function remainingCooldown(code) {
@@ -186,58 +185,58 @@ function handleScan() {
 
        setCooldown(data.employee.employee_code);
 
-            const bgColor =
-                data.status === 'success'
-                    ? 'bg-green-100 border-green-400 text-green-700'
-                    : 'bg-red-100 border-red-400 text-yellow-700';
+        const bgColor =
+            data.status === 'success'
+                ? 'bg-green-100 border-green-400 text-green-700'
+                : 'bg-red-100 border-red-400 text-red-700';
 
-            document.getElementById('employeeData').innerHTML = `
-                <div class="${bgColor} border px-4 py-3 rounded mb-4">
-                    <strong>${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
-                </div>
+        document.getElementById('employeeData').innerHTML = `
+            <div class="${bgColor} border px-4 py-3 rounded mb-4">
+                <strong>${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
+            </div>
 
-                <div class="p-4 bg-center bg-cover bg-no-repeat 
-                    bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')]
-                    bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
+            <div class="p-4 bg-center bg-cover bg-no-repeat 
+                bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')]
+                bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
 
-                    <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
+                <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
 
-                        <!-- Header -->
-                        <div class="rounded-lg text-white text-center py-2 pt-4">
-                            <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">
-                                Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span>
-                            </h2>
-                            <p class="text-sm">PT. Kaltim Methanol Industri</p>
-                        </div>
-
-                        <!-- Info Karyawan -->
-                        <div class="py-2">
-                            <h3 class="text-xl font-bold text-gray-100">
-                                ${data.employee.full_name}
-                            </h3>
-
-                            <p class="text-md text-gray-200 italic">
-                                ${data.employee.company_name} - ${data.employee.position_name}
-                            </p>
-
-                            <p class="text-sm text-gray-400">
-                                ${data.employee.employee_code}
-                            </p>
-
-                            ${
-                                data.total_minutes !== undefined
-                                    ? `<p class="mt-1 text-sm text-gray-300">
-                                        Total Waktu: ${data.total_minutes} menit
-                                    </p>`
-                                    : ''
-                            }
-                        </div>
-
+                    <!-- Header -->
+                    <div class="rounded-lg text-white text-center py-2 pt-4">
+                        <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">
+                            Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span>
+                        </h2>
+                        <p class="text-sm">PT. Kaltim Methanol Industri</p>
                     </div>
-                </div>
-            `;
 
-            loadDailyCounter();
+                    <!-- Info Karyawan -->
+                    <div class="py-2">
+                        <h3 class="text-xl font-bold text-gray-100">
+                            ${data.employee.full_name}
+                        </h3>
+
+                        <p class="text-md text-gray-200 italic">
+                            ${data.employee.company_name} - ${data.employee.position_name}
+                        </p>
+
+                        <p class="text-sm text-gray-400">
+                            ${data.employee.employee_code}
+                        </p>
+
+                        ${
+                            data.total_minutes !== undefined
+                                ? `<p class="mt-1 text-sm text-gray-300">
+                                    Total Waktu: ${data.total_minutes} menit
+                                </p>`
+                                : ''
+                        }
+                    </div>
+
+                </div>
+            </div>
+        `;
+
+        loadDailyCounter();
 
     })
     .catch(() => {
