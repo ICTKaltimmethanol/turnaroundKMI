@@ -95,11 +95,11 @@ class PresencesTable
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('presenceIn.presence_time')
-                    ->label()
+                    ->label('Waktu Masuk')
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('presenceIn.presence_date')
-                    ->label()
+                    ->label('Tanggal Masuk')
                     ->toggleable()
                     ->sortable(),
                 TextColumn::make('presenceIn.created_at')
