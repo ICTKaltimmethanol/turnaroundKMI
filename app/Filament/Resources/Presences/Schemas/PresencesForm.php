@@ -17,11 +17,11 @@ class PresencesForm
         return $schema
             ->components([
 
-                /* ================= TOTAL TIME ================= */
+                /* ================= TOTAL TIME (ROOT) ================= */
                 TextInput::make('total_time')
                     ->label('Total Waktu (Menit)')
                     ->numeric()
-                    ->disabled()
+                    ->readOnly()     // ❗ WAJIB (bukan disabled)
                     ->dehydrated(),
 
                 /* ================= EMPLOYEE ================= */
@@ -46,9 +46,7 @@ class PresencesForm
                         'company',
                         'name',
                         modifyQueryUsing: fn ($query) =>
-                            $query
-                                ->whereNotNull('name')
-                                ->orderBy('name')
+                            $query->whereNotNull('name')->orderBy('name')
                     )
                     ->getOptionLabelFromRecordUsing(
                         fn ($record) => $record->name ?? '-'
@@ -64,9 +62,7 @@ class PresencesForm
                         'position',
                         'name',
                         modifyQueryUsing: fn ($query) =>
-                            $query
-                                ->whereNotNull('name')
-                                ->orderBy('name')
+                            $query->whereNotNull('name')->orderBy('name')
                     )
                     ->getOptionLabelFromRecordUsing(
                         fn ($record) => $record->name ?? '-'
@@ -121,13 +117,14 @@ class PresencesForm
         callable $set
     ): void {
 
-        $inDate  = $get('presenceIn.presence_date');
-        $inTime  = $get('presenceIn.presence_time');
-        $outDate = $get('presenceOut.presence_date');
-        $outTime = $get('presenceOut.presence_time');
+        // ⬅⬅⬅ PERHATIKAN PATH NAIK KE ROOT
+        $inDate  = $get('../../presenceIn.presence_date');
+        $inTime  = $get('../../presenceIn.presence_time');
+        $outDate = $get('../../presenceOut.presence_date');
+        $outTime = $get('../../presenceOut.presence_time');
 
         if (! $inDate || ! $inTime || ! $outDate || ! $outTime) {
-            $set('total_time', null);
+            $set('../../total_time', null);
             return;
         }
 
@@ -136,7 +133,7 @@ class PresencesForm
 
         /**
          * SHIFT MALAM
-         * jika jam pulang < jam masuk → tambah 1 hari
+         * Jika jam pulang < jam masuk → tambah 1 hari
          */
         if ($end->lessThan($start)) {
             $end->addDay();
@@ -144,6 +141,7 @@ class PresencesForm
 
         $minutes = $start->diffInMinutes($end);
 
-        $set('total_time', $minutes);
+        // ⬅⬅⬅ SET KE ROOT STATE
+        $set('../../total_time', $minutes);
     }
 }
