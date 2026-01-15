@@ -68,6 +68,7 @@ class PresencesTable
                 'all',
             ])
             ->columns([
+                // inactive line code
                 /* TextColumn::make('employee.full_name')
                     ->label('Nama Lengkap')
                     ->numeric()
@@ -85,6 +86,7 @@ class PresencesTable
                     ->label('Perusahaan')
                     ->toggleable()
                     ->sortable(), */
+
                 TextColumn::make('employee_name')->label('Nama Lengkap'),
                 TextColumn::make('employee_code')->label('ID Pekerja'),
                 TextColumn::make('company_name')->label('Perusahaan'),
@@ -94,14 +96,25 @@ class PresencesTable
                     ->formatStateUsing(fn ($state) => abs($state))
                     ->toggleable()
                     ->sortable(),
-                TextColumn::make('presenceIn.presence_time')
-                    ->label('Waktu Masuk')
-                    ->toggleable()
-                    ->sortable(),
                 TextColumn::make('presenceIn.presence_date')
                     ->label('Tanggal Masuk')
                     ->toggleable()
                     ->sortable(),
+                TextColumn::make('presenceIn.presence_time')
+                    ->label('Waktu Masuk')
+                    ->toggleable()
+                    ->sortable(),
+                TextColumn::make('presenceOut.presence_time')
+                    ->label('Waktu Keluar')
+                    ->toggleable()
+                    ->sortable(),
+                TextColumn::make('presenceOut.presnece_date')
+                    ->label('Tanggal Keluar')
+                    ->toggleable()
+                    ->sortable(),
+                
+                //not used column for show data
+                /* 
                 TextColumn::make('presenceIn.created_at')
                     ->label('Waktu Masuk')
                     ->dateTime('d/m/Y H:i:s')                    
@@ -112,7 +125,7 @@ class PresencesTable
                     ->dateTime('d/m/Y H:i:s')
                     ->toggleable()
                     ->sortable(),
-                
+                 */
             ])
             ->filters([
                 Filter::make('created_at')
