@@ -19,7 +19,6 @@ class PresencesForm
                 TextInput::make('total_time')
                     ->label('Total Waktu (Menit)')
                     ->numeric()
-                    ->disabled()
                     ->dehydrated(),
                     
                 Select::make('employees_id')

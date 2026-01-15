@@ -108,7 +108,7 @@ class PresencesTable
                     ->label('Waktu Keluar')
                     ->toggleable()
                     ->sortable(),
-                TextColumn::make('presenceOut.presnece_date')
+                TextColumn::make('presenceOut.presence_date')
                     ->label('Tanggal Keluar')
                     ->toggleable()
                     ->sortable(),
