@@ -94,7 +94,14 @@ class PresencesTable
                     ->formatStateUsing(fn ($state) => abs($state))
                     ->toggleable()
                     ->sortable(),
-                
+                TextColumn::make('presenceIn.presence_time')
+                    ->label()
+                    ->toggleable()
+                    ->sortable(),
+                TextColumn::make('presenceIn.presence_date')
+                    ->label()
+                    ->toggleable()
+                    ->sortable(),
                 TextColumn::make('presenceIn.created_at')
                     ->label('Waktu Masuk')
                     ->dateTime('d/m/Y H:i:s')                    
