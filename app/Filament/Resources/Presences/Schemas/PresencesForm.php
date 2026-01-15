@@ -21,14 +21,21 @@ class PresencesForm
                 TextInput::make('total_time')
                     ->label('Total Waktu (Menit)')
                     ->numeric()
-                    ->disabled()          // user tidak bisa edit manual
-                    ->dehydrated(),       // tetap disimpan ke DB
+                    ->disabled()
+                    ->dehydrated(),
 
                 /* ================= EMPLOYEE ================= */
                 Select::make('employees_id')
-                    ->relationship('employee', 'full_name')
                     ->label('Nama Pekerja')
-                    ->disabled()
+                    ->relationship(
+                        'employee',
+                        'full_name',
+                        modifyQueryUsing: fn ($query) =>
+                            $query->whereNotNull('full_name')
+                    )
+                    ->getOptionLabelFromRecordUsing(
+                        fn ($record) => $record->full_name ?? '-'
+                    )
                     ->searchable()
                     ->preload(),
 
@@ -38,7 +45,13 @@ class PresencesForm
                     ->relationship(
                         'company',
                         'name',
-                        modifyQueryUsing: fn ($query) => $query->orderBy('name')
+                        modifyQueryUsing: fn ($query) =>
+                            $query
+                                ->whereNotNull('name')
+                                ->orderBy('name')
+                    )
+                    ->getOptionLabelFromRecordUsing(
+                        fn ($record) => $record->name ?? '-'
                     )
                     ->searchable()
                     ->preload()
@@ -50,7 +63,13 @@ class PresencesForm
                     ->relationship(
                         'position',
                         'name',
-                        modifyQueryUsing: fn ($query) => $query->orderBy('name')
+                        modifyQueryUsing: fn ($query) =>
+                            $query
+                                ->whereNotNull('name')
+                                ->orderBy('name')
+                    )
+                    ->getOptionLabelFromRecordUsing(
+                        fn ($record) => $record->name ?? '-'
                     )
                     ->searchable()
                     ->preload()
