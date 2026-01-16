@@ -2,20 +2,20 @@
 
 namespace App\Filament\Resources\Presences\Schemas;
 
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TimePicker;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Carbon\Carbon;
 
 class PresencesForm
 {
-    public static function form(Form $form): Form
+    public static function configure(Schema $schema): Schema
     {
-        return $form->schema([
+        return $schema->components([
 
             TextInput::make('total_time')
                 ->label('Total Waktu (Menit)')
@@ -75,7 +75,7 @@ class PresencesForm
         $start = Carbon::parse("$inDate $inTime");
         $end   = Carbon::parse("$outDate $outTime");
 
-        // Shift malam
+        // SHIFT MALAM
         if ($end->lessThan($start)) {
             $end->addDay();
         }

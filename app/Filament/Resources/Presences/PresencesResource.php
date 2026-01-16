@@ -11,9 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\Presences;
 use BackedEnum;
 use Filament\Resources\Resource;
-use Filament\Forms\Form;
-
-//use Filament\Schemas\Schema;
+use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
@@ -38,17 +36,10 @@ class PresencesResource extends Resource
         return (string) Presences::count();
     }
 
-   
-
-    public static function form(Form $form): Form
-    {
-        return PresencesForm::form($form);
-    }
-
-    /* public static function form(Schema $schema): Schema
+    public static function form(Schema $schema): Schema
     {
         return PresencesForm::configure($schema);
-    } */
+    }
 
     public static function table(Table $table): Table
     {
