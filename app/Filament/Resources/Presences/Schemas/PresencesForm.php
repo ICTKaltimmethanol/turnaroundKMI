@@ -19,9 +19,13 @@ class PresencesForm
                 TextInput::make('total_time')
                     ->label('Total Waktu (Menit)')
                     ->numeric()
-                    ->dehydrateStateUsing(fn ($state) => abs((int) $state))
+                    ->minValue(0)
+                    ->live()
+                    ->afterStateUpdated(fn ($state, $set) =>
+                        $set('total_time', abs((int) $state))
+                    )
                     ->dehydrated(),
-                    
+
                 Select::make('employees_id')
                     ->relationship('employee', 'full_name')
                     ->getOptionLabelFromRecordUsing(
