@@ -104,12 +104,12 @@ class PresencesTable
                     ->label('Waktu Masuk')
                     ->toggleable()
                     ->sortable(),
-                TextColumn::make('presenceOut.presence_time')
-                    ->label('Waktu Keluar')
-                    ->toggleable()
-                    ->sortable(),
                 TextColumn::make('presenceOut.presence_date')
                     ->label('Tanggal Keluar')
+                    ->toggleable()
+                    ->sortable(),    
+                TextColumn::make('presenceOut.presence_time')
+                    ->label('Waktu Keluar')
                     ->toggleable()
                     ->sortable(),
                 
