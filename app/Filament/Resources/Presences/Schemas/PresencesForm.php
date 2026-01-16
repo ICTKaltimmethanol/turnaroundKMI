@@ -8,9 +8,8 @@ use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
 use Carbon\Carbon;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
-
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 class PresencesForm
 {
     public static function configure(Schema $schema): Schema
