@@ -16,6 +16,7 @@ class PresencesForm
     public static function form(Form $form): Form
     {
         return $form->schema([
+
             TextInput::make('total_time')
                 ->label('Total Waktu (Menit)')
                 ->numeric()
@@ -27,14 +28,14 @@ class PresencesForm
                 ->schema([
                     DatePicker::make('presence_date')
                         ->required()
-                        ->reactive()
+                        ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
 
                     TimePicker::make('presence_time')
                         ->required()
-                        ->reactive()
+                        ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
@@ -45,14 +46,14 @@ class PresencesForm
                 ->schema([
                     DatePicker::make('presence_date')
                         ->required()
-                        ->reactive()
+                        ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
 
                     TimePicker::make('presence_time')
                         ->required()
-                        ->reactive()
+                        ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
@@ -74,6 +75,7 @@ class PresencesForm
         $start = Carbon::parse("$inDate $inTime");
         $end   = Carbon::parse("$outDate $outTime");
 
+        // Shift malam
         if ($end->lessThan($start)) {
             $end->addDay();
         }
