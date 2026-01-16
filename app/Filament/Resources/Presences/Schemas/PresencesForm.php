@@ -23,6 +23,30 @@ class PresencesForm
                 ->disabled()
                 ->dehydrated(),
 
+            Select::make('employees_id')
+                    ->relationship('employee', 'full_name')
+                    ->getOptionLabelFromRecordUsing(
+                        fn ($record) => $record->full_name ?? '-'
+                    )
+                    ->label('Nama Pekerja')
+                    ->disabled()
+                    ->searchable()
+                    ->preload(),
+
+            Select::make('company_id')
+                ->label('Perusahaan')
+                ->relationship('company', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
+                ->searchable()
+                ->preload() 
+                ->required(),
+                
+            Select::make('position_id')
+                ->label('Posisi')
+                ->relationship('position', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
+                ->searchable()
+                ->preload()
+                ->required(),
+    
             Section::make('Presensi Waktu Masuk')
                 ->relationship('presenceIn')
                 ->schema([
