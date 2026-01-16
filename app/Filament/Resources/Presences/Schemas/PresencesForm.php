@@ -99,7 +99,7 @@ class PresencesForm
                         ->label('Waktu Pulang')
                         
                         ->afterStateUpdated(
-                            fn( Get $get, Set $swet) =>
+                            fn( Get $get, Set $set) =>
                             self::generateTotalMinute($get,$set)
                         )
                         ->afterStateHydrated(
