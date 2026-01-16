@@ -28,7 +28,7 @@ class PresencesForm
                     DatePicker::make('presence_date')
                         ->label('Tanggal Masuk')
                         ->required()
-                        ->live()
+                        ->reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
@@ -36,7 +36,7 @@ class PresencesForm
                     TimePicker::make('presence_time')
                         ->label('Waktu Masuk')
                         ->required()
-                        ->live()
+                        -reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
@@ -48,7 +48,8 @@ class PresencesForm
                     DatePicker::make('presence_date')
                         ->label('Tanggal Pulang')
                         ->required()
-                        ->live()
+                        //->live()
+                        -reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
@@ -56,7 +57,8 @@ class PresencesForm
                     TimePicker::make('presence_time')
                         ->label('Waktu Pulang')
                         ->required()
-                        ->live()
+                        //->live()
+                        ->reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
