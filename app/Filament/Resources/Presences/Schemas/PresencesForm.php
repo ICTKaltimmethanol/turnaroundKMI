@@ -10,6 +10,7 @@ use Filament\Schemas\Schema;
 use Carbon\Carbon;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+
 class PresencesForm
 {
     public static function configure(Schema $schema): Schema
@@ -35,7 +36,7 @@ class PresencesForm
                     TimePicker::make('presence_time')
                         ->label('Waktu Masuk')
                         ->required()
-                        -reactive()
+                        ->reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
