@@ -49,7 +49,7 @@ class PresencesForm
                         ->label('Tanggal Pulang')
                         ->required()
                         //->live()
-                        -reactive()
+                        ->reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
