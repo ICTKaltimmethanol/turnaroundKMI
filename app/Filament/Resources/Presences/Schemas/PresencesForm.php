@@ -1,23 +1,21 @@
 <?php
+
 namespace App\Filament\Resources\Presences\Schemas;
 
+use Filament\Forms\Form;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TimePicker;
-use Filament\Forms\Components\Select;
-use Filament\Schemas\Schema;
-use Carbon\Carbon;
-use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-
+use Carbon\Carbon;
 
 class PresencesForm
 {
-    public static function configure(Schema $schema): Schema
+    public static function form(Form $form): Form
     {
-        return $schema->components([
+        return $form->schema([
             TextInput::make('total_time')
                 ->label('Total Waktu (Menit)')
                 ->numeric()
@@ -28,7 +26,6 @@ class PresencesForm
                 ->relationship('presenceIn')
                 ->schema([
                     DatePicker::make('presence_date')
-                        ->label('Tanggal Masuk')
                         ->required()
                         ->reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
@@ -36,7 +33,6 @@ class PresencesForm
                         ),
 
                     TimePicker::make('presence_time')
-                        ->label('Waktu Masuk')
                         ->required()
                         ->reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
@@ -48,18 +44,14 @@ class PresencesForm
                 ->relationship('presenceOut')
                 ->schema([
                     DatePicker::make('presence_date')
-                        ->label('Tanggal Pulang')
                         ->required()
-                        //->live()
                         ->reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
 
                     TimePicker::make('presence_time')
-                        ->label('Waktu Pulang')
                         ->required()
-                        //->live()
                         ->reactive()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
