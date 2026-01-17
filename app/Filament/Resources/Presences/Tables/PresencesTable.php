@@ -96,6 +96,25 @@ class PresencesTable
                     ->formatStateUsing(fn ($state) => abs($state))
                     ->toggleable()
                     ->sortable(),
+                TextColumn::make('presenceIn')
+                    ->label('Masuk')
+                    ->state(fn ($record) =>
+                        $record->presenceIn
+                            ? $record->presenceIn->presence_date . ' ' . $record->presenceIn->presence_time
+                            : '-'
+                    )
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('presenceOut')
+                    ->label('Keluar')
+                    ->state(fn($record) => 
+                    $record->presenceOut
+                        ? $record->presenceOut->presence_date . ' ' . $record->presenceIn->presence_time
+                        : '-'
+                    )
+                    ->sortable()
+                    ->toggleable(),
+
                 TextColumn::make('presenceIn.presence_date')
                     ->label('Tanggal Masuk')
                     ->toggleable()
