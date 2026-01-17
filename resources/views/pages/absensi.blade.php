@@ -53,7 +53,7 @@
 <!-- ================= MAIN ================= -->
 <main class="max-w-7xl mx-auto px-6 py-10">
 
-    <div class="grid grid-cols-3 gap-6 mb-6">
+    <div class="grid grid-cols-2 gap-6 mb-6">
         <div class="rounded-xl bg-emerald-500/20 border border-emerald-400/40 p-5 text-center">
             <p class="text-sm text-emerald-200">Absensi Masuk Hari Ini</p>
             <p id="alreadyInCount" class="text-3xl font-bold text-emerald-300">0</p>
