@@ -29,6 +29,28 @@ class AbsensiController extends Controller
         ]);
     }
 
+    public function counterHarian()
+    {
+        $today = now()->toDateString();
+
+        $alreadyIn = Absensi::whereDate('tanggal', $today)
+            ->whereNotNull('jam_masuk')
+            ->count();
+
+        $notOutYet = Absensi::whereDate('tanggal', $today)
+            ->whereNotNull('jam_masuk')
+            ->whereNull('jam_keluar')
+            ->count();
+
+        $totalAbsen = Absensi::whereDate('tanggal', $today)->count();
+
+        return response()->json([
+            'already_in' => $alreadyIn,
+            'not_out_yet' => $notOutYet,
+            'total_absen_today' => $totalAbsen
+        ]);
+    }
+
     public function counterMasukDanBelumKeluar()
     {
         $start = Carbon::today()->startOfDay();
