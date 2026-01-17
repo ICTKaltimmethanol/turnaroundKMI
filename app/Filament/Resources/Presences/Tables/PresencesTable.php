@@ -109,13 +109,13 @@ class PresencesTable
                     ->label('Keluar')
                     ->state(fn($record) => 
                     $record->presenceOut
-                        ? $record->presenceOut->presence_date . ' ' . $record->presenceIn->presence_time
+                        ? $record->presenceOut->presence_date . ' ' . $record->presenceOut->presence_time
                         : '-'
                     )
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('presenceIn.presence_date')
+                /* TextColumn::make('presenceIn.presence_date')
                     ->label('Tanggal Masuk')
                     ->toggleable()
                     ->sortable(),
@@ -130,10 +130,7 @@ class PresencesTable
                 TextColumn::make('presenceOut.presence_time')
                     ->label('Waktu Keluar')
                     ->toggleable()
-                    ->sortable(),
-                
-                //not used column for show data
-                /* 
+                    ->sortable(), 
                 TextColumn::make('presenceIn.created_at')
                     ->label('Waktu Masuk')
                     ->dateTime('d/m/Y H:i:s')                    
