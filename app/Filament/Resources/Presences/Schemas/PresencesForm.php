@@ -88,15 +88,13 @@ class PresencesForm
                         ),
 
              
-                        Action::make('hapus_waktu_pulang')
+                    Action::make('hapus_waktu_pulang')
                             ->label('Hapus Waktu Pulang')
                             ->icon('heroicon-o-trash')
                             ->color('danger')
                             ->requiresConfirmation()
-                            ->action(function (Set $set) {
-                                $set('presenceOut.presence_date', null);
-                                $set('presenceOut.presence_time', null);
-                                $set('total_time', null);
+                            ->action(function ($record) {
+                                $record?->presenceOut()?->delete();
                             }),
                 ]),
         ]);
