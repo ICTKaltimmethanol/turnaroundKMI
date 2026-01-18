@@ -94,7 +94,7 @@ class PresencesForm
                             ->color('danger')
                             ->requiresConfirmation()
                             ->action(function ($record) {
-                                $record->hash_update(['total_time' => null]);
+                                $record->update(['total_time' => null]);
                                 $record->update(['presenceOut_id' => null]);
                                 $record->presenceOut()?->delete();
                     
