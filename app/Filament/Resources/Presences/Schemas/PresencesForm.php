@@ -94,7 +94,8 @@ class PresencesForm
                             ->color('danger')
                             ->requiresConfirmation()
                             ->action(function ($record) {
-                                $record?->presenceOut()?->delete();
+                                $record->update(['presenceOut_id' => null]);
+                                $record->presenceOut()?->delete();
                             }),
                 ]),
         ]);
