@@ -104,8 +104,8 @@
                 class="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white/50">
                 Data pekerja akan tampil di sini
             </div>
-            <div class="rounded-2xl text-8xl border border-dashed border-white/20 p-10 text-center text-white/50 mt-8">
-                Cukup 1 kali scan untuk tiap orang, jangan lakukan secara memaksa untuk tiap id pekerja
+            <div class="rounded-2xl h-80 border border-dashed border-white/20 p-10 text-center text-white/50 mt-8">
+                <h1 class="text-8xl">Cukup 1 kali scan untuk tiap orang, jangan lakukan secara memaksa untuk tiap id pekerja</h1>
             </div>
         </div>
 
