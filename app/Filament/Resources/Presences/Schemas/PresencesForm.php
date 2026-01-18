@@ -84,7 +84,6 @@ class PresencesForm
                     TimePicker::make('presence_time')
                         ->label('Jam Pulang')
                         ->nullable()
-                        ->clearable()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
