@@ -75,7 +75,6 @@ class PresencesForm
                     DatePicker::make('presence_date')
                         ->label('Tanggal Pulang')
                         ->nullable()
-                        ->clearable()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
