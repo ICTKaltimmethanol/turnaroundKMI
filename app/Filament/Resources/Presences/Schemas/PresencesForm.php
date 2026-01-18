@@ -11,6 +11,8 @@ use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Carbon\Carbon;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 
 class PresencesForm
 {
@@ -66,22 +68,40 @@ class PresencesForm
                         ),
                 ]),
 
+            
             Section::make('Presensi Waktu Pulang')
                 ->relationship('presenceOut')
                 ->schema([
                     DatePicker::make('presence_date')
-                        ->required()
+                        ->label('Tanggal Pulang')
+                        ->nullable()
+                        ->clearable()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
 
                     TimePicker::make('presence_time')
-                        ->required()
+                        ->label('Jam Pulang')
+                        ->nullable()
+                        ->clearable()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
+
+                    Actions::make([
+                        Action::make('hapus_waktu_pulang')
+                            ->label('Hapus Waktu Pulang')
+                            ->icon('heroicon-o-trash')
+                            ->color('danger')
+                            ->requiresConfirmation()
+                            ->action(function (Set $set) {
+                                $set('presenceOut.presence_date', null);
+                                $set('presenceOut.presence_time', null);
+                                $set('total_time', null);
+                            }),
+                    ]),
                 ]),
         ]);
     }
