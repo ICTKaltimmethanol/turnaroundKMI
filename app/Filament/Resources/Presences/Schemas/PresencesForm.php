@@ -87,7 +87,7 @@ class PresencesForm
                             self::generateTotalMinute($get, $set)
                         ),
 
-                    Action::make([
+             
                         Action::make('hapus_waktu_pulang')
                             ->label('Hapus Waktu Pulang')
                             ->icon('heroicon-o-trash')
@@ -98,7 +98,6 @@ class PresencesForm
                                 $set('presenceOut.presence_time', null);
                                 $set('total_time', null);
                             }),
-                    ]),
                 ]),
         ]);
     }
