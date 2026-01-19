@@ -94,10 +94,19 @@ class PresencesForm
                             ->color('danger')
                             ->requiresConfirmation()
                             ->action(function ($record) {
-                                $record->update(['total_time' => null]);
-                                $record->update(['presenceOut_id' => null]);
-                                $record->presenceOut()?->delete();
+                                
+                                $record->update([
+                                    'total_time' => null,
+                                    'presenceOut_id' => null,
+                                ]);
                     
+                                $record->presenceOut()?->delete();
+
+                                Notification::make()
+                                    ->title('Berhasil')
+                                    ->body('Waktu pulang berhasil dihapus.')
+                                    ->success()
+                                    ->send();
                             }),
                 ]),
         ]);
