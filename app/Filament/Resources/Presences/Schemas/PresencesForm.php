@@ -99,8 +99,8 @@ class PresencesForm
                                 $set('presence_date', null);
                                 $set('presence_time', null);
 
-                                $set('../total_time', null);
-                                $set('../presenceOut_id', null);
+                                $set('../../total_time', null);
+                                $set('../../presenceOut_id', null);
 
                                 $record->update([   
                                     'total_time' => null,
