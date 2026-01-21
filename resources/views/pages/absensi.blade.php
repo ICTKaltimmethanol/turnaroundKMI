@@ -64,9 +64,9 @@
             <p id="notOutCount" class="text-3xl font-bold text-amber-300">0</p>
         </div>
 
-        <div class="rounded-xl bg-amber-500/20 border boorder amber-400/40 p-5 text-center">
+        <div class="rounded-xl bg-sky-500/20 border border-sky-400/40 p-5 text-center">
             <p class="Text-sm text-amber-200">Total absensi hingga hari ini</p>
-            <p id="allOverPresence" class="text-3xl font-bold text-emerald-300">0</p>
+            <p id="allOverPresence" class="text-3xl font-bold text-sky-300">0</p>
         </div>
     </div>
 
@@ -203,7 +203,7 @@ function handleScan() {
                 }
         document.getElementById('employeeData').innerHTML = `
             <div class="${bgColor} border px-4 py-3 rounded mb-4">
-                <strong class="text-4xl">${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
+                <strong class="text-6xl">${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
             </div>
 
             <div class="p-4 bg-center bg-cover bg-no-repeat 
@@ -222,7 +222,7 @@ function handleScan() {
 
                     <!-- Info Karyawan -->
                     <div class="py-2">
-                        <h3 class="text-4xl font-bold text-White-100">
+                        <h3 class="text-8xl font-bold text-White-100">
                             ${data.employee.full_name}
                         </h3>
 
