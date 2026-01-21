@@ -43,7 +43,7 @@ class AbsensiController extends Controller
             ->whereNull('presenceOut_id')
             ->count();
 
-        $allOverPresence = Presences::Count();
+        $allOverPresence = Presences::count();
 
         return response()->json([
             'already_in' => $alreadyIn,
