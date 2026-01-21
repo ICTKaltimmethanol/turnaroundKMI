@@ -53,7 +53,7 @@
 <!-- ================= MAIN ================= -->
 <main class="max-w-7xl mx-auto px-6 py-10">
 
-    <div class="grid grid-cols-2 gap-6 mb-6">
+    <div class="grid grid-cols-3 gap-6 mb-6">
         <div class="rounded-xl bg-emerald-500/20 border border-emerald-400/40 p-5 text-center">
             <p class="text-sm text-emerald-200">Absensi Masuk Hari Ini</p>
             <p id="alreadyInCount" class="text-3xl font-bold text-emerald-300">0</p>
@@ -62,6 +62,11 @@
         <div class="rounded-xl bg-amber-500/20 border border-amber-400/40 p-5 text-center">
             <p class="text-sm text-amber-200">Belum Absensi Keluar Hari Ini</p>
             <p id="notOutCount" class="text-3xl font-bold text-amber-300">0</p>
+        </div>
+
+        <div class="rounded-xl bg-amber-500/20 border boorder amber-400/40 p-5 text-center">
+            <p class="Text-sm text-amber-200">Total absensi hingga hari ini</p>
+            <p id="allOverPresence" class="text-3xl font-bold text-emerald-300">0</p>
         </div>
     </div>
 
@@ -198,7 +203,7 @@ function handleScan() {
                 }
         document.getElementById('employeeData').innerHTML = `
             <div class="${bgColor} border px-4 py-3 rounded mb-4">
-                <strong>${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
+                <strong class="text-4xl">${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
             </div>
 
             <div class="p-4 bg-center bg-cover bg-no-repeat 
@@ -217,7 +222,7 @@ function handleScan() {
 
                     <!-- Info Karyawan -->
                     <div class="py-2">
-                        <h3 class="text-xl font-bold text-gray-100">
+                        <h3 class="text-4xl font-bold text-White-100">
                             ${data.employee.full_name}
                         </h3>
 
