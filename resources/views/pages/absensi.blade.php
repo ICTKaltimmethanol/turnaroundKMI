@@ -188,7 +188,6 @@ function handleScan() {
 
        setCooldown(data.employee.employee_code);
 
-         // Pilih warna sesuai status
                 let bgColor = '';
                 if (data.status === 'masuk') {
                     bgColor = 'bg-green-100 border-green-400 text-green-700';
@@ -271,8 +270,14 @@ function loadDailyCounter() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    loadDailyCounter(); // ⬅️ LANGSUNG AMBIL DATA HARI INI
+    loadDailyCounter(); 
 });
+
+setInterval(() => {
+    if (!document.hidden) {
+        loadDailyCounter();
+    }
+}, 5000);
 </script>
 
 </body>

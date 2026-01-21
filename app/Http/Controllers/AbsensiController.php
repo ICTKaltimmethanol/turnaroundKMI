@@ -29,49 +29,28 @@ class AbsensiController extends Controller
         ]);
     }
 
-    public function counterHarian()
-    {
-        $today = now()->toDateString();
-
-        $alreadyIn = Absensi::whereDate('tanggal', $today)
-            ->whereNotNull('jam_masuk')
-            ->count();
-
-        $notOutYet = Absensi::whereDate('tanggal', $today)
-            ->whereNotNull('jam_masuk')
-            ->whereNull('jam_keluar')
-            ->count();
-
-        $totalAbsen = Absensi::whereDate('tanggal', $today)->count();
-
-        return response()->json([
-            'already_in' => $alreadyIn,
-            'not_out_yet' => $notOutYet,
-            'total_absen_today' => $totalAbsen
-        ]);
-    }
-
     public function counterMasukDanBelumKeluar()
-    {
-        $start = Carbon::today()->startOfDay();
-        $end   = Carbon::today()->endOfDay();
+{
+    $today = Carbon::today()->toDateString();
 
-        // Total MASUK (semua gate)
-        $alreadyIn = Presences::whereBetween('created_at', [$start, $end])
-            ->whereNotNull('presenceIn_id')
-            ->count();
+    // Sudah masuk hari ini
+    $alreadyIn = Presences::whereHas('presenceIn', function ($q) use ($today) {
+            $q->where('presence_date', $today);
+        })
+        ->count();
 
-        // Total BELUM KELUAR (semua gate)
-        $notOutYet = Presences::whereBetween('created_at', [$start, $end])
-            ->whereNotNull('presenceIn_id')
-            ->whereNull('presenceOut_id')
-            ->count();
+    // Sudah masuk tapi belum keluar
+    $notOutYet = Presences::whereHas('presenceIn', function ($q) use ($today) {
+            $q->where('presence_date', $today);
+        })
+        ->whereNull('presenceOut_id')
+        ->count();
 
-        return response()->json([
-            'already_in' => $alreadyIn,
-            'not_out_yet' => $notOutYet,
-        ]);
-    }
+    return response()->json([
+        'already_in'   => $alreadyIn,
+        'not_out_yet'  => $notOutYet,
+    ]);
+}
 
     /*public function scan(Request $request)
     {
