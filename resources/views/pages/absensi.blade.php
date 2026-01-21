@@ -64,10 +64,6 @@
             <p id="notOutCount" class="text-3xl font-bold text-amber-300">0</p>
         </div>
 
-        <div class="rounded-xl bg-sky-500/20 border border-sky-400/40 p-5 text-center">
-            <p class="Text-sm text-amber-200">Total absensi hingga hari ini</p>
-            <p id="allOverPresence" class="text-3xl font-bold text-sky-300">0</p>
-        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -271,7 +267,6 @@ function loadDailyCounter() {
         .then(d => {
             alreadyInCount.innerText = d.already_in ?? 0;
             notOutCount.innerText = d.not_out_yet ?? 0;
-            allOverPresence.innerText = d.allOverPresence.innerText ?? 0;
         });
 
 }
