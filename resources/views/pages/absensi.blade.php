@@ -271,7 +271,9 @@ function loadDailyCounter() {
         .then(d => {
             alreadyInCount.innerText = d.already_in ?? 0;
             notOutCount.innerText = d.not_out_yet ?? 0;
+            allOverPresence.innerText = d.allOverPresence.innerText ?? 0;
         });
+
 }
 
 document.addEventListener('DOMContentLoaded', () => {

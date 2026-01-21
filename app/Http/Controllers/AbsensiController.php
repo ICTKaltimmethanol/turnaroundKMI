@@ -30,30 +30,27 @@ class AbsensiController extends Controller
     }
 
     public function counterMasukDanBelumKeluar()
-{
-    $today = Carbon::today()->toDateString();
+    {
+        $start = Carbon::today()->startOfDay();
+        $end   = Carbon::today()->endOfDay();
 
-    // Sudah masuk hari ini
-    $alreadyIn = Presences::whereHas('presenceIn', function ($q) use ($today) {
-            $q->where('presence_date', $today);
-        })
-        ->count();
+        $alreadyIn = Presences::whereBetween('created_at', [$start, $end])
+            ->whereNotNull('presenceIn_id')
+            ->count();
 
-    // Sudah masuk tapi belum keluar
-    $notOutYet = Presences::whereHas('presenceIn', function ($q) use ($today) {
-            $q->where('presence_date', $today);
-        })
-        ->whereNull('presenceOut_id')
-        ->count();
+        $notOutYet = Presences::whereBetween('created_at', [$start, $end])
+            ->whereNotNull('presenceIn_id')
+            ->whereNull('presenceOut_id')
+            ->count();
 
-    $allOverPresence = Presences::count(); 
-    
-    return response()->json([
-        'already_in'   => $alreadyIn,
-        'not_out_yet'  => $notOutYet,
-        'allOverPresence' => $alloverPresence,
-    ]);
-}
+        $allOverPresence = Presences::Count();
+
+        return response()->json([
+            'already_in' => $alreadyIn,
+            'not_out_yet' => $notOutYet,
+            'allOverPresence' => $allOverPresence,
+        ]);
+    }
 
     /*public function scan(Request $request)
     {
