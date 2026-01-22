@@ -44,11 +44,9 @@ class AbsensiController extends Controller
             ->count();
 
         $allOverPresence = Presences::count();
-
         return response()->json([
             'already_in' => $alreadyIn,
             'not_out_yet' => $notOutYet,
-            'allOverPresence' => $allOverPresence,
         ]);
     }
 
