@@ -47,6 +47,7 @@ class AbsensiController extends Controller
         return response()->json([
             'already_in' => $alreadyIn,
             'not_out_yet' => $notOutYet,
+           'allOverPresence' => $allOverPresence,
         ]);
     }
 
