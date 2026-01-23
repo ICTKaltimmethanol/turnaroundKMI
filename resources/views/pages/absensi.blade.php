@@ -206,7 +206,7 @@ function handleScan() {
                 }
         document.getElementById('employeeData').innerHTML = `
             <div class="${bgColor} border px-4 py-3 rounded mb-4">
-                <strong class="text-6xl">${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
+                <strong class="text-4xl">${data.status.toUpperCase()}</strong> - ${data.message ?? ''}
             </div>
 
             <div class="p-4 bg-center bg-cover bg-no-repeat 
@@ -225,25 +225,20 @@ function handleScan() {
 
                     <!-- Info Karyawan -->
                     <div class="py-2">
-                        <h3 class="text-8xl font-bold text-White-100">
+                        <h3 class="text-4xl font-black text-White-100">
                             ${data.employee.full_name}
                         </h3>
 
-                        <p class="text-md text-gray-200 italic">
+                        <p class="text-l text-gray-200 italic">
                             ${data.employee.company_name} - ${data.employee.position_name}
                         </p>
 
-                        <p class="text-sm text-gray-400">
+                        <p class="text-md text-gray-400">
                             ${data.employee.employee_code}
                         </p>
 
-                        ${
-                            data.total_minutes !== undefined
-                                ? `<p class="mt-1 text-sm text-gray-300">
-                                    Total Waktu: ${data.total_minutes} menit
-                                </p>`
-                                : ''
-                        }
+                     
+                
                     </div>
 
                 </div>
