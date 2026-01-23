@@ -208,19 +208,19 @@ class PresencesTable
                         }
                         return $query
                             ->when($data['employee_code_from'], fn ($q, $from) =>
-                                $q->where('employees_code', '>=', $from)
+                                $q->where('employee_code', '>=', $from)
                             )
                             ->when($data['employee_code_until'], fn ($q, $until) =>
-                                $q->where('employees_code', '>=', $untill)
+                                $q->where('employee_code', '>=', $untill)
                             )
                             ->when($data['employee_name'] ?? null, fn ($query, $name) => 
                                 $query->whereHas('employee', fn ($q) => $q->where('full_name', 'like', "%{$name}%"))
                             )
                             ->when($data['employees_company_id'] ?? null, fn ($query, $companyId) => 
-                                $query->where('employees_company_id', $companyId)
+                                $query->where('employee_company_id', $companyId)
                             )
                             ->when($data['employees_position_id'] ?? null, fn ($query, $positionId) => 
-                                $query->where('employees_position_id', $positionId)
+                                $query->where('employee_position_id', $positionId)
                             );
                     }),
             ])
