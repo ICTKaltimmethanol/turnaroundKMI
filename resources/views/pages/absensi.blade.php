@@ -129,7 +129,7 @@
                     <!-- Info Karyawan -->
                     <div class="py-2">
                         <h3 class="text-4xl font-black text-White-100">
-                            ${data.employee.full_name}
+                            Indra Parlindungan Hutahaean
                         </h3>
 
                         <p class="text-l text-gray-200 italic">
