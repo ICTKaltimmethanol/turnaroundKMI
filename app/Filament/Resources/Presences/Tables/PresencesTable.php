@@ -211,7 +211,7 @@ class PresencesTable
                                 $q->where('employee_code', '>=', $from)
                             )
                             ->when($data['employee_code_until'], fn ($q, $until) =>
-                                $q->where('employee_code', '>=', $untill)
+                                $q->where('employee_code', '>=', $until)
                             )
                             ->when($data['employee_name'] ?? null, fn ($query, $name) => 
                                 $query->whereHas('employee', fn ($q) => $q->where('full_name', 'like', "%{$name}%"))
