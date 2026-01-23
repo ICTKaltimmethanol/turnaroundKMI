@@ -128,7 +128,7 @@
 
                     <!-- Info Karyawan -->
                     <div class="py-2">
-                        <h3 class="text-4xl font-extrabold text-White-100">
+                        <h3 class="text-8xl font-extrabold text-White-100">
                             Indra Parlindungan Hutahaean
                         </h3>
 
