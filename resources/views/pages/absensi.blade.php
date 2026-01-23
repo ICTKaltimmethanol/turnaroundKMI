@@ -109,7 +109,7 @@
         <!-- RESULT -->
         <div class="lg:col-span-2">
             <div id="employeeData"
-                class="rounded-2xl text-2xl border border-dashed border-white/20 p-10 text-center text-white">
+                class="rounded-2xl text-2xl border border-dashed border-white/20 p-10 text-center text-white mb-4">
                 Data pekerja akan tampil di sini
             </div>
             <div class="rounded-2xl  text-2xl  border border-dashed border-white/20 p-10 text-center text-whitemt-8">
