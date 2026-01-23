@@ -109,10 +109,10 @@
         <!-- RESULT -->
         <div class="lg:col-span-2">
             <div id="employeeData"
-                class="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white/50">
+                class="rounded-2xl text-2xl border border-dashed border-white/20 p-10 text-center text-white">
                 Data pekerja akan tampil di sini
             </div>
-            <div class="rounded-2xl  border border-dashed border-white/20 p-10 text-center text-white/50 mt-8">
+            <div class="rounded-2xl  text-2xl  border border-dashed border-white/20 p-10 text-center text-whitemt-8">
                 <h1 class="text-8xl">Cukup 1 kali scan untuk tiap orang, jangan lakukan secara memaksa untuk tiap id pekerja</h1>
             </div>
         </div>
