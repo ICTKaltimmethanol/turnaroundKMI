@@ -132,11 +132,11 @@
                             Indra Parlindungan Hutahaean
                         </h3>
 
-                        <p class="text-l text-gray-200 italic">
+                        <p class="text-2l text-gray-200 italic">
                             ${data.employee.company_name} - ${data.employee.position_name}
                         </p>
 
-                        <p class="text-md text-gray-400">
+                        <p class="text-2l text-white">
                             ${data.employee.employee_code}
                         </p>
 
