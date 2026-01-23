@@ -34,14 +34,17 @@ class AbsensiController extends Controller
         $start = Carbon::today()->startOfDay();
         $end   = Carbon::today()->endOfDay();
 
+     
         $alreadyIn = Presences::whereBetween('created_at', [$start, $end])
             ->whereNotNull('presenceIn_id')
-            ->count();
-
+            ->distinct('employees_id')
+            ->count('employees_id');
+            
         $notOutYet = Presences::whereBetween('created_at', [$start, $end])
             ->whereNotNull('presenceIn_id')
             ->whereNull('presenceOut_id')
-            ->count();
+            ->distinct('employees_id')
+            ->count('employees_id');
 
         $allOverPresence = Presences::count();
         return response()->json([
