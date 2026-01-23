@@ -166,8 +166,8 @@ class PresencesTable
                         Select::make('employee_code_from')
                             ->label('ID Pekerja From')
                             ->options(
-                                Employee::orderBy('employees_code')
-                                    ->pluck('employees_code','employees_code')
+                                Employee::orderBy('employee_code')
+                                    ->pluck('employee_code','employee_code')
                             )
                             ->searchable()
                             ->placeholder('Pilih ID Pekerja'),
@@ -176,7 +176,7 @@ class PresencesTable
                             ->label('ID Pekerja To')
                             ->options(
                                 Employee::orderBy('employees_code')
-                                 ->pluck('employees_code', 'employees_code')
+                                 ->pluck('employee_code', 'employee_code')
                             )
                             ->searchable()
                             ->placeholder('Pilih ID Pekerja'),
