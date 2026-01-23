@@ -225,9 +225,9 @@ function handleScan() {
 
                     <!-- Info Karyawan -->
                     <div class="py-2">
-                        <h3 class="text-4xl font-black text-White-100">
+                        <strong="text-4xl  text-White">
                             ${data.employee.full_name}
-                        </h3>
+                        </strong>
 
                         <p class="text-l text-gray-200 italic">
                             ${data.employee.company_name} - ${data.employee.position_name}
