@@ -145,118 +145,125 @@ class PresencesTable
             ])
             ->filters([
 
-    /* ================= FILTER TANGGAL ================= */
-    Filter::make('created_at')
-        ->schema([
-            DatePicker::make('created_from')
-                ->label('Dari Tanggal'),
+                    /* ================= FILTER TANGGAL ================= */
+                    Filter::make('created_at')
+                        ->schema([
+                            DatePicker::make('created_from')
+                                ->label('Dari Tanggal'),
 
-            DatePicker::make('created_until')
-                ->label('Sampai Tanggal'),
-        ])
-        ->query(function (Builder $query, array $data): Builder {
-            return $query
-                ->when(
-                    $data['created_from'] ?? null,
-                    fn ($q, $date) => $q->whereDate('created_at', '>=', $date)
-                )
-                ->when(
-                    $data['created_until'] ?? null,
-                    fn ($q, $date) => $q->whereDate('created_at', '<=', $date)
-                );
-        }),
+                            DatePicker::make('created_until')
+                                ->label('Sampai Tanggal'),
+                        ])
+                        ->query(function (Builder $query, array $data): Builder {
+                            return $query
+                                ->when(
+                                    $data['created_from'] ?? null,
+                                    fn ($q, $date) => $q->whereDate('created_at', '>=', $date)
+                                )
+                                ->when(
+                                    $data['created_until'] ?? null,
+                                    fn ($q, $date) => $q->whereDate('created_at', '<=', $date)
+                                );
+                        }),
 
-            Filter::make('filters')
-                ->form([
+                /* ================= FILTER PEKERJA ================= */
+                Filter::make('filters')
+                    ->form([
 
-                    TextInput::make('employee_name')
-                        ->label('Nama Pekerja')
-                        ->placeholder('Cari nama pekerja...'),
+                        /* === 1 ID PEKERJA (PRIORITAS) === */
+                        Select::make('employee_code')
+                            ->label('ID Pekerja')
+                            ->options(
+                                \App\Models\Employee::orderBy('employees_code')
+                                    ->pluck('employees_code', 'employees_code')
+                            )
+                            ->searchable()
+                            ->placeholder('Pilih ID Pekerja'),
 
-                    Select::make('employee_code_from')
-                        ->label('ID Pekerja From')
-                        ->options(
-                            \App\Models\Employee::orderBy('employees_code')
-                                ->pluck('employees_code', 'employees_code')
-                        )
-                        ->searchable()
-                        ->placeholder('Pilih ID Pekerja'),
+                        /* === RANGE ID (OPSIONAL) === */
+                        Select::make('employee_code_from')
+                            ->label('ID Pekerja From')
+                            ->options(
+                                \App\Models\Employee::orderBy('employees_code')
+                                    ->pluck('employees_code', 'employees_code')
+                            )
+                            ->searchable(),
 
-                    Select::make('employee_code_until')
-                        ->label('ID Pekerja To')
-                        ->options(
-                            \App\Models\Employee::orderBy('employees_code')
-                                ->pluck('employees_code', 'employees_code')
-                        )
-                        ->searchable()
-                        ->placeholder('Pilih ID Pekerja'),
+                        Select::make('employee_code_until')
+                            ->label('ID Pekerja To')
+                            ->options(
+                                \App\Models\Employee::orderBy('employees_code')
+                                    ->pluck('employees_code', 'employees_code')
+                            )
+                            ->searchable(),
 
-                    Select::make('employees_company_id')
-                        ->label('Perusahaan')
-                        ->options(
-                            \App\Models\Company::pluck('name', 'id')
-                        )
-                        ->searchable()
-                        ->placeholder('Pilih perusahaan'),
+                        TextInput::make('employee_name')
+                            ->label('Nama Pekerja')
+                            ->placeholder('Cari nama pekerja...'),
 
-                    Select::make('employees_position_id')
-                        ->label('Posisi')
-                        ->options(
-                            \App\Models\Position::pluck('name', 'id')
-                        )
-                        ->searchable()
-                        ->placeholder('Pilih posisi'),
-                ])
+                        Select::make('employees_company_id')
+                            ->label('Perusahaan')
+                            ->options(\App\Models\Company::pluck('name', 'id'))
+                            ->searchable(),
 
-                ->query(function (Builder $query, array $data): Builder {
+                        Select::make('employees_position_id')
+                            ->label('Posisi')
+                            ->options(\App\Models\Position::pluck('name', 'id'))
+                            ->searchable(),
+                    ])
 
-                    /* === AUTO SWAP FROM–TO JIKA TERBALIK === */
-                    if (
-                        filled($data['employee_code_from'] ?? null) &&
-                        filled($data['employee_code_until'] ?? null) &&
-                        $data['employee_code_from'] > $data['employee_code_until']
-                    ) {
-                        [$data['employee_code_from'], $data['employee_code_until']] =
-                            [$data['employee_code_until'], $data['employee_code_from']];
-                    }
+                    ->query(function (Builder $query, array $data): Builder {
 
-                    return $query
+                        /* === PRIORITAS 1 ID === */
+                        if (!empty($data['employee_code'])) {
+                            return $query->where('employee_code', $data['employee_code']);
+                        }
 
-                        /* === FILTER ID PEKERJA === */
-                        ->when(
-                            $data['employee_code_from'] ?? null,
-                            fn ($q, $from) =>
-                                $q->where('employee_code', '>=', $from)
-                        )
+                        /* === AUTO SWAP RANGE JIKA TERBALIK === */
+                        if (
+                            filled($data['employee_code_from'] ?? null) &&
+                            filled($data['employee_code_until'] ?? null) &&
+                            $data['employee_code_from'] > $data['employee_code_until']
+                        ) {
+                            [$data['employee_code_from'], $data['employee_code_until']] =
+                                [$data['employee_code_until'], $data['employee_code_from']];
+                        }
 
-                        ->when(
-                            $data['employee_code_until'] ?? null,
-                            fn ($q, $until) =>
-                                $q->where('employee_code', '<=', $until)
-                        )
+                        return $query
+                            /* === RANGE ID === */
+                            ->when(
+                                $data['employee_code_from'] ?? null,
+                                fn ($q, $from) =>
+                                    $q->where('employee_code', '>=', $from)
+                            )
+                            ->when(
+                                $data['employee_code_until'] ?? null,
+                                fn ($q, $until) =>
+                                    $q->where('employee_code', '<=', $until)
+                            )
 
-                        /* === FILTER NAMA === */
-                        ->when(
-                            $data['employee_name'] ?? null,
-                            fn ($q, $name) =>
-                                $q->where('employee_name', 'like', "%{$name}%")
-                        )
+                            /* === NAMA === */
+                            ->when(
+                                $data['employee_name'] ?? null,
+                                fn ($q, $name) =>
+                                    $q->where('employee_name', 'like', "%{$name}%")
+                            )
 
-                        /* === FILTER PERUSAHAAN === */
-                        ->when(
-                            $data['employees_company_id'] ?? null,
-                            fn ($q, $companyId) =>
-                                $q->where('employees_company_id', $companyId)
-                        )
+                            /* === PERUSAHAAN === */
+                            ->when(
+                                $data['employees_company_id'] ?? null,
+                                fn ($q, $companyId) =>
+                                    $q->where('employees_company_id', $companyId)
+                            )
 
-                        /* === FILTER POSISI === */
-                        ->when(
-                            $data['employees_position_id'] ?? null,
-                            fn ($q, $positionId) =>
-                                $q->where('employees_position_id', $positionId)
-                        );
-                }),
-        ])
+                            /* === POSISI === */
+                            ->when(
+                                $data['employees_position_id'] ?? null,
+                                fn ($q, $positionId) =>
+                                    $q->where('employees_position_id', $positionId)
+                            );
+                    }),
+            ])
 
 
             ->recordActions([
