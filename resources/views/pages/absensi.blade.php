@@ -112,40 +112,6 @@
                 class="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white/50">
                 Data pekerja akan tampil di sini
             </div>
-             <div class="p-4 bg-center bg-cover bg-no-repeat 
-                bg-[url('https://kaltimmethanol.com/themes/methanol/images/slider2_.jpg')]
-                bg-gray-700 bg-blend-multiply rounded-xl shadow-lg overflow-hidden border border-gray-200">
-
-                <div class="p-4 px-2 pt-2 rounded-lg text-center space-y-2">
-
-                    <!-- Header -->
-                    <div class="rounded-lg text-white text-center py-2 pt-4">
-                        <h2 class="text-xl font-bold italic uppercase tracking-wide text-blue-400">
-                            Turn <span class="text-red-400">Around</span> <span class="text-white">2025</span>
-                        </h2>
-                        <p class="text-sm">PT. Kaltim Methanol Industri</p>
-                    </div>
-
-                    <!-- Info Karyawan -->
-                    <div class="py-2">
-                        <h3 class="text-4xl font-extrabold text-White">
-                            Indra Parlindungan Hutahaean
-                        </h3>
-
-                        <p class="text-2l text-gray-200 italic">
-                            ${data.employee.company_name} - ${data.employee.position_name}
-                        </p>
-
-                        <p class="text-2l text-white">
-                            ${data.employee.employee_code}
-                        </p>
-
-                     
-                
-                    </div>
-
-                </div>
-            </div>
             <div class="rounded-2xl  border border-dashed border-white/20 p-10 text-center text-white/50 mt-8">
                 <h1 class="text-8xl">Cukup 1 kali scan untuk tiap orang, jangan lakukan secara memaksa untuk tiap id pekerja</h1>
             </div>
@@ -259,20 +225,19 @@ function handleScan() {
 
                     <!-- Info Karyawan -->
                     <div class="py-2">
-                        <h3 class="text-4xl font-black text-White-100">
+                        <h3 class="text-4xl font-extrabold text-White">
                             ${data.employee.full_name}
                         </h3>
 
-                        <p class="text-l text-gray-200 italic">
+                        <p class="text-2l text-gray-200 italic">
                             ${data.employee.company_name} - ${data.employee.position_name}
                         </p>
 
-                        <p class="text-md text-gray-400">
+                        <p class="text-2l text-gray-400">
                             ${data.employee.employee_code}
                         </p>
 
                      
-                
                     </div>
 
                 </div>
