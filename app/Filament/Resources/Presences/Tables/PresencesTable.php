@@ -172,7 +172,7 @@ class PresencesTable
                             ->searchable()
                             ->placeholder('Pilih ID Pekerja'),
                         
-                        Select::make('employee_code_untill')
+                        Select::make('employee_code_until')
                             ->label('ID Pekerja To')
                             ->options(
                                 Employee::orderBy('employees_code')
@@ -210,7 +210,7 @@ class PresencesTable
                             ->when($data['employee_code_from'], fn ($q, $from) =>
                                 $q->where('employees_code', '>=', $from)
                             )
-                            ->when($data['employee_code_untill'], fn ($q, $untill) =>
+                            ->when($data['employee_code_until'], fn ($q, $until) =>
                                 $q->where('employees_code', '>=', $untill)
                             )
                             ->when($data['employee_name'] ?? null, fn ($query, $name) => 
