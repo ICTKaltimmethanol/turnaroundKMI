@@ -23,10 +23,9 @@ class PresencesForm
             TextInput::make('total_time')
                 ->label('Total Waktu (Menit)')
                 ->numeric()
-                ->disabled()
                 ->dehydrated(),
             
-                    Select::make('employee_code')
+            Select::make('employee_code')
                     ->label('ID Pekerja')
                     ->options(
                         \App\Models\Employee::orderBy('employees_code')
