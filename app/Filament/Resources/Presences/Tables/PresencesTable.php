@@ -23,8 +23,8 @@ use Filament\Actions\ViewAction;
 | Filament – Models
 |--------------------------------------------------------------------------
 */
-use app\Models\Presences;
-use app\Models\Employee;
+use App\Models\Presences;
+use App\Models\Employee;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,11 +86,41 @@ class PresencesTable
                     ->label('Perusahaan')
                     ->toggleable()
                     ->sortable(), */
+                Select::make('employee_code')
+                    ->label('ID Pekerja')
+                    ->options(
+                        \App\Models\Employee::orderBy('employees_code')
+                            ->pluck('employees_code', 'employees_code')
+                    )
+                    ->searchable()
+                    ->live()
+                    ->required()
+                    ->afterStateUpdated(function ($state, Set $set) {
 
-                TextColumn::make('employee_name')->label('Nama Lengkap'),
-                TextColumn::make('employee_code')->label('ID Pekerja'),
-                TextColumn::make('company_name')->label('Perusahaan'),
-                TextColumn::make('position_name')->label('Posisi'),
+                        $employee = \App\Models\Employee::with(['company', 'position'])
+                            ->where('employees_code', $state)
+                            ->first();
+
+                        if (! $employee) {
+                            return;
+                        }
+
+                        // FK
+                        $set('employees_id', $employee->id);
+                        $set('company_id', $employee->company?->id);
+                        $set('position_id', $employee->position?->id);
+
+                        // SNAPSHOT
+                        $set('employee_name', $employee->full_name);
+                        $set('company_name', $employee->company?->name);
+                        $set('position_name', $employee->position?->name);
+                    }),
+
+                TextColumn::make('employee_name')->label('Nama Lengkap')->disabled(),
+                TextColumn::make('employee_code')->label('ID Pekerja')->disabled(),
+                TextColumn::make('company_name')->label('Perusahaan')->disabled(),
+                TextColumn::make('position_name')->label('Posisi')->disabled(),
+                
                 TextColumn::make('total_time')
                     ->label('Total Waktu (Menit)')
                     ->formatStateUsing(fn ($state) => abs($state))
@@ -104,16 +134,27 @@ class PresencesTable
                             : '-'
                     )
                     ->sortable()
-                    ->toggleable(),
+                    ->sortUsing(function (Builder $query, string $direction) {
+                        $query->leftJoin('presence_ins', 'presence_ins.id', '=', 'presences.presenceIn_id')
+                            ->orderBy('presence_ins.presence_date', $direction)
+                            ->orderBy('presence_ins.presence_time', $direction)
+                            ->select('presences.*');
+                    }),
                 TextColumn::make('presenceOut')
                     ->label('Keluar')
-                    ->state(fn($record) => 
-                    $record->presenceOut
-                        ? $record->presenceOut->presence_date . ' ' . $record->presenceOut->presence_time
-                        : '-'
+                    ->state(fn ($record) =>
+                        $record->presenceOut
+                            ? $record->presenceOut->presence_date . ' ' . $record->presenceOut->presence_time
+                            : '-'
                     )
                     ->sortable()
-                    ->toggleable(),
+                    ->sortUsing(function (Builder $query, string $direction) {
+                        $query->leftJoin('presence_outs', 'presence_outs.id', '=', 'presences.presenceOut_id')
+                            ->orderBy('presence_outs.presence_date', $direction)
+                            ->orderBy('presence_outs.presence_time', $direction)
+                            ->select('presences.*');
+                    }),
+
 
                 /* TextColumn::make('presenceIn.presence_date')
                     ->label('Tanggal Masuk')

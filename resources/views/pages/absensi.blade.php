@@ -164,6 +164,10 @@ const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 window.onload = () => input.focus();
 document.onclick = () => input.focus();
 
+function clearEmployeeInfo() {
+    document.getElementById('employeeData').innerHTML = '';
+}
+
 function handleScan() {
     const code = input.value.trim();
     if (code.length < 3) return;
@@ -171,14 +175,24 @@ function handleScan() {
     const remaining = remainingCooldown(code);
     if (remaining > 0) {
         document.getElementById('employeeData').innerHTML = `
-            <div class="bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded">
-                Barcode sudah discan.<br>
-                Tunggu <strong>${Math.ceil(remaining / 1000)} detik</strong>.
-            </div>`;
+            <div>
+                <div style="font-size:64px; line-height:1;">⚠️</div>
+                <div style="font-size:32px; font-weight:bold; margin-top:10px;">
+                    Anda telah melakukan scan
+                </div>
+                <div style="font-size:20px; margin-top:6px;">
+                    Mohon jangan melakukan scan berulang
+                </div>
+                <div style="font-size:18px; margin-top:10px;">
+                    Tunggu <strong>${Math.ceil(remaining / 1000)} detik</strong>
+                </div>
+            </div>
+        `;
         input.value = '';
         return;
     }
 
+    clearEmployeeInfo();
     document.getElementById('loadingIndicator').classList.remove('hidden');
     input.disabled = true;
 
