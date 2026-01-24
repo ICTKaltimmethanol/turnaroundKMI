@@ -57,7 +57,6 @@ class PresencesResource extends Resource
     {
         return [
             'index' => ListPresences::route('/'),
-            'create' => CreatePresences::route('/create'),
             'edit' => EditPresences::route('/{record}/edit'),
   
 
