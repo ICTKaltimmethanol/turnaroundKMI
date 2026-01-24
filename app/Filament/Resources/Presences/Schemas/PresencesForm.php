@@ -25,6 +25,36 @@ class PresencesForm
                 ->numeric()
                 ->disabled()
                 ->dehydrated(),
+            
+                    Select::make('employee_code')
+                    ->label('ID Pekerja')
+                    ->options(
+                        \App\Models\Employee::orderBy('employees_code')
+                            ->pluck('employees_code', 'employees_code')
+                    )
+                    ->searchable()
+                    ->live()
+                    ->required()
+                    ->afterStateUpdated(function ($state, Set $set) {
+
+                        $employee = \App\Models\Employee::with(['company', 'position'])
+                            ->where('employees_code', $state)
+                            ->first();
+
+                        if (! $employee) {
+                            return;
+                        }
+
+                        // FK
+                        $set('employees_id', $employee->id);
+                        $set('company_id', $employee->company?->id);
+                        $set('position_id', $employee->position?->id);
+
+                        // SNAPSHOT
+                        $set('employee_name', $employee->full_name);
+                        $set('company_name', $employee->company?->name);
+                        $set('position_name', $employee->position?->name);
+                    }),
 
             Select::make('employees_id')
                     ->relationship('employee', 'full_name')
@@ -40,6 +70,7 @@ class PresencesForm
                 ->label('Perusahaan')
                 ->relationship('company', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
                 ->searchable()
+                ->disabled()
                 ->preload() 
                 ->required(),
                 
@@ -48,6 +79,7 @@ class PresencesForm
                 ->relationship('position', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
                 ->searchable()
                 ->preload()
+                ->disabled()
                 ->required(),
     
             Section::make('Presensi Waktu Masuk')
