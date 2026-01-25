@@ -55,6 +55,10 @@ class PresencesForm
                         $set('position_name', $employee->position?->name);
                     }),
 
+            Hidden::make('employees_id')
+                ->dehydrated(true)
+                ->required(),
+
             Select::make('employees_id')
                     ->relationship('employee', 'full_name')
                     ->getOptionLabelFromRecordUsing(
