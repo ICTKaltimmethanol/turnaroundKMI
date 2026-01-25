@@ -9,9 +9,12 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Hidden;
+
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Carbon\Carbon;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 
 class PresencesForm
 {
@@ -19,9 +22,10 @@ class PresencesForm
     {
         return $schema->components([
 
-            /* ==============================
-             | DATA KARYAWAN
-             ============================== */
+            TextInput::make('total_time')
+                ->label('Total Waktu (Menit)')
+                ->numeric()
+                ->dehydrated(),
 
             Select::make('employee_code')
                 ->label('ID Pekerja')
@@ -33,7 +37,6 @@ class PresencesForm
                 ->live()
                 ->required()
                 ->afterStateUpdated(function ($state, Set $set) {
-
                     $employee = \App\Models\Employee::with(['company', 'position'])
                         ->where('employees_code', $state)
                         ->first();
@@ -60,34 +63,35 @@ class PresencesForm
             TextInput::make('employee_name')
                 ->label('Nama Pekerja')
                 ->readonly()
+                ->dehydrated(true)
                 ->required(),
 
             TextInput::make('company_name')
                 ->label('Perusahaan')
                 ->readonly()
+                ->dehydrated(true)
                 ->required(),
 
             TextInput::make('position_name')
                 ->label('Posisi')
                 ->readonly()
+                ->dehydrated(true)
                 ->required(),
 
-            /* ==============================
-             | PRESENSI MASUK
-             ============================== */
-
             Section::make('Presensi Waktu Masuk')
+                ->relationship('presenceIn')
                 ->schema([
-                    DatePicker::make('presence_in_date')
-                        ->label('Tanggal Masuk')
+                    Hidden::make('employees_id')
+                        ->default(fn (Get $get) => $get('../employees_id'))
+                        ->dehydrated(true)
+                        ->required(),
+                    DatePicker::make('presence_date')
                         ->required()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
-
-                    TimePicker::make('presence_in_time')
-                        ->label('Jam Masuk')
+                    TimePicker::make('presence_time')
                         ->required()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
@@ -95,42 +99,63 @@ class PresencesForm
                         ),
                 ]),
 
-            /* ==============================
-             | PRESENSI PULANG
-             ============================== */
-
             Section::make('Presensi Waktu Pulang')
+                ->relationship('presenceOut')
                 ->schema([
-                    DatePicker::make('presence_out_date')
+                    Hidden::make('employees_id')
+                        ->default(fn (Get $get) => $get('../employees_id'))
+                        ->dehydrated(true)
+                        ->required(),
+                    DatePicker::make('presence_date')
                         ->label('Tanggal Pulang')
                         ->nullable()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
-
-                    TimePicker::make('presence_out_time')
+                    TimePicker::make('presence_time')
                         ->label('Jam Pulang')
                         ->nullable()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
-                ]),
+                    Action::make('hapus_waktu_pulang')
+                        ->label('Hapus Waktu Pulang')
+                        ->icon('heroicon-o-trash')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->visible(fn (Get $get) => $get('presenceOut.presence_date') || $get('presenceOut.presence_time'))
+                        ->action(function ($record, Set $set) {
+                            $set('presenceOut.presence_date', null);
+                            $set('presenceOut.presence_time', null);
+                            $set('total_time', null);
+                            $set('presenceOut_id', null);
 
-            TextInput::make('total_time')
-                ->label('Total Waktu (Menit)')
-                ->numeric()
-                ->readonly(),
+                            if ($record) {
+                                $record->update([
+                                    'total_time' => null,
+                                    'presenceOut_id' => null,
+                                ]);
+                                $record->presenceOut()?->delete();
+                            }
+
+                            Notification::make()
+                                ->title('Berhasil')
+                                ->body('Waktu pulang berhasil dihapus.')
+                                ->success()
+                                ->send();
+                        }),
+                ]),
         ]);
     }
 
     protected static function generateTotalMinute(Get $get, Set $set): void
     {
-        $inDate  = $get('presence_in_date');
-        $inTime  = $get('presence_in_time');
-        $outDate = $get('presence_out_date');
-        $outTime = $get('presence_out_time');
+        $inDate  = $get('../presenceIn.presence_date');
+        $inTime  = $get('../presenceIn.presence_time');
+        $outDate = $get('../presenceOut.presence_date');
+        $outTime = $get('../presenceOut.presence_time');
 
         if (! $inDate || ! $inTime || ! $outDate || ! $outTime) {
             return;
@@ -139,10 +164,11 @@ class PresencesForm
         $start = Carbon::parse("$inDate $inTime");
         $end   = Carbon::parse("$outDate $outTime");
 
+        // SHIFT MALAM
         if ($end->lessThan($start)) {
             $end->addDay();
         }
 
-        $set('total_time', $start->diffInMinutes($end));
+        $set('../total_time', $start->diffInMinutes($end));
     }
 }
