@@ -61,6 +61,20 @@ class PresencesForm
                 ->dehydrated(true)
                 ->required(),
 
+            Hidden::make('employee_name')
+                ->dehydrated(true)
+                ->required(),
+
+            Hidden::make('company_name')
+                ->dehydrated(true)
+                ->required(),
+
+            Hidden::make('position_name')
+                ->dehydrated(true)
+                ->required(),
+
+            
+
             Select::make('employees_id')
                     ->relationship('employee', 'full_name')
                     ->getOptionLabelFromRecordUsing(
