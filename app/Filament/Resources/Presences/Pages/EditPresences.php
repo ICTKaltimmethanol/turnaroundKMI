@@ -16,4 +16,10 @@ class EditPresences extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+{
+    dd($data);
+}
+
 }
