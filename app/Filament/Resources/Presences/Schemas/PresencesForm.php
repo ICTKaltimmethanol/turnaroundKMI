@@ -83,20 +83,15 @@ class PresencesForm
 
     
             Section::make('Presensi Waktu Masuk')
-                ->relationship('presenceIn')
                 ->schema([
-                    Hidden::make('employees_id')
-                        ->default(fn (Get $get) => $get('../../employees_id'))
-                        ->dehydrated(true)
-                        ->required(),
-                    DatePicker::make('presence_date')
+                    DatePicker::make('presenceIn.presence_date')
                         ->required()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
 
-                    TimePicker::make('presence_time')
+                    TimePicker::make('presenceIn.presence_time')
                         ->required()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
@@ -106,55 +101,20 @@ class PresencesForm
 
             
             Section::make('Presensi Waktu Pulang')
-                ->relationship('presenceOut')
                 ->schema([
-                    Hidden::make('employees_id')
-                        ->default(fn (Get $get) => $get('../../employees_id'))
-                        ->dehydrated(true)
-                        ->required(),
-                    DatePicker::make('presence_date')
-                        ->label('Tanggal Pulang')
+                    DatePicker::make('presenceOut.presence_date')
                         ->nullable()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
 
-                    TimePicker::make('presence_time')
-                        ->label('Jam Pulang')
+                    TimePicker::make('presenceOut.presence_time')
                         ->nullable()
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
-
-             
-                    Action::make('hapus_waktu_pulang')
-                            ->label('Hapus Waktu Pulang')
-                            ->icon('heroicon-o-trash')
-                            ->color('danger')
-                            ->requiresConfirmation()
-                            ->action(function ($record, Set $set) {
-                                
-                                $set('presenceOut.presence_date', null);
-                                $set('presenceOut.presence_time', null);
-
-                                $set('total_time', null);
-                                $set('presenceOut_id', null);
-
-                                $record->update([   
-                                    'total_time' => null,
-                                    'presenceOut_id' => null,
-                                ]);
-                    
-                                $record->presenceOut()?->delete();
-
-                                Notification::make()
-                                    ->title('Berhasil')
-                                    ->body('Waktu pulang berhasil dihapus.')
-                                    ->success()
-                                    ->send();
-                            }),
                 ]),
         ]);
     }
