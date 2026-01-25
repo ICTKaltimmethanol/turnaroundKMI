@@ -121,10 +121,10 @@ class PresencesForm
 
     protected static function generateTotalMinute(Get $get, Set $set): void
     {
-        $inDate  = $get('../presenceIn.presence_date');
-        $inTime  = $get('../presenceIn.presence_time');
-        $outDate = $get('../presenceOut.presence_date');
-        $outTime = $get('../presenceOut.presence_time');
+        $inDate  = $get('presenceIn.presence_date');
+        $inTime  = $get('presenceIn.presence_time');
+        $outDate = $get('presenceOut.presence_date');
+        $outTime = $get('presenceOut.presence_time');
 
         if (! $inDate || ! $inTime || ! $outDate || ! $outTime) {
             return;
