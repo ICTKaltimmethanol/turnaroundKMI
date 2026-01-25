@@ -46,8 +46,8 @@ class PresencesForm
 
                         // FK
                         $set('employees_id', $employee->id);
-                        $set('company_id', $employee->company?->id);
-                        $set('position_id', $employee->position?->id);
+                        $set('employees_company_id', $employee->company?->id);
+                        $set('employees_position_id', $employee->position?->id);
 
                         // SNAPSHOT
                         $set('employee_name', $employee->full_name);
@@ -65,21 +65,18 @@ class PresencesForm
                     ->searchable()
                     ->preload(),
 
-            Select::make('company_id')
-                ->label('Perusahaan')
-                ->relationship('company', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
-                ->searchable()
+            Select::make('employees_company_id')
+                ->relationship('company', 'name')
                 ->disabled()
-                ->preload() 
+                ->dehydrated(true)
                 ->required(),
-                
-            Select::make('position_id')
-                ->label('Posisi')
-                ->relationship('position', 'name', modifyQueryUsing: fn ($query) => $query->orderBy('name'))
-                ->searchable()
-                ->preload()
+
+            Select::make('employees_position_id')
+                ->relationship('position', 'name')
                 ->disabled()
+                ->dehydrated(true)
                 ->required(),
+
     
             Section::make('Presensi Waktu Masuk')
                 ->relationship('presenceIn')
