@@ -57,6 +57,10 @@ class PresencesForm
                         $set('position_name', $employee->position?->name);
                     }),
 
+            Hidden::make('employees_id')
+                ->dehydrated(true)
+                ->required(),
+
             Hidden::make('employee_name')
                 ->dehydrated(true)
                 ->required(),
