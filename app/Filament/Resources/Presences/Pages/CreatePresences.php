@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Presences\Pages;
 
 use App\Filament\Resources\Presences\PresencesResource;
 use Filament\Resources\Pages\CreateRecord;
+  use App\Models\PresenceIn;
+use App\Models\PresenceOut;
 
 class CreatePresences extends CreateRecord
 {
@@ -16,8 +18,7 @@ class CreatePresences extends CreateRecord
         return 'Tambah Presensi';
     }
 
-  use App\Models\PresenceIn;
-use App\Models\PresenceOut;
+
 
 protected function mutateFormDataBeforeCreate(array $data): array
 {
