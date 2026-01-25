@@ -83,7 +83,8 @@ class PresencesForm
 
     
          Section::make('Presensi Waktu Masuk')
-            ->statePath('presenceIn') 
+            ->statePath('presenceIn')
+            ->dehydrated(false) 
             ->schema([
                 DatePicker::make('presence_date')
                     ->required()
@@ -99,10 +100,12 @@ class PresencesForm
                         self::generateTotalMinute($get, $set)
                     ),
             ]),
+
 
 
         Section::make('Presensi Waktu Pulang')
-            ->statePath('presenceOut') // 🔴 WAJIB
+            ->statePath('presenceOut')
+            ->dehydrated(false) 
             ->schema([
                 DatePicker::make('presence_date')
                     ->nullable()
@@ -118,6 +121,7 @@ class PresencesForm
                         self::generateTotalMinute($get, $set)
                     ),
             ]),
+
 
 
         ]);
