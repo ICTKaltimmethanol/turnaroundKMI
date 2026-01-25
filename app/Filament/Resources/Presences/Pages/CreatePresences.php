@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Presences\Pages;
 use App\Filament\Resources\Presences\PresencesResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model; 
 
 use App\Models\Presences;
 use App\Models\PresenceIn;
@@ -19,7 +20,7 @@ class CreatePresences extends CreateRecord
         return 'Tambah Presensi';
     }
 
-    protected function handleRecordCreation(array $data)
+    protected function handleRecordCreation(array $data): Model
     {
         return DB::transaction(function () use ($data) {
 
@@ -59,9 +60,10 @@ class CreatePresences extends CreateRecord
              * PRESENCE OUT (OPTIONAL)
              * =========================
              */
-            if (! empty($data['presenceOut']['presence_date']) &&
-                ! empty($data['presenceOut']['presence_time'])) {
-
+            if (
+                ! empty($data['presenceOut']['presence_date']) &&
+                ! empty($data['presenceOut']['presence_time'])
+            ) {
                 $presenceOut = PresenceOut::create([
                     'employees_id'  => $data['employees_id'],
                     'presence_date' => $data['presenceOut']['presence_date'],
@@ -73,7 +75,7 @@ class CreatePresences extends CreateRecord
                 ]);
             }
 
-            return $presence;
+            return $presence; // ✅ HARUS Model
         });
     }
 }
