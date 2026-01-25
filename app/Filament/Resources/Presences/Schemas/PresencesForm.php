@@ -82,28 +82,30 @@ class PresencesForm
 
 
     
-            Section::make('Presensi Waktu Masuk')
-                ->schema([
-                    DatePicker::make('presenceIn.presence_date')
-                        ->required()
-                        ->live()
-                        ->afterStateUpdated(fn (Get $get, Set $set) =>
-                            self::generateTotalMinute($get, $set)
-                        ),
+         Section::make('Presensi Waktu Masuk')
+            ->schema([
+                DatePicker::make('presenceIn.presence_date')
+                    ->required()
+                    ->dehydrated(true)
+                    ->live()
+                    ->afterStateUpdated(fn (Get $get, Set $set) =>
+                        self::generateTotalMinute($get, $set)
+                    ),
 
-                    TimePicker::make('presenceIn.presence_time')
-                        ->required()
-                        ->live()
-                        ->afterStateUpdated(fn (Get $get, Set $set) =>
-                            self::generateTotalMinute($get, $set)
-                        ),
-                ]),
+                TimePicker::make('presenceIn.presence_time')
+                    ->required()
+                    ->dehydrated(true)
+                    ->live()
+                    ->afterStateUpdated(fn (Get $get, Set $set) =>
+                        self::generateTotalMinute($get, $set)
+                    ),
+            ]),
 
-            
             Section::make('Presensi Waktu Pulang')
                 ->schema([
                     DatePicker::make('presenceOut.presence_date')
                         ->nullable()
+                        ->dehydrated(true)
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
@@ -111,11 +113,13 @@ class PresencesForm
 
                     TimePicker::make('presenceOut.presence_time')
                         ->nullable()
+                        ->dehydrated(true)
                         ->live()
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
                 ]),
+
         ]);
     }
 

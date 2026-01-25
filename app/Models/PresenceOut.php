@@ -9,7 +9,7 @@ class PresenceOut extends Model
 {
         protected $table = 'presence_out';
 
-    use Hasfactory;
+    use HasFactory;
 
     protected $fillable = ['latitude_out', 'longitude_out', 'presence_time', 'presence_date', 'employees_id'];
 
