@@ -147,7 +147,31 @@ class PresencesForm
                                 ->send();
                         }),
                 ]),
-        ]);
+
+        ])
+        ->beforeSave(function ($form) {
+            $data = $form->getState();
+
+            // Buat presenceIn otomatis jika belum ada
+            if (!isset($data['presenceIn_id'])) {
+                $presenceIn = \App\Models\PresenceIn::create([
+                    'employees_id' => $data['employees_id'],
+                    'presence_date' => $data['presenceIn']['presence_date'] ?? now()->toDateString(),
+                    'presence_time' => $data['presenceIn']['presence_time'] ?? now()->format('H:i'),
+                ]);
+                $form->model->presenceIn_id = $presenceIn->id;
+            }
+
+            // Buat presenceOut jika sudah diisi
+            if (isset($data['presenceOut']['presence_date']) && isset($data['presenceOut']['presence_time'])) {
+                $presenceOut = \App\Models\PresenceOut::create([
+                    'employees_id' => $data['employees_id'],
+                    'presence_date' => $data['presenceOut']['presence_date'],
+                    'presence_time' => $data['presenceOut']['presence_time'],
+                ]);
+                $form->model->presenceOut_id = $presenceOut->id;
+            }
+        });
     }
 
     protected static function generateTotalMinute(Get $get, Set $set): void
