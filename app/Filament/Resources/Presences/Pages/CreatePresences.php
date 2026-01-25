@@ -16,42 +16,35 @@ class CreatePresences extends CreateRecord
         return 'Tambah Presensi';
     }
 
-    protected function mutateFormDataBeforeCreate(array $data): array
+  use App\Models\PresenceIn;
+use App\Models\PresenceOut;
+
+protected function mutateFormDataBeforeCreate(array $data): array
 {
-    dd($data);
-}
-  /*   protected function mutateFormDataBeforeCreate(array $data): array
-{
-    // === SIMPAN PRESENCE IN ===
-    $presenceIn = \App\Models\PresenceIn::create([
-        'employees_id'  => $data['employees_id'],
-        'presence_date' => $data['presenceIn']['presence_date'],
-        'presence_time' => $data['presenceIn']['presence_time'],
-    ]);
+    $presenceInData  = $data['presenceIn']  ?? null;
+    $presenceOutData = $data['presenceOut'] ?? null;
 
-    // === SIMPAN PRESENCE OUT (OPTIONAL) ===
-    $presenceOutId = null;
+    unset($data['presenceIn'], $data['presenceOut']);
 
-    if (
-        !empty($data['presenceOut']['presence_date']) &&
-        !empty($data['presenceOut']['presence_time'])
-    ) {
-        $presenceOut = \App\Models\PresenceOut::create([
-            'employees_id'  => $data['employees_id'],
-            'presence_date' => $data['presenceOut']['presence_date'],
-            'presence_time' => $data['presenceOut']['presence_time'],
-        ]);
-
-        $presenceOutId = $presenceOut->id;
+    // CREATE PRESENCE IN
+    if ($presenceInData) {
+        $presenceIn = PresenceIn::create($presenceInData);
+        $data['presenceIn_id'] = $presenceIn->id;
     }
 
-    // === KEMBALIKAN DATA UNTUK TABEL PRESENCES ===
-    return [
-        ...$data,
-        'presenceIn_id'  => $presenceIn->id,
-        'presenceOut_id' => $presenceOutId,
-    ];
-} */
+    // CREATE PRESENCE OUT (OPTIONAL)
+    if (
+        $presenceOutData &&
+        ($presenceOutData['presence_date'] ?? null) &&
+        ($presenceOutData['presence_time'] ?? null)
+    ) {
+        $presenceOut = PresenceOut::create($presenceOutData);
+        $data['presenceOut_id'] = $presenceOut->id;
+    }
+
+    return $data;
+}
+
 
 
 }
