@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Presences\Pages;
 use App\Filament\Resources\Presences\PresencesResource;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use App\Models\PresenceOut;
 
 class EditPresences extends EditRecord
 {
@@ -18,25 +17,32 @@ class EditPresences extends EditRecord
         ];
     }
 
-    // instance method untuk update presenceOut
-    protected function mutateFormDataBeforeSave(array $data): array
+    protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        if (!empty($data['presenceOut']['presence_date']) && !empty($data['presenceOut']['presence_time'])) {
-            if ($this->record->presenceOut) {
-                $this->record->presenceOut->update([
-                    'presence_date' => $data['presenceOut']['presence_date'],
-                    'presence_time' => $data['presenceOut']['presence_time'],
-                ]);
-            } else {
-                $presenceOut = PresenceOut::create([
-                    'employees_id' => $data['employees_id'],
-                    'presence_date' => $data['presenceOut']['presence_date'],
-                    'presence_time' => $data['presenceOut']['presence_time'],
-                ]);
-                $data['presenceOut_id'] = $presenceOut->id;
-            }
-        }
+        return DB::transaction(function () use ($record, $data) {
 
-        return $data;
+            if (!empty($data['presence_out_date']) && !empty($data['presence_out_time'])) {
+
+                if ($record->presenceOut) {
+                    $record->presenceOut->update([
+                        'presence_date' => $data['presence_out_date'],
+                        'presence_time' => $data['presence_out_time'],
+                    ]);
+                } else {
+                    $presenceOut = PresenceOut::create([
+                        'employees_id' => $record->employees_id,
+                        'presence_date' => $data['presence_out_date'],
+                        'presence_time' => $data['presence_out_time'],
+                    ]);
+
+                    $record->update([
+                        'presenceOut_id' => $presenceOut->id,
+                    ]);
+                }
+            }
+
+            return $record;
+        });
     }
+
 }

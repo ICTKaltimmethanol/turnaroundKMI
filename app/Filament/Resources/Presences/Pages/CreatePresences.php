@@ -16,27 +16,29 @@ class CreatePresences extends CreateRecord
         return 'Tambah Presensi';
     }
 
-    // instance method, jangan static
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        // Buat presenceIn otomatis
+   protected function handleRecordCreation(array $data): Model
+{
+    return DB::transaction(function () use ($data) {
+
+        // 1. Buat PresenceIn
         $presenceIn = PresenceIn::create([
-            'employees_id' => $data['employees_id'],
-            'presence_date' => $data['presenceIn']['presence_date'] ?? now()->toDateString(),
-            'presence_time' => $data['presenceIn']['presence_time'] ?? now()->format('H:i'),
+            'employees_id'   => $data['employees_id'],
+            'presence_date'  => $data['presence_in_date'],
+            'presence_time'  => $data['presence_in_time'],
         ]);
-        $data['presenceIn_id'] = $presenceIn->id;
 
-        // Buat presenceOut jika ada
-        if (!empty($data['presenceOut']['presence_date']) && !empty($data['presenceOut']['presence_time'])) {
-            $presenceOut = PresenceOut::create([
-                'employees_id' => $data['employees_id'],
-                'presence_date' => $data['presenceOut']['presence_date'],
-                'presence_time' => $data['presenceOut']['presence_time'],
-            ]);
-            $data['presenceOut_id'] = $presenceOut->id;
-        }
+        // 2. Buat Presences (seperti controller scan)
+        return Presences::create([
+            'presenceIn_id' => $presenceIn->id,
+            'employees_id'  => $data['employees_id'],
+            'employees_company_id' => $data['employees_company_id'],
+            'employees_position_id' => $data['employees_position_id'],
+            'employee_name' => $data['employee_name'],
+            'employee_code' => $data['employee_code'],
+            'company_name'  => $data['company_name'],
+            'position_name' => $data['position_name'],
+        ]);
+    });
+}
 
-        return $data;
-    }
 }
