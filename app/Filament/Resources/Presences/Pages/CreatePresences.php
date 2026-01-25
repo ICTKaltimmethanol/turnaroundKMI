@@ -19,7 +19,6 @@ class CreatePresences extends CreateRecord
     }
 
 
-
 protected function mutateFormDataBeforeCreate(array $data): array
 {
     $presenceInData  = $data['presenceIn']  ?? null;
@@ -27,24 +26,27 @@ protected function mutateFormDataBeforeCreate(array $data): array
 
     unset($data['presenceIn'], $data['presenceOut']);
 
-    // CREATE PRESENCE IN
     if ($presenceInData) {
+        $presenceInData['employees_id'] ??= $data['employees_id'];
+
         $presenceIn = PresenceIn::create($presenceInData);
         $data['presenceIn_id'] = $presenceIn->id;
     }
 
-    // CREATE PRESENCE OUT (OPTIONAL)
     if (
         $presenceOutData &&
         ($presenceOutData['presence_date'] ?? null) &&
         ($presenceOutData['presence_time'] ?? null)
     ) {
+        $presenceOutData['employees_id'] ??= $data['employees_id'];
+
         $presenceOut = PresenceOut::create($presenceOutData);
         $data['presenceOut_id'] = $presenceOut->id;
     }
 
     return $data;
 }
+    
 
 
 
