@@ -18,6 +18,10 @@ class CreatePresences extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
 {
+    dd($data);
+}
+  /*   protected function mutateFormDataBeforeCreate(array $data): array
+{
     // === SIMPAN PRESENCE IN ===
     $presenceIn = \App\Models\PresenceIn::create([
         'employees_id'  => $data['employees_id'],
@@ -47,7 +51,7 @@ class CreatePresences extends CreateRecord
         'presenceIn_id'  => $presenceIn->id,
         'presenceOut_id' => $presenceOutId,
     ];
-}
+} */
 
 
 }
