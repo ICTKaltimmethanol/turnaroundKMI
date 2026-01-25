@@ -26,43 +26,41 @@ class PresencesForm
                 ->label('Total Waktu (Menit)')
                 ->numeric()
                 ->dehydrated(),
-            
+
             Select::make('employee_code')
-                    ->label('ID Pekerja')
-                    ->options(
-                        \App\Models\Employee::orderBy('employees_code')
-                            ->pluck('employees_code', 'employees_code')
-                    )
-                    ->searchable()
-                    ->live()
-                    ->required()
-                    ->afterStateUpdated(function ($state, Set $set) {
+                ->label('ID Pekerja')
+                ->options(
+                    \App\Models\Employee::orderBy('employees_code')
+                        ->pluck('employees_code', 'employees_code')
+                )
+                ->searchable()
+                ->live()
+                ->required()
+                ->afterStateUpdated(function ($state, Set $set) {
+                    $employee = \App\Models\Employee::with(['company', 'position'])
+                        ->where('employees_code', $state)
+                        ->first();
 
-                        $employee = \App\Models\Employee::with(['company', 'position'])
-                            ->where('employees_code', $state)
-                            ->first();
+                    if (! $employee) {
+                        return;
+                    }
 
-                        if (! $employee) {
-                            return;
-                        }
+                    // FK
+                    $set('employees_id', $employee->id);
+                    $set('employees_company_id', $employee->company?->id);
+                    $set('employees_position_id', $employee->position?->id);
 
-                        // FK
-                        $set('employees_id', $employee->id);
-                        $set('employees_company_id', $employee->company?->id);
-                        $set('employees_position_id', $employee->position?->id);
-
-                        // SNAPSHOT
-                        $set('employee_name', $employee->full_name);
-                        $set('company_name', $employee->company?->name);
-                        $set('position_name', $employee->position?->name);
-                    }),
+                    // SNAPSHOT
+                    $set('employee_name', $employee->full_name);
+                    $set('company_name', $employee->company?->name);
+                    $set('position_name', $employee->position?->name);
+                }),
 
             Hidden::make('employees_id')->required(),
             Hidden::make('employees_company_id')->required(),
             Hidden::make('employees_position_id')->required(),
 
-            
-           TextInput::make('employee_name')
+            TextInput::make('employee_name')
                 ->label('Nama Pekerja')
                 ->readonly()
                 ->dehydrated(true)
@@ -80,8 +78,6 @@ class PresencesForm
                 ->dehydrated(true)
                 ->required(),
 
-
-    
             Section::make('Presensi Waktu Masuk')
                 ->relationship('presenceIn')
                 ->schema([
@@ -95,7 +91,6 @@ class PresencesForm
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
-
                     TimePicker::make('presence_time')
                         ->required()
                         ->live()
@@ -104,7 +99,6 @@ class PresencesForm
                         ),
                 ]),
 
-            
             Section::make('Presensi Waktu Pulang')
                 ->relationship('presenceOut')
                 ->schema([
@@ -119,7 +113,6 @@ class PresencesForm
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
-
                     TimePicker::make('presence_time')
                         ->label('Jam Pulang')
                         ->nullable()
@@ -127,34 +120,32 @@ class PresencesForm
                         ->afterStateUpdated(fn (Get $get, Set $set) =>
                             self::generateTotalMinute($get, $set)
                         ),
-
-             
                     Action::make('hapus_waktu_pulang')
-                            ->label('Hapus Waktu Pulang')
-                            ->icon('heroicon-o-trash')
-                            ->color('danger')
-                            ->requiresConfirmation()
-                            ->action(function ($record, Set $set) {
-                                
-                                $set('presenceOut.presence_date', null);
-                                $set('presenceOut.presence_time', null);
+                        ->label('Hapus Waktu Pulang')
+                        ->icon('heroicon-o-trash')
+                        ->color('danger')
+                        ->requiresConfirmation()
+                        ->visible(fn (Get $get) => $get('presenceOut.presence_date') || $get('presenceOut.presence_time'))
+                        ->action(function ($record, Set $set) {
+                            $set('presenceOut.presence_date', null);
+                            $set('presenceOut.presence_time', null);
+                            $set('total_time', null);
+                            $set('presenceOut_id', null);
 
-                                $set('total_time', null);
-                                $set('presenceOut_id', null);
-
-                                $record->update([   
+                            if ($record) {
+                                $record->update([
                                     'total_time' => null,
                                     'presenceOut_id' => null,
                                 ]);
-                    
                                 $record->presenceOut()?->delete();
+                            }
 
-                                Notification::make()
-                                    ->title('Berhasil')
-                                    ->body('Waktu pulang berhasil dihapus.')
-                                    ->success()
-                                    ->send();
-                            }),
+                            Notification::make()
+                                ->title('Berhasil')
+                                ->body('Waktu pulang berhasil dihapus.')
+                                ->success()
+                                ->send();
+                        }),
                 ]),
         ]);
     }
