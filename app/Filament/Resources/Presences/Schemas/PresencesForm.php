@@ -57,14 +57,33 @@ class PresencesForm
                         $set('position_name', $employee->position?->name);
                     }),
 
-            Hidden::make('employees_id')->required(),
-            Hidden::make('employees_company_id')->required(),
-            Hidden::make('employees_position_id')->required(),
+            Hidden::make('employees_id')
+                ->required()
+                ->dehydrated(true),
 
-            
-            TextInput::make('employee_name')->disabled(),
-            TextInput::make('company_name')->disabled(),
-            TextInput::make('position_name')->disabled(),
+            Hidden::make('employees_company_id')
+                ->required()
+                ->dehydrated(true),
+
+            Hidden::make('employees_position_id')
+                ->required()
+                ->dehydrated(true),
+
+            TextInput::make('employee_name')
+                ->disabled()
+                ->required()
+                ->dehydrated(true),
+
+            TextInput::make('company_name')
+                ->disabled()
+                ->required()
+                ->dehydrated(true),
+
+            TextInput::make('position_name')
+                ->disabled()
+                ->required()
+                ->dehydrated(true),
+
 
 
     
