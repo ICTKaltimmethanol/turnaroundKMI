@@ -57,45 +57,15 @@ class PresencesForm
                         $set('position_name', $employee->position?->name);
                     }),
 
-            Hidden::make('employees_id')
-                ->dehydrated(true)
-                ->required(),
-
-            Hidden::make('employee_name')
-                ->dehydrated(true)
-                ->required(),
-
-            Hidden::make('company_name')
-                ->dehydrated(true)
-                ->required(),
-
-            Hidden::make('position_name')
-                ->dehydrated(true)
-                ->required(),
+            Hidden::make('employees_id')->required(),
+            Hidden::make('employees_company_id')->required(),
+            Hidden::make('employees_position_id')->required(),
 
             
+            TextInput::make('employee_name')->disabled(),
+            TextInput::make('company_name')->disabled(),
+            TextInput::make('position_name')->disabled(),
 
-            Select::make('employees_id')
-                    ->relationship('employee', 'full_name')
-                    ->getOptionLabelFromRecordUsing(
-                        fn ($record) => $record->full_name ?? '-'
-                    )
-                    ->label('Nama Pekerja')
-                    ->disabled()
-                    ->searchable()
-                    ->preload(),
-
-            Select::make('employees_company_id')
-                ->relationship('company', 'name')
-                ->disabled()
-                ->dehydrated(true)
-                ->required(),
-
-            Select::make('employees_position_id')
-                ->relationship('position', 'name')
-                ->disabled()
-                ->dehydrated(true)
-                ->required(),
 
     
             Section::make('Presensi Waktu Masuk')
