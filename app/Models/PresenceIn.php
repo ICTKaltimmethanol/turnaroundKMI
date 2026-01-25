@@ -17,5 +17,10 @@ class PresenceIn extends Model
     {
         return $this->belongsTo(Employee::class, 'employees_id');
     }
+    
+     public function presence()
+    {
+        return $this->belongsTo(Presences::class, 'presences_id');
+    }
 
 }
