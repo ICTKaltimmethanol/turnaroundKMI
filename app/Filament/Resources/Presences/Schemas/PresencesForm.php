@@ -85,6 +85,10 @@ class PresencesForm
             Section::make('Presensi Waktu Masuk')
                 ->relationship('presenceIn')
                 ->schema([
+                    Hidden::make('employees_id')
+                        ->default(fn (Get $get) => $get('../../employees_id'))
+                        ->dehydrated(true)
+                        ->required(),
                     DatePicker::make('presence_date')
                         ->required()
                         ->live()
@@ -104,6 +108,10 @@ class PresencesForm
             Section::make('Presensi Waktu Pulang')
                 ->relationship('presenceOut')
                 ->schema([
+                    Hidden::make('employees_id')
+                        ->default(fn (Get $get) => $get('../../employees_id'))
+                        ->dehydrated(true)
+                        ->required(),
                     DatePicker::make('presence_date')
                         ->label('Tanggal Pulang')
                         ->nullable()
