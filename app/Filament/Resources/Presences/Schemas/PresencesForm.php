@@ -83,42 +83,42 @@ class PresencesForm
 
     
          Section::make('Presensi Waktu Masuk')
+            ->statePath('presenceIn') 
             ->schema([
-                DatePicker::make('presenceIn.presence_date')
+                DatePicker::make('presence_date')
                     ->required()
-                    ->dehydrated(true)
                     ->live()
                     ->afterStateUpdated(fn (Get $get, Set $set) =>
                         self::generateTotalMinute($get, $set)
                     ),
 
-                TimePicker::make('presenceIn.presence_time')
+                TimePicker::make('presence_time')
                     ->required()
-                    ->dehydrated(true)
                     ->live()
                     ->afterStateUpdated(fn (Get $get, Set $set) =>
                         self::generateTotalMinute($get, $set)
                     ),
             ]),
 
-            Section::make('Presensi Waktu Pulang')
-                ->schema([
-                    DatePicker::make('presenceOut.presence_date')
-                        ->nullable()
-                        ->dehydrated(true)
-                        ->live()
-                        ->afterStateUpdated(fn (Get $get, Set $set) =>
-                            self::generateTotalMinute($get, $set)
-                        ),
 
-                    TimePicker::make('presenceOut.presence_time')
-                        ->nullable()
-                        ->dehydrated(true)
-                        ->live()
-                        ->afterStateUpdated(fn (Get $get, Set $set) =>
-                            self::generateTotalMinute($get, $set)
-                        ),
-                ]),
+        Section::make('Presensi Waktu Pulang')
+            ->statePath('presenceOut') // 🔴 WAJIB
+            ->schema([
+                DatePicker::make('presence_date')
+                    ->nullable()
+                    ->live()
+                    ->afterStateUpdated(fn (Get $get, Set $set) =>
+                        self::generateTotalMinute($get, $set)
+                    ),
+
+                TimePicker::make('presence_time')
+                    ->nullable()
+                    ->live()
+                    ->afterStateUpdated(fn (Get $get, Set $set) =>
+                        self::generateTotalMinute($get, $set)
+                    ),
+            ]),
+
 
         ]);
     }
