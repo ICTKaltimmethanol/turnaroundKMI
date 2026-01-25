@@ -62,9 +62,23 @@ class PresencesForm
             Hidden::make('employees_position_id')->required(),
 
             
-            TextInput::make('employee_name')->disabled(),
-            TextInput::make('company_name')->disabled(),
-            TextInput::make('position_name')->disabled(),
+           TextInput::make('employee_name')
+                ->label('Nama Pekerja')
+                ->readonly()
+                ->dehydrated(true)
+                ->required(),
+
+            TextInput::make('company_name')
+                ->label('Perusahaan')
+                ->readonly()
+                ->dehydrated(true)
+                ->required(),
+
+            TextInput::make('position_name')
+                ->label('Posisi')
+                ->readonly()
+                ->dehydrated(true)
+                ->required(),
 
 
     
