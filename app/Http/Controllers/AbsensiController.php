@@ -30,27 +30,30 @@ class AbsensiController extends Controller
     }
 
    public function counterMasukDanBelumKeluar()
-    {
-        $today = Carbon::today();
+{
+    $today = Carbon::today();
 
-        $alreadyIn = Presences::whereHas('presenceIn', fn ($q) =>
-                $q->whereDate('presence_date', $today)
-            )
-            ->distinct('employees_id')
-            ->count('employees_id');
+    $alreadyIn = Presences::whereHas('presenceIn', function ($q) use ($today) {
+            $q->whereDate('presence_date', $today);
+        })
+        ->distinct('employees_id')
+        ->count('employees_id');
 
-        $notOutYet = Presences::whereHas('presenceIn', fn ($q) =>
-                $q->whereDate('presence_date', $today)
-            )
-            ->whereNull('presenceOut_id')
-            ->distinct('employees_id')
-            ->count('employees_id');
+    $notOutYet = Presences::whereHas('presenceIn', function ($q) use ($today) {
+            $q->whereDate('presence_date', $today);
+        })
+        ->whereNull('presenceOut_id')
+        ->distinct('employees_id')
+        ->count('employees_id');
 
-        return response()->json([
-            'already_in'  => $alreadyIn,
-            'not_out_yet' => $notOutYet,
-        ]);
-    }
+    $allOverPresence = Presences::count();
+
+    return response()->json([
+        'already_in'        => $alreadyIn,
+        'not_out_yet'       => $notOutYet,
+        'allOverPresence'   => $allOverPresence,
+    ]);
+}
 
 
     /*public function scan(Request $request)
