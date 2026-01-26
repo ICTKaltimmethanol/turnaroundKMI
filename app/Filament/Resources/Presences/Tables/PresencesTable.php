@@ -155,16 +155,24 @@ class PresencesTable
                                 ->label('Sampai Tanggal'),
                         ])
                         ->query(function (Builder $query, array $data): Builder {
+
                             return $query
                                 ->when(
                                     $data['created_from'] ?? null,
-                                    fn ($q, $date) => $q->whereDate('presenceIn.presence_date', '>=', $date)
+                                    fn (Builder $q, $date) =>
+                                        $q->whereHas('presenceIn', fn ($sub) =>
+                                            $sub->whereDate('presence_date', '>=', $date)
+                                        )
                                 )
                                 ->when(
                                     $data['created_until'] ?? null,
-                                    fn ($q, $date) => $q->whereDate('presenceOut.presence_date', '<=', $date)
+                                    fn (Builder $q, $date) =>
+                                        $q->whereHas('presenceOut', fn ($sub) =>
+                                            $sub->whereDate('presence_date', '<=', $date)
+                                        )
                                 );
                         }),
+
 
                 /* ================= FILTER PEKERJA ================= */
                 Filter::make('filters')
