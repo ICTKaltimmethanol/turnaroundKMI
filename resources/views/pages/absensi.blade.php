@@ -174,23 +174,30 @@ function handleScan() {
 
     const remaining = remainingCooldown(code);
     if (remaining > 0) {
-        document.getElementById('employeeData').innerHTML = `
-            <div>
+
+        const container = document.getElementById('employeeData');
+        const existingCard = container.innerHTML;
+
+        container.innerHTML = `
+            <div class="text-center mb-6">
+                
                 <div style="font-size:64px; line-height:1;">⚠️</div>
-                <div style="font-size:32px; font-weight:bold; margin-top:10px;">
-                    Anda telah melakukan scan
+                <div class="text-3xl font-bold mt-2 text-yellow-300">
+                    Anda sudah melakukan scan
                 </div>
-                <div style="font-size:20px; margin-top:6px;">
-                    Mohon jangan melakukan scan berulang
+                <div class="text-lg text-white">
+                    Mohon jangan melakukan scan berulang,  Tunggu <strong>${Math.ceil(remaining / 1000)} detik</strong>
                 </div>
-                <div style="font-size:18px; margin-top:10px;">
-                    Tunggu <strong>${Math.ceil(remaining / 1000)} detik</strong>
-                </div>
+                ${existingCard}  
             </div>
+
+            
         `;
+
         input.value = '';
         return;
     }
+
 
     clearEmployeeInfo();
     document.getElementById('loadingIndicator').classList.remove('hidden');
