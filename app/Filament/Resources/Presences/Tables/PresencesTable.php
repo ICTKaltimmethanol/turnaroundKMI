@@ -158,11 +158,11 @@ class PresencesTable
                             return $query
                                 ->when(
                                     $data['created_from'] ?? null,
-                                    fn ($q, $date) => $q->whereDate('created_at', '>=', $date)
+                                    fn ($q, $date) => $q->whereDate('presenceIn.presence_date', '>=', $date)
                                 )
                                 ->when(
                                     $data['created_until'] ?? null,
-                                    fn ($q, $date) => $q->whereDate('created_at', '<=', $date)
+                                    fn ($q, $date) => $q->whereDate('presenceOut.presence_date', '<=', $date)
                                 );
                         }),
 
