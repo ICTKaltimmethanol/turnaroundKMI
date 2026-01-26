@@ -54,9 +54,9 @@ class PresencesResource extends Resource
     }
 
         public static function canCreate(): bool
-{
-    return false;
-}
+    {
+        return false;
+    }
 
     public static function getPages(): array
     {
