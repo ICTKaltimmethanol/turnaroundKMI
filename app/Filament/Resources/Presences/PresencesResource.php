@@ -53,11 +53,15 @@ class PresencesResource extends Resource
         ];
     }
 
+        public static function canCreate(): bool
+{
+    return false;
+}
+
     public static function getPages(): array
     {
         return [
-            'index' => ListPresences::route('/'),
-            'create' => CreatePresences::route('/create'),
+            'index' => ListPresences::route('/'),   
             'edit' => EditPresences::route('/{record}/edit'),
   
 
