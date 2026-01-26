@@ -146,32 +146,32 @@ class PresencesTable
             ->filters([
 
                     /* ================= FILTER TANGGAL ================= */
-                    Filter::make('created_at')
-                        ->schema([
-                            DatePicker::make('created_from')
-                                ->label('Dari Tanggal'),
+                   Filter::make('created_at')
+                    ->schema([
+                        DatePicker::make('created_from')
+                            ->label('Dari Tanggal'),
 
-                            DatePicker::make('created_until')
-                                ->label('Sampai Tanggal'),
-                        ])
-                        ->query(function (Builder $query, array $data): Builder {
+                        DatePicker::make('created_until')
+                            ->label('Sampai Tanggal'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
 
-                            return $query
-                                ->when(
-                                    $data['created_from'] ?? null,
-                                    fn (Builder $q, $date) =>
-                                        $q->whereHas('presenceIn', fn ($sub) =>
-                                            $sub->whereDate('presence_date', '>=', $date)
-                                        )
-                                )
-                                ->when(
-                                    $data['created_until'] ?? null,
-                                    fn (Builder $q, $date) =>
-                                        $q->whereHas('presenceOut', fn ($sub) =>
-                                            $sub->whereDate('presence_date', '<=', $date)
-                                        )
-                                );
-                        }),
+                        return $query
+                            ->when(
+                                $data['created_from'] ?? null,
+                                fn (Builder $q, $date) =>
+                                    $q->whereHas('presenceIn', fn ($sub) =>
+                                        $sub->whereDate('presence_date', '>=', $date)
+                                    )
+                            )
+                            ->when(
+                                $data['created_until'] ?? null,
+                                fn (Builder $q, $date) =>
+                                    $q->whereHas('presenceOut', fn ($sub) =>
+                                        $sub->whereDate('presence_date', '<=', $date)
+                                    )
+                            );
+                    }),
 
 
                 /* ================= FILTER PEKERJA ================= */
