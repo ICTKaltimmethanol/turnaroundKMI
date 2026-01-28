@@ -188,7 +188,7 @@ function handleScan() {
                 <div class="text-lg text-white">
                     Mohon jangan melakukan scan berulang,  Tunggu <strong>${Math.ceil(remaining / 1000)} detik</strong>
                 </div>
-                ${existingCard}  
+            ${existingCard}  
             </div>
 
             
