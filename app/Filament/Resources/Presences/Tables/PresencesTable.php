@@ -89,7 +89,7 @@ class PresencesTable
                     ->sortable(), */
 
                 TextColumn::make('employee_name')->label('Nama Lengkap'),
-                TextColumn::make('employee_code')->label('ID Pekerja'),
+                TextColumn::make('employee_code')->label('ID Pekerja')->sortable(),
                 TextColumn::make('company_name')->label('Perusahaan'),
                 TextColumn::make('position_name')->label('Posisi'),
                 TextColumn::make('total_time')
