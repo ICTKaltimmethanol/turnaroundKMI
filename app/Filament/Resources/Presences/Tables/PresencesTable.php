@@ -104,31 +104,17 @@ class PresencesTable
                             ? $record->presenceIn->presence_date . ' ' . $record->presenceIn->presence_time
                             : '-'
                     )
-                    ->sortable(query: function ($query, $direction) {
-                        $query->orderBy(
-                            \App\Models\PresenceIn::select('presence_date')
-                                ->whereColumn('presence_in.id', 'presences.presenceIn_id'),
-                            $direction
-                        );
-                    })
+                    ->sortable()
                     ->toggleable(),
-
                 TextColumn::make('presenceOut.presence_date')
                     ->label('Keluar')
-                    ->state(fn ($record) =>
-                        $record->presenceOut
-                            ? $record->presenceOut->presence_date . ' ' . $record->presenceOut->presence_time
-                            : '-'
+                    ->state(fn($record) => 
+                    $record->presenceOut
+                        ? $record->presenceOut->presence_date . ' ' . $record->presenceOut->presence_time
+                        : '-'
                     )
-                    ->sortable(query: function ($query, $direction) {
-                        $query->orderBy(
-                            \App\Models\PresenceOut::select('presence_date')
-                                ->whereColumn('presence_out.id', 'presences.presenceOut_id'),
-                            $direction
-                        );
-                    })
+                    ->sortable()
                     ->toggleable(),
-
 
                 /* TextColumn::make('presenceIn.presence_date')
                     ->label('Tanggal Masuk')
