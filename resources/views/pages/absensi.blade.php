@@ -113,7 +113,7 @@
                 Data pekerja akan tampil di sini
             </div>
             <div class="rounded-2xl  text-2xl  border border-dashed border-white/20 p-10 text-center text-whitemt-8">
-                <h1 class="text-8xl">Tidak perlu melakukan scan berulang untuk jika telah muncul hasil scan.</h1>
+                <h1 class="text-8xl">Tidak perlu melakukan scan berulang jika telah muncul hasil scan.</h1>
             </div>
         </div>
 
