@@ -60,7 +60,6 @@ class PresencesTable
         return $table
             ->poll('10s')
             ->heading('Daftar Absensi')
-            ->defaultSort('presenceIn.presence_date', 'desc')
             ->paginated([
                 5,
                 10,
