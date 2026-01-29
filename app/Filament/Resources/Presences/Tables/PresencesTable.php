@@ -61,12 +61,14 @@ class PresencesTable
             ->poll('10s')
             ->heading('Daftar Absensi')
             ->paginated([
-                5,
                 10,
                 25,
                 50,
+                100,
                 'all',
             ])
+            ->defaultPaginationPageOption(25)
+
             ->columns([
                 // inactive line code
                 /* TextColumn::make('employee.full_name')
